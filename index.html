@@ -1,1 +1,400 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Machinery Shop</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        /* Header */
+        header {
+            background: #ffffff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        .cart {
+            font-size: 22px;
+        }
+
+        /* Search */
+        .search {
+            margin-top: 15px;
+            display: flex;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px 0 0 7px;
+            font-size: 15px;
+        }
+
+        .search button {
+            padding: 12px 18px;
+            border: none;
+            background: #16a34a;
+            color: white;
+            border-radius: 0 7px 7px 0;
+        }
+
+        /* Menu */
+        nav {
+            background: #1f2937;
+            padding: 12px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 14px;
+        }
+
+        /* Hero */
+        .hero {
+            margin: 15px;
+            padding: 25px 20px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            color: #16a34a;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .hero button {
+            background: #f59e0b;
+            border: none;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        /* Categories */
+        .section {
+            padding: 10px 15px;
+        }
+
+        .section-title {
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .category {
+            background: white;
+            padding: 18px 5px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .category span {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        /* Products */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .product-img {
+            height: 140px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            border-radius: 6px;
+        }
+
+        .product h3 {
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        .price {
+            color: #16a34a;
+            font-weight: bold;
+            font-size: 17px;
+            margin: 7px 0;
+        }
+
+        .old-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 12px;
+        }
+
+        .buy {
+            width: 100%;
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 9px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 25px;
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        footer p {
+            margin: 6px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+
+        <div class="top">
+            <div class="logo">⚙️ Machinery Shop</div>
+            <div class="cart">🛒</div>
+        </div>
+
+        <div class="search">
+            <input type="text" placeholder="আপনার প্রয়োজনীয় মেশিন খুঁজুন...">
+            <button>Search</button>
+        </div>
+
+    </header>
+
+    <!-- Menu -->
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Categories</a>
+        <a href="#">All Products</a>
+        <a href="#">Offers</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+
+        <h1>আপনার ব্যবসার মেশিন এক জায়গায়</h1>
+
+        <p>
+            Quality Machinery • Best Price • Nationwide Delivery
+        </p>
+
+        <button>Shop Now</button>
+
+    </section>
+
+    <!-- Categories -->
+    <section class="section">
+
+        <h2 class="section-title">ক্যাটাগরি</h2>
+
+        <div class="categories">
+
+            <div class="category">
+                <span>⚖️</span>
+                Digital Scale
+            </div>
+
+            <div class="category">
+                <span>🥤</span>
+                Juice Machine
+            </div>
+
+            <div class="category">
+                <span>🍿</span>
+                Food Machine
+            </div>
+
+            <div class="category">
+                <span>🧊</span>
+                Ice Machine
+            </div>
+
+            <div class="category">
+                <span>🏭</span>
+                Industrial
+            </div>
+
+            <div class="category">
+                <span>🔧</span>
+                Other Machines
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Products -->
+    <section class="section">
+
+        <h2 class="section-title">🔥 জনপ্রিয় পণ্য</h2>
+
+        <div class="products">
+
+            <div class="product">
+
+                <div class="product-img">⚖️</div>
+
+                <h3>Digital Weighing Scale</h3>
+
+                <div class="price">
+                    ৳ ৩,৫০০
+                </div>
+
+                <div class="old-price">
+                    ৳ ৪,০০০
+                </div>
+
+                <button class="buy">
+                    Buy Now
+                </button>
+
+            </div>
+
+
+            <div class="product">
+
+                <div class="product-img">🥤</div>
+
+                <h3>Commercial Juice Machine</h3>
+
+                <div class="price">
+                    ৳ ২৫,০০০
+                </div>
+
+                <div class="old-price">
+                    ৳ ২৮,০০০
+                </div>
+
+                <button class="buy">
+                    Buy Now
+                </button>
+
+            </div>
+
+
+            <div class="product">
+
+                <div class="product-img">🍿</div>
+
+                <h3>Popcorn Machine</h3>
+
+                <div class="price">
+                    ৳ ১২,৫০০
+                </div>
+
+                <div class="old-price">
+                    ৳ ১৪,০০০
+                </div>
+
+                <button class="buy">
+                    Buy Now
+                </button>
+
+            </div>
+
+
+            <div class="product">
+
+                <div class="product-img">🧊</div>
+
+                <h3>Ice Cube Machine</h3>
+
+                <div class="price">
+                    ৳ ৩৫,০০০
+                </div>
+
+                <div class="old-price">
+                    ৳ ৩৮,০০০
+                </div>
+
+                <button class="buy">
+                    Buy Now
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <h3>Machinery Shop</h3>
+
+        <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
+
+        <p>🚚 সারা বাংলাদেশে Delivery</p>
+
+        <p>📞 Contact: 01XXXXXXXXX</p>
+
+        <p>© 2026 Machinery Shop</p>
+
+    </footer>
+
+</body>
+</html>
