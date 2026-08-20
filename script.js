@@ -1,13 +1,10 @@
-// ===============================
-// Machinery Shop - Cart System
-// ===============================
-
 let cart = JSON.parse(localStorage.getItem("machineryCart")) || [];
 
-// Add product to cart
 function addToCart(name, price) {
 
-    const existingProduct = cart.find(product => product.name === name);
+    const existingProduct = cart.find(
+        product => product.name === name
+    );
 
     if (existingProduct) {
         existingProduct.quantity += 1;
@@ -19,31 +16,34 @@ function addToCart(name, price) {
         });
     }
 
-    localStorage.setItem("machineryCart", JSON.stringify(cart));
+    localStorage.setItem(
+        "machineryCart",
+        JSON.stringify(cart)
+    );
 
-    alert(name + " কার্টে যোগ হয়েছে!");
+    alert("✅ " + name + " কার্টে যোগ হয়েছে!");
 
     updateCartCount();
 }
 
 
-// Update cart count
 function updateCartCount() {
 
     const cartCount = cart.reduce(
-        (total, product) => total + product.quantity,
+        (total, product) =>
+            total + product.quantity,
         0
     );
 
-    const cartElement = document.querySelector(".cart");
+    const cartCountElement =
+        document.getElementById("cart-count");
 
-    if (cartElement) {
-        cartElement.innerHTML = "🛒 " + cartCount;
+    if (cartCountElement) {
+        cartCountElement.innerText = cartCount;
     }
 }
 
 
-// Remove product from cart
 function removeFromCart(index) {
 
     cart.splice(index, 1);
@@ -58,7 +58,6 @@ function removeFromCart(index) {
 }
 
 
-// Calculate total price
 function getCartTotal() {
 
     return cart.reduce(
@@ -69,7 +68,6 @@ function getCartTotal() {
 }
 
 
-// Show cart
 function showCart() {
 
     const cartContainer =
@@ -99,20 +97,17 @@ function showCart() {
 
     cart.forEach((product, index) => {
 
-        const item = document.createElement("div");
+        const item =
+            document.createElement("div");
 
         item.className = "cart-item";
 
         item.innerHTML = `
             <h3>${product.name}</h3>
 
-            <p>
-                দাম: ৳ ${product.price}
-            </p>
+            <p>দাম: ৳ ${product.price}</p>
 
-            <p>
-                Quantity: ${product.quantity}
-            </p>
+            <p>Quantity: ${product.quantity}</p>
 
             <button onclick="removeFromCart(${index})">
                 Remove
@@ -133,7 +128,6 @@ function showCart() {
 }
 
 
-// Run when page loads
 document.addEventListener(
     "DOMContentLoaded",
     function () {
