@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart - Machinery Shop</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        header {
+            background: white;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #16a34a;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .cart {
+            font-size: 23px;
+        }
+
+        .back {
+            display: block;
+            margin: 15px;
+            color: #16a34a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cart-container {
+            margin: 15px;
+        }
+
+        .cart-title {
+            margin-bottom: 15px;
+        }
+
+        #cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .cart-item h3 {
+            margin-bottom: 8px;
+        }
+
+        .cart-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .cart-item button {
+            margin-top: 10px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 5px;
+        }
+
+        .cart-summary {
+            margin-top: 20px;
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .cart-total {
+            font-size: 22px;
+            font-weight: bold;
+            color: #16a34a;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 25px 15px;
+            background: #1f2937;
+            color: white;
+            text-align: center;
+        }
+
+        footer p {
+            margin-top: 7px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="top">
+
+        <div class="logo">
+            ⚙️ Machinery Shop
+        </div>
+
+        <div class="cart">
+            🛒
+        </div>
+
+    </div>
+
+</header>
+
+
+<a href="index.html" class="back">
+    ← Continue Shopping
+</a>
+
+
+<div class="cart-container">
+
+    <h2 class="cart-title">
+        🛒 আপনার Shopping Cart
+    </h2>
+
+    <div id="cart-items"></div>
+
+
+    <div class="cart-summary">
+
+        <div class="cart-total">
+            মোট: <span id="cart-total">৳ 0</span>
+        </div>
+
+        <button class="checkout-btn">
+            Proceed to Checkout
+        </button>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <h3>Machinery Shop</h3>
+
+    <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
+
+    <p>🚚 সারা বাংলাদেশে Delivery</p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
