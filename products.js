@@ -1,676 +1,580 @@
 /* =========================================
    MACHINERY SHOP
    PRODUCT DATABASE
-   STEP 1 — PRODUCT SYSTEM
-   Bangla + English Search Ready
+   STEP 2 — NEW CATEGORY STRUCTURE
    ========================================= */
 
 const products = [
 
-    // =========================
-    // 🏭 MACHINERY
-    // =========================
+    /* =========================
+       MACHINERY — MAIN
+    ========================= */
 
     {
         id: "machinery-001",
-        name: "Cup Sealing Machine",
-        nameBn: "কাপ সিলিং মেশিন",
+        name: "Mini Electric Drill Machine",
+        nameBn: "মিনি ইলেকট্রিক ড্রিল মেশিন",
         category: "machinery",
         categoryName: "Machinery",
-        subCategory: "Cup Sealer",
-        keywords: "cup sealing machine cup sealer cup seller কাপ সিলার কাপ সিলিং মেশিন",
-        price: 12000,
-        oldPrice: 14000,
-        image: "🥤",
-        rating: 4.9,
+        subCategory: "Power Tools",
+        price: 2800,
+        oldPrice: 3500,
+        image: "🔧",
+        gallery: [],
+        rating: 4.8,
         reviews: 0,
-        badge: "BEST SELLER",
-        stock: 8,
-        status: "available",
-        description: "Commercial cup sealing machine for juice, beverage and fast food business.",
+        badge: "POPULAR",
+        description: "Home, shop and workshop use electric drill machine.",
+        descriptionBn: "বাড়ি, দোকান ও ওয়ার্কশপের কাজে ব্যবহারযোগ্য ড্রিল মেশিন।",
         specifications: {
-            type: "Manual",
-            use: "Juice Shop / Fast Food"
+            type: "Electric",
+            use: "Home / Shop / Workshop"
         },
+        stock: 15,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "drill",
+            "drill machine",
+            "ড্রিল",
+            "ড্রিল মেশিন",
+            "মেশিন",
+            "টুলস"
+        ]
     },
+
 
     {
         id: "machinery-002",
+        name: "Manual Cup Sealing Machine",
+        nameBn: "ম্যানুয়াল কাপ সিলিং মেশিন",
+        category: "machinery",
+        categoryName: "Machinery",
+        subCategory: "Cup Sealer",
+        price: 7500,
+        oldPrice: 8500,
+        image: "🥤",
+        gallery: [],
+        rating: 4.9,
+        reviews: 0,
+        badge: "BEST SELLER",
+        description: "Manual cup sealing machine for juice and fast food business.",
+        descriptionBn: "জুস, চা, কফি ও ফাস্টফুড ব্যবসার জন্য কাপ সিলিং মেশিন।",
+        specifications: {
+            type: "Manual",
+            capacity: "150-200 cups/hour",
+            use: "Juice / Fast Food"
+        },
+        stock: 10,
+        status: "available",
+        delivery: "All Bangladesh",
+        seller: "Machinery Shop",
+        page: "product.html",
+        keywords: [
+            "cup sealer",
+            "cup sealing machine",
+            "কাপ সিলার",
+            "কাপ সিলিং মেশিন",
+            "কাপ সিল",
+            "জুস মেশিন"
+        ]
+    },
+
+
+    {
+        id: "machinery-003",
         name: "Cotton Candy Machine",
         nameBn: "কটন ক্যান্ডি মেশিন",
         category: "machinery",
         categoryName: "Machinery",
-        subCategory: "Cotton Candy",
-        keywords: "cotton candy machine candy floss machine কটন ক্যান্ডি মেশিন বাতাসা মেশিন",
-        price: 22500,
-        oldPrice: 28000,
+        subCategory: "Candy Floss",
+        price: 12500,
+        oldPrice: 15000,
         image: "🍭",
-        rating: 4.9,
+        gallery: [],
+        rating: 4.8,
         reviews: 0,
         badge: "HOT",
-        stock: 10,
-        status: "available",
-        description: "Commercial cotton candy machine for business, events and shops.",
+        description: "Commercial cotton candy machine for business and events.",
+        descriptionBn: "ব্যবসা, মেলা ও ইভেন্টের জন্য কটন ক্যান্ডি মেশিন।",
         specifications: {
             type: "Commercial",
             use: "Business / Event"
         },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    {
-        id: "machinery-003",
-        name: "Popcorn Machine",
-        nameBn: "পপকর্ন মেশিন",
-        category: "machinery",
-        categoryName: "Machinery",
-        subCategory: "Popcorn",
-        keywords: "popcorn machine popcorn maker পপকর্ন মেশিন পপকর্ন বানানোর মেশিন",
-        price: 14500,
-        oldPrice: 17000,
-        image: "🍿",
-        rating: 4.8,
-        reviews: 0,
-        badge: "POPULAR",
         stock: 10,
         status: "available",
-        description: "Commercial popcorn machine for fast food, cinema and snack business.",
-        specifications: {
-            type: "Commercial",
-            use: "Fast Food / Snack Business"
-        },
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "cotton candy",
+            "candy floss",
+            "কটন ক্যান্ডি",
+            "কটন ক্যান্ডি মেশিন",
+            "ক্যান্ডি মেশিন"
+        ]
     },
+
 
     {
         id: "machinery-004",
-        name: "Sugarcane Juice Machine",
-        nameBn: "আখের জুস মেশিন",
+        name: "AC & DC Sugarcane Juice Machine",
+        nameBn: "এসি ও ডিসি আখের জুস মেশিন",
         category: "machinery",
         categoryName: "Machinery",
         subCategory: "Sugarcane Machine",
-        keywords: "sugarcane juice machine sugar cane machine আখ মেশিন আখের জুস মেশিন শরবত মেশিন",
         price: 60000,
         oldPrice: 68000,
         image: "🌱",
+        gallery: [],
         rating: 4.9,
         reviews: 0,
         badge: "BEST SELLER",
-        stock: 5,
-        status: "available",
-        description: "AC and DC sugarcane juice machine for commercial juice business.",
+        description: "AC and DC sugarcane juice machine for commercial business.",
+        descriptionBn: "আখের জুস ব্যবসার জন্য AC ও DC চালিত কমার্শিয়াল মেশিন।",
         specifications: {
             type: "AC / DC",
             use: "Juice Business"
         },
+        stock: 5,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "sugarcane",
+            "sugar cane machine",
+            "আখ",
+            "আখের জুস",
+            "আখের মেশিন",
+            "জুস মেশিন"
+        ]
     },
+
 
     {
         id: "machinery-005",
-        name: "Commercial Juice Blender",
-        nameBn: "কমার্শিয়াল জুস ব্লেন্ডার",
+        name: "Commercial Juice Machine",
+        nameBn: "কমার্শিয়াল জুস মেশিন",
         category: "machinery",
         categoryName: "Machinery",
-        subCategory: "Blender",
-        keywords: "juice blender commercial blender mixer জুস ব্লেন্ডার মিক্সার ব্লেন্ডার",
-        price: 6500,
-        oldPrice: 7500,
+        subCategory: "Juice Machine",
+        price: 22000,
+        oldPrice: 25000,
         image: "🥤",
-        rating: 4.8,
+        gallery: [],
+        rating: 4.9,
         reviews: 0,
-        badge: "POPULAR",
+        badge: "SALE",
+        description: "Commercial juice machine for juice shops and businesses.",
+        descriptionBn: "জুসের দোকান ও ব্যবসার জন্য কমার্শিয়াল জুস মেশিন।",
+        specifications: {
+            type: "Commercial",
+            use: "Juice Shop / Business"
+        },
         stock: 10,
         status: "available",
-        description: "High performance commercial blender for juice shop, restaurant and cafe.",
-        specifications: {
-            capacity: "2 Liter",
-            use: "Juice Shop / Restaurant"
-        },
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "juice machine",
+            "commercial juice",
+            "জুস মেশিন",
+            "জুস",
+            "কমার্শিয়াল জুস"
+        ]
     },
+
 
     {
         id: "machinery-006",
-        name: "Commercial Ice Crusher Machine",
-        nameBn: "আইস ক্রাশার মেশিন",
+        name: "Commercial Popcorn Machine",
+        nameBn: "কমার্শিয়াল পপকর্ন মেশিন",
         category: "machinery",
         categoryName: "Machinery",
-        subCategory: "Ice Crusher",
-        keywords: "ice crusher ice crushing machine বরফ ভাঙার মেশিন আইস ক্রাশার",
-        price: 4500,
-        oldPrice: 5500,
-        image: "🧊",
+        subCategory: "Popcorn Machine",
+        price: 14500,
+        oldPrice: 17000,
+        image: "🍿",
+        gallery: [],
         rating: 4.8,
         reviews: 0,
-        badge: "OFFER",
+        badge: "POPULAR",
+        description: "Commercial popcorn machine for fast food and snack business.",
+        descriptionBn: "ফাস্টফুড ও স্ন্যাকস ব্যবসার জন্য কমার্শিয়াল পপকর্ন মেশিন।",
+        specifications: {
+            type: "Commercial",
+            use: "Fast Food / Snack Business"
+        },
         stock: 10,
         status: "available",
-        description: "Electric ice crusher for juice shops, restaurants and beverage businesses.",
-        specifications: {
-            type: "Electric",
-            use: "Juice Shop / Restaurant"
-        },
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "popcorn",
+            "popcorn machine",
+            "পপকর্ন",
+            "পপকর্ন মেশিন"
+        ]
     },
+
 
     {
         id: "machinery-007",
-        name: "Commercial Ice Cube Machine",
-        nameBn: "আইস কিউব মেশিন",
+        name: "Commercial Waffle Maker",
+        nameBn: "কমার্শিয়াল ওয়াফল মেকার",
         category: "machinery",
         categoryName: "Machinery",
-        subCategory: "Ice Machine",
-        keywords: "ice cube machine ice maker বরফ তৈরির মেশিন আইস কিউব মেশিন",
-        price: 35000,
-        oldPrice: 40000,
-        image: "🧊",
-        rating: 4.8,
-        reviews: 0,
-        badge: "SALE",
-        stock: 5,
-        status: "available",
-        description: "Commercial ice cube making machine for restaurants and businesses.",
-        specifications: {
-            type: "Commercial",
-            use: "Restaurant / Business"
-        },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    // =========================
-    // 🍔 RESTAURANT & FAST FOOD
-    // =========================
-
-    {
-        id: "restaurant-001",
-        name: "Commercial Waffle Maker",
-        nameBn: "ওয়াফেল মেকার",
-        category: "restaurant",
-        categoryName: "Restaurant & Fast Food",
         subCategory: "Waffle Maker",
-        keywords: "waffle maker waffle machine ওয়াফেল মেশিন ওয়াফেল মেকার",
         price: 7500,
         oldPrice: 9000,
         image: "🧇",
+        gallery: [],
         rating: 4.7,
         reviews: 0,
         badge: "OFFER",
-        stock: 10,
-        status: "available",
         description: "Commercial waffle maker for cafe and fast food business.",
+        descriptionBn: "ক্যাফে ও ফাস্টফুড ব্যবসার জন্য ওয়াফল মেকার।",
         specifications: {
             type: "Electric",
             use: "Cafe / Fast Food"
         },
+        stock: 10,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "waffle",
+            "waffle maker",
+            "ওয়াফল",
+            "ওয়াফল মেকার"
+        ]
     },
 
+
     {
-        id: "restaurant-002",
-        name: "Commercial Deep Fryer",
-        nameBn: "ডিপ ফ্রায়ার",
-        category: "restaurant",
-        categoryName: "Restaurant & Fast Food",
-        subCategory: "Fryer",
-        keywords: "deep fryer fryer chicken fryer ডিপ ফ্রায়ার ফ্রায়ার ভাজার মেশিন",
+        id: "machinery-008",
+        name: "Commercial Crepe Maker",
+        nameBn: "কমার্শিয়াল ক্রেপ মেকার",
+        category: "machinery",
+        categoryName: "Machinery",
+        subCategory: "Crepe Maker",
+        price: 6500,
+        oldPrice: 8000,
+        image: "🥞",
+        gallery: [],
+        rating: 4.7,
+        reviews: 0,
+        badge: "NEW",
+        description: "Electric crepe maker for cafe and street food business.",
+        descriptionBn: "ক্যাফে ও স্ট্রিট ফুড ব্যবসার জন্য ইলেকট্রিক ক্রেপ মেকার।",
+        specifications: {
+            type: "Electric",
+            use: "Cafe / Street Food"
+        },
+        stock: 10,
+        status: "available",
+        delivery: "All Bangladesh",
+        seller: "Machinery Shop",
+        page: "product.html",
+        keywords: [
+            "crepe",
+            "crepe maker",
+            "ক্রেপ",
+            "ক্রেপ মেকার"
+        ]
+    },
+
+
+    {
+        id: "machinery-009",
+        name: "Donut Making Machine",
+        nameBn: "ডোনাট মেকিং মেশিন",
+        category: "machinery",
+        categoryName: "Machinery",
+        subCategory: "Donut Maker",
         price: 8500,
         oldPrice: 10000,
-        image: "🍗",
+        image: "🍩",
+        gallery: [],
         rating: 4.7,
         reviews: 0,
         badge: "OFFER",
-        stock: 8,
-        status: "available",
-        description: "Commercial deep fryer for restaurant and fast food business.",
+        description: "Donut making machine for small food business.",
+        descriptionBn: "ছোট খাবারের ব্যবসার জন্য ডোনাট মেকিং মেশিন।",
         specifications: {
             type: "Commercial",
-            use: "Restaurant / Fast Food"
+            use: "Food Business"
         },
+        stock: 10,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "donut",
+            "donut machine",
+            "ডোনাট",
+            "ডোনাট মেশিন"
+        ]
     },
 
+
     {
-        id: "restaurant-003",
-        name: "Commercial Shawarma Machine",
-        nameBn: "শাওয়ারমা মেশিন",
-        category: "restaurant",
-        categoryName: "Restaurant & Fast Food",
-        subCategory: "Shawarma",
-        keywords: "shawarma machine shawarma maker শাওয়ারমা মেশিন শর্মা মেশিন",
-        price: 42000,
-        oldPrice: 48000,
-        image: "🌯",
+        id: "machinery-010",
+        name: "Electric Ice Crusher Machine",
+        nameBn: "ইলেকট্রিক আইস ক্রাশার মেশিন",
+        category: "machinery",
+        categoryName: "Machinery",
+        subCategory: "Ice Crusher",
+        price: 4500,
+        oldPrice: 5500,
+        image: "🧊",
+        gallery: [],
         rating: 4.8,
         reviews: 0,
-        badge: "POPULAR",
+        badge: "OFFER",
+        description: "Electric ice crusher for juice shops and beverage businesses.",
+        descriptionBn: "জুসের দোকান ও পানীয় ব্যবসার জন্য ইলেকট্রিক আইস ক্রাশার।",
+        specifications: {
+            type: "Electric",
+            use: "Juice Shop / Beverage"
+        },
+        stock: 10,
+        status: "available",
+        delivery: "All Bangladesh",
+        seller: "Machinery Shop",
+        page: "product.html",
+        keywords: [
+            "ice crusher",
+            "ice machine",
+            "আইস ক্রাশার",
+            "বরফ ভাঙার মেশিন",
+            "বরফ মেশিন"
+        ]
+    },
+
+
+    {
+        id: "machinery-011",
+        name: "Commercial Ice Cube Machine",
+        nameBn: "কমার্শিয়াল আইস কিউব মেশিন",
+        category: "machinery",
+        categoryName: "Machinery",
+        subCategory: "Ice Machine",
+        price: 35000,
+        oldPrice: 40000,
+        image: "🧊",
+        gallery: [],
+        rating: 4.8,
+        reviews: 0,
+        badge: "SALE",
+        description: "Commercial ice cube machine for restaurants and businesses.",
+        descriptionBn: "রেস্টুরেন্ট, ক্যাফে ও ব্যবসার জন্য কমার্শিয়াল আইস কিউব মেশিন।",
+        specifications: {
+            type: "Commercial",
+            use: "Restaurant / Business"
+        },
         stock: 5,
         status: "available",
-        description: "Commercial shawarma machine for restaurant and fast food business.",
+        delivery: "All Bangladesh",
+        seller: "Machinery Shop",
+        page: "ice-machine.html",
+        keywords: [
+            "ice cube",
+            "ice cube machine",
+            "আইস কিউব",
+            "বরফের মেশিন",
+            "আইস মেশিন"
+        ]
+    },
+
+
+    /* =========================
+       FOOD & RESTAURANT
+       ========================= */
+
+    {
+        id: "food-001",
+        name: "Commercial Deep Fryer",
+        nameBn: "কমার্শিয়াল ডিপ ফ্রায়ার",
+        category: "food",
+        categoryName: "Food & Restaurant",
+        subCategory: "Fryer",
+        price: 8500,
+        oldPrice: 10000,
+        image: "🍗",
+        gallery: [],
+        rating: 4.7,
+        reviews: 0,
+        badge: "OFFER",
+        description: "Commercial fryer for restaurant and fast food business.",
+        descriptionBn: "রেস্টুরেন্ট ও ফাস্টফুড ব্যবসার জন্য কমার্শিয়াল ফ্রায়ার।",
         specifications: {
             type: "Commercial",
             use: "Restaurant / Fast Food"
         },
+        stock: 10,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "fryer",
+            "deep fryer",
+            "ফ্রায়ার",
+            "ডিপ ফ্রায়ার",
+            "তেলে ভাজার মেশিন"
+        ]
     },
 
+
     {
-        id: "restaurant-004",
+        id: "food-002",
         name: "Commercial Pizza Oven",
-        nameBn: "পিজ্জা ওভেন",
-        category: "restaurant",
-        categoryName: "Restaurant & Fast Food",
+        nameBn: "কমার্শিয়াল পিজ্জা ওভেন",
+        category: "food",
+        categoryName: "Food & Restaurant",
         subCategory: "Pizza Oven",
-        keywords: "pizza oven pizza machine পিজ্জা ওভেন পিজ্জা মেশিন",
         price: 22000,
         oldPrice: 26000,
         image: "🍕",
+        gallery: [],
         rating: 4.8,
         reviews: 0,
         badge: "HOT",
-        stock: 5,
-        status: "available",
         description: "Commercial pizza oven for restaurant and pizza shop.",
+        descriptionBn: "রেস্টুরেন্ট ও পিজ্জা শপের জন্য কমার্শিয়াল পিজ্জা ওভেন।",
         specifications: {
             type: "Electric",
             use: "Restaurant / Pizza Shop"
         },
+        stock: 10,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "pizza oven",
+            "pizza",
+            "পিজ্জা ওভেন",
+            "পিজ্জা"
+        ]
     },
 
-    // =========================
-    // 🔧 TOOLS & HARDWARE
-    // =========================
 
     {
-        id: "tools-001",
-        name: "Electric Drill Machine",
-        nameBn: "ইলেকট্রিক ড্রিল মেশিন",
-        category: "tools",
-        categoryName: "Tools & Hardware",
-        subCategory: "Power Tools",
-        keywords: "drill machine electric drill power drill ড্রিল মেশিন ড্রিল মেশিন ইলেকট্রিক",
-        price: 2800,
-        oldPrice: 3500,
-        image: "🔧",
-        rating: 4.8,
+        id: "food-003",
+        name: "French Fry Cutting Machine",
+        nameBn: "ফ্রেঞ্চ ফ্রাই কাটিং মেশিন",
+        category: "food",
+        categoryName: "Food & Restaurant",
+        subCategory: "French Fry",
+        price: 4500,
+        oldPrice: 5500,
+        image: "🍟",
+        gallery: [],
+        rating: 4.7,
         reviews: 0,
         badge: "POPULAR",
-        stock: 15,
-        status: "available",
-        description: "Electric drill machine for home repair, construction and workshop use.",
+        description: "French fry cutter for restaurant and fast food shops.",
+        descriptionBn: "রেস্টুরেন্ট ও ফাস্টফুড দোকানের জন্য ফ্রেঞ্চ ফ্রাই কাটার।",
         specifications: {
-            type: "Electric",
-            use: "Home / Workshop"
+            type: "Manual",
+            use: "Restaurant / Fast Food"
         },
+        stock: 10,
+        status: "available",
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "french fry",
+            "fry cutter",
+            "ফ্রেঞ্চ ফ্রাই",
+            "আলু কাটার মেশিন"
+        ]
     },
 
-    {
-        id: "tools-002",
-        name: "Rechargeable Electric Screwdriver",
-        nameBn: "ইলেকট্রিক স্ক্রু ড্রাইভার",
-        category: "tools",
-        categoryName: "Tools & Hardware",
-        subCategory: "Power Tools",
-        keywords: "electric screwdriver rechargeable screwdriver স্ক্রু ড্রাইভার ইলেকট্রিক স্ক্রু ড্রাইভার",
-        price: 2200,
-        oldPrice: 2800,
-        image: "🪛",
-        rating: 4.6,
-        reviews: 0,
-        badge: "OFFER",
-        stock: 15,
-        status: "available",
-        description: "Rechargeable electric screwdriver for home and workshop use.",
-        specifications: {
-            type: "Rechargeable",
-            use: "Home / Workshop"
-        },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
 
-    // =========================
-    // 🏠 HOME & KITCHEN
-    // =========================
+    /* =========================
+       HOME
+       ========================= */
 
     {
         id: "home-001",
         name: "Mini Vacuum Cleaner",
         nameBn: "মিনি ভ্যাকুয়াম ক্লিনার",
         category: "home",
-        categoryName: "Home & Kitchen",
+        categoryName: "Home",
         subCategory: "Cleaning",
-        keywords: "vacuum cleaner mini vacuum cleaner ভ্যাকুয়াম ক্লিনার ঘর পরিষ্কার",
         price: 1800,
         oldPrice: 2200,
         image: "🧹",
+        gallery: [],
         rating: 4.6,
         reviews: 0,
         badge: "NEW",
-        stock: 20,
-        status: "available",
         description: "Compact vacuum cleaner for home and office cleaning.",
+        descriptionBn: "বাড়ি ও অফিস পরিষ্কারের জন্য ছোট ভ্যাকুয়াম ক্লিনার।",
         specifications: {
             type: "Portable",
             use: "Home / Office"
         },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    {
-        id: "home-002",
-        name: "Electric Kitchen Chopper",
-        nameBn: "ইলেকট্রিক কিচেন চপার",
-        category: "home",
-        categoryName: "Home & Kitchen",
-        subCategory: "Kitchen Appliance",
-        keywords: "kitchen chopper electric chopper vegetable cutter চপার মেশিন সবজি কাটার মেশিন",
-        price: 1800,
-        oldPrice: 2300,
-        image: "🔪",
-        rating: 4.7,
-        reviews: 0,
-        badge: "POPULAR",
         stock: 20,
         status: "available",
-        description: "Electric kitchen chopper for daily home cooking.",
-        specifications: {
-            type: "Electric",
-            use: "Home Kitchen"
-        },
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "vacuum",
+            "vacuum cleaner",
+            "ভ্যাকুয়াম",
+            "ভ্যাকুয়াম ক্লিনার"
+        ]
     },
 
-    // =========================
-    // 🛒 DAILY NEEDS
-    // =========================
+
+    /* =========================
+       TOOLS & OTHERS
+       ========================= */
 
     {
-        id: "daily-001",
-        name: "Digital Kitchen Scale",
-        nameBn: "ডিজিটাল কিচেন স্কেল",
-        category: "daily",
-        categoryName: "Daily Needs",
-        subCategory: "Kitchen Scale",
-        keywords: "digital kitchen scale food scale ওজন মাপার মেশিন কিচেন স্কেল",
-        price: 650,
-        oldPrice: 900,
-        image: "⚖️",
-        rating: 4.7,
-        reviews: 0,
-        badge: "BEST SELLER",
-        stock: 30,
-        status: "available",
-        description: "Compact digital kitchen weighing scale for home and business use.",
-        specifications: {
-            type: "Digital",
-            use: "Home / Kitchen"
-        },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    {
-        id: "daily-002",
-        name: "Rechargeable Emergency Light",
-        nameBn: "রিচার্জেবল ইমার্জেন্সি লাইট",
-        category: "daily",
-        categoryName: "Daily Needs",
-        subCategory: "Lighting",
-        keywords: "emergency light rechargeable light ইমার্জেন্সি লাইট চার্জ লাইট বাতি",
-        price: 850,
-        oldPrice: 1200,
-        image: "💡",
+        id: "tools-001",
+        name: "Rechargeable Electric Screwdriver",
+        nameBn: "রিচার্জেবল ইলেকট্রিক স্ক্রু ড্রাইভার",
+        category: "tools",
+        categoryName: "Tools & Others",
+        subCategory: "Power Tools",
+        price: 2200,
+        oldPrice: 2800,
+        image: "🪛",
+        gallery: [],
         rating: 4.6,
         reviews: 0,
         badge: "OFFER",
-        stock: 25,
-        status: "available",
-        description: "Rechargeable emergency light for home, shop and outdoor use.",
+        description: "Rechargeable screwdriver for home and workshop use.",
+        descriptionBn: "বাড়ি ও ওয়ার্কশপের কাজের জন্য রিচার্জেবল স্ক্রু ড্রাইভার।",
         specifications: {
             type: "Rechargeable",
-            use: "Home / Shop"
+            use: "Home / Workshop"
         },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    // =========================
-    // 📱 GADGETS & ELECTRONICS
-    // =========================
-
-    {
-        id: "gadget-001",
-        name: "K9 Wireless Microphone",
-        nameBn: "K9 ওয়্যারলেস মাইক্রোফোন",
-        category: "gadgets",
-        categoryName: "Gadgets & Electronics",
-        subCategory: "Microphone",
-        keywords: "k9 microphone wireless mic মাইক্রোফোন ওয়্যারলেস মাইক",
-        price: 1200,
-        oldPrice: 1600,
-        image: "🎤",
-        rating: 4.7,
-        reviews: 0,
-        badge: "HOT",
-        stock: 20,
+        stock: 15,
         status: "available",
-        description: "Compact wireless microphone for mobile video, live streaming and content creation.",
-        specifications: {
-            type: "Wireless",
-            use: "Mobile / Video"
-        },
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    {
-        id: "gadget-002",
-        name: "Smart Watch",
-        nameBn: "স্মার্ট ওয়াচ",
-        category: "gadgets",
-        categoryName: "Gadgets & Electronics",
-        subCategory: "Smart Watch",
-        keywords: "smart watch smartwatch স্মার্ট ওয়াচ ঘড়ি",
-        price: 1500,
-        oldPrice: 2200,
-        image: "⌚",
-        rating: 4.5,
-        reviews: 0,
-        badge: "POPULAR",
-        stock: 20,
-        status: "available",
-        description: "Smart watch with useful everyday features and modern design.",
-        specifications: {
-            type: "Smart Watch",
-            use: "Daily Use"
-        },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    // =========================
-    // 👕 FASHION
-    // =========================
-
-    {
-        id: "fashion-001",
-        name: "Premium Men's T-Shirt",
-        nameBn: "প্রিমিয়াম ছেলেদের টি-শার্ট",
-        category: "fashion",
-        categoryName: "Fashion",
-        subCategory: "Men's Clothing",
-        keywords: "mens t shirt t-shirt boys shirt ছেলেদের টি শার্ট পুরুষের জামা",
-        price: 550,
-        oldPrice: 750,
-        image: "👕",
-        rating: 4.6,
-        reviews: 0,
-        badge: "NEW",
-        stock: 25,
-        status: "available",
-        description: "Comfortable casual men's t-shirt for everyday use.",
-        specifications: {
-            type: "Casual",
-            use: "Daily Wear"
-        },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
-    },
-
-    // =========================
-    // 🧴 HEALTH & PERSONAL CARE
-    // =========================
-
-    {
-        id: "care-001",
-        name: "Electric Toothbrush",
-        nameBn: "ইলেকট্রিক টুথব্রাশ",
-        category: "care",
-        categoryName: "Health & Personal Care",
-        subCategory: "Personal Care",
-        keywords: "electric toothbrush toothbrush টুথব্রাশ ইলেকট্রিক ব্রাশ দাঁত পরিষ্কার",
-        price: 950,
-        oldPrice: 1300,
-        image: "🪥",
-        rating: 4.6,
-        reviews: 0,
-        badge: "POPULAR",
-        stock: 20,
-        status: "available",
-        description: "Electric toothbrush for convenient daily personal care.",
-        specifications: {
-            type: "Electric",
-            use: "Personal Care"
-        },
-        delivery: "All Bangladesh",
-        seller: "Machinery Shop",
-        page: "product.html"
+        page: "product.html",
+        keywords: [
+            "screwdriver",
+            "electric screwdriver",
+            "স্ক্রু ড্রাইভার",
+            "ইলেকট্রিক স্ক্রু ড্রাইভার"
+        ]
     }
 
 ];
-
-
-/* =========================================
-   CATEGORY LIST
-   ========================================= */
-
-const categories = [
-    {
-        id: "machinery",
-        name: "Machinery",
-        nameBn: "মেশিনারি",
-        icon: "🏭"
-    },
-    {
-        id: "restaurant",
-        name: "Restaurant & Fast Food",
-        nameBn: "রেস্টুরেন্ট ও ফাস্ট ফুড",
-        icon: "🍔"
-    },
-    {
-        id: "home",
-        name: "Home & Kitchen",
-        nameBn: "হোম ও কিচেন",
-        icon: "🏠"
-    },
-    {
-        id: "daily",
-        name: "Daily Needs",
-        nameBn: "দৈনন্দিন প্রয়োজনীয়",
-        icon: "🛒"
-    },
-    {
-        id: "tools",
-        name: "Tools & Hardware",
-        nameBn: "টুলস ও হার্ডওয়্যার",
-        icon: "🔧"
-    },
-    {
-        id: "gadgets",
-        name: "Gadgets & Electronics",
-        nameBn: "গ্যাজেট ও ইলেকট্রনিক্স",
-        icon: "📱"
-    },
-    {
-        id: "fashion",
-        name: "Fashion",
-        nameBn: "ফ্যাশন",
-        icon: "👕"
-    },
-    {
-        id: "care",
-        name: "Health & Personal Care",
-        nameBn: "স্বাস্থ্য ও পার্সোনাল কেয়ার",
-        icon: "🧴"
-    }
-];
-
-
-/* =========================================
-   SEARCH HELPER
-   Bangla + English
-   ========================================= */
-
-function searchProducts(searchText) {
-
-    const query = searchText
-        .toLowerCase()
-        .trim();
-
-    if (!query) {
-        return products;
-    }
-
-    return products.filter(product => {
-
-        const searchableText = `
-            ${product.name}
-            ${product.nameBn}
-            ${product.category}
-            ${product.categoryName}
-            ${product.subCategory}
-            ${product.keywords}
-            ${product.description}
-        `.toLowerCase();
-
-        return searchableText.includes(query);
-    });
-}
