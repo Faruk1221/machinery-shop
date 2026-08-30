@@ -401,18 +401,31 @@ function handlePlaceOrder(event) {
 
 function showOrderSuccess(order) {
     const mainWrapper = document.getElementById("checkout-content");
+    
+    // WhatsApp মেসেজ তৈরি
+    let itemDetails = order.items.map(i => `${i.name} (x${i.quantity || 1})`).join(", ");
+    let waMessage = `NEW ORDER!%0AOrder ID: ${order.orderId}%0AName: ${order.customer.name}%0APhone: ${order.customer.phone}%0AItems: ${itemDetails}%0ATotal: BDT ${order.grandTotal}%0AAddress: ${order.customer.address}`;
+    
+    // আপনার হোয়াটসঅ্যাপ নম্বর এখানে ৮৮ সহ বসাবেন (যেমন: 8801700000000)
+    let adminPhone = "8801973317146"; 
+    let waUrl = `https://wa.me/${adminPhone}?text=${waMessage}`;
+
     mainWrapper.innerHTML = `
         <div class="success-box" style="width: 100%;">
             <h2>🎉 আপনার অর্ডারটি সফলভাবে গৃহীত হয়েছে!</h2>
             <p style="margin: 10px 0;">অর্ডার নম্বর: <strong>${order.orderId}</strong></p>
             <p>আমাদের প্রতিনিধি খুব শীঘ্রই <strong>${order.customer.phone}</strong> নম্বরে কল করে অর্ডারটি নিশ্চিত করবেন।</p>
-            <div style="margin-top: 20px;">
+            
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <a href="${waUrl}" target="_blank" style="background: #25D366; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">💬 WhatsApp-এ কনফার্ম করুন</a>
                 <a href="index.html" style="background: #16a34a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">হোম পেজে ফিরে যান</a>
             </div>
         </div>`;
     
     if (typeof updateCartCount === "function") {
         updateCartCount();
+    }
+}
     }
 }
 
