@@ -27,24 +27,40 @@ function saveCart() {
    ADD TO CART
 ========================================= */
 
-function addToCart(name, price) {
-    const existingProduct = cart.find(
-        product => product.name === name
-    );
+// আপনার বর্তমান script.js এর addToCart ফাংশনের জায়গায় এইটুকু আপডেট করুন
+function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // products.js থেকে আইডি অনুযায়ী প্রোডাক্ট খোঁজা
+    const product = products.find(p => p.id === productId);
 
-    if (existingProduct) {
-        existingProduct.quantity += 1;
+    if (!product) {
+        console.error("Product not found!");
+        return;
+    }
+
+    const existingIndex = cart.findIndex(item => item.id === productId);
+
+    if (existingIndex > -1) {
+        cart[existingIndex].quantity += 1;
     } else {
         cart.push({
-            name: name,
-            price: Number(price),
+            id: product.id,
+            title: product.title,
+            price: product.price || 0,
+            image: product.image || '',
             quantity: 1
         });
     }
 
-    saveCart();
-    updateCartCount();
-    alert("✅ " + name + " কার্টে যোগ হয়েছে!");
+    localStorage.setItem("cart", JSON.stringify(cart));
+    
+    // কার্ট কাউন্ট আপডেট
+    if (typeof updateCartBadge === "function") {
+        updateCartBadge();
+    }
+    
+    alert(`"${product.title}" কার্টে যোগ করা হয়েছে!`);
 }
 
 /* =========================================
