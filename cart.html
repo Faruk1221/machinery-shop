@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Shopping Cart - Machinery Shop</title>
 
     <style>
@@ -23,38 +22,84 @@
             background: white;
             padding: 15px;
             border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .top {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .logo {
             color: #16a34a;
             font-size: 21px;
             font-weight: bold;
+            text-decoration: none;
         }
 
         .cart {
             font-size: 23px;
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        .main-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 15px;
         }
 
         .back {
-            display: block;
-            margin: 15px;
+            display: inline-block;
+            margin: 15px 0;
             color: #16a34a;
             text-decoration: none;
             font-weight: bold;
         }
 
-        .cart-container {
-            margin: 15px;
+        .cart-title {
+            margin-bottom: 20px;
+            font-size: 22px;
         }
 
-        .cart-title {
-            margin-bottom: 15px;
+        .cart-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .cart-layout {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            #cart-items {
+                flex: 2;
+            }
+            .cart-summary {
+                flex: 1;
+                position: sticky;
+                top: 80px;
+            }
         }
 
         #cart-items {
@@ -67,53 +112,132 @@
             background: white;
             padding: 15px;
             border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e5e7eb;
         }
 
-        .cart-item h3 {
-            margin-bottom: 8px;
+        .cart-item-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
         }
 
-        .cart-item p {
-            margin: 5px 0;
-            color: #555;
+        .cart-item-info p {
+            color: #16a34a;
+            font-weight: bold;
+            font-size: 15px;
         }
 
-        .cart-item button {
-            margin-top: 10px;
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .qty-controls button {
+            width: 30px;
+            height: 30px;
+            background: #f3f4f6;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .qty-controls span {
+            width: 32px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .remove-btn {
             background: #dc2626;
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
         }
 
         .cart-summary {
-            margin-top: 20px;
             background: white;
-            padding: 18px;
+            padding: 20px;
             border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
         }
 
         .cart-total {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             color: #16a34a;
-            margin-bottom: 15px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
         .checkout-btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: #16a34a;
             color: white;
             border: none;
             border-radius: 6px;
             font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .checkout-btn:hover {
+            opacity: 0.9;
+        }
+
+        .empty-cart {
+            background: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .empty-cart h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #4b5563;
+        }
+
+        .empty-cart a {
+            display: inline-block;
+            margin-top: 15px;
+            background: #16a34a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         footer {
-            margin-top: 30px;
+            margin-top: 40px;
             padding: 25px 15px;
             background: #1f2937;
             color: white;
@@ -123,6 +247,7 @@
         footer p {
             margin-top: 7px;
             font-size: 13px;
+            color: #9ca3af;
         }
     </style>
 </head>
@@ -130,63 +255,138 @@
 <body>
 
 <header>
-
     <div class="top">
-
-        <div class="logo">
-            ⚙️ Machinery Shop
-        </div>
-
-        <div class="cart">
-            🛒
-        </div>
-
+        <a href="index.html" class="logo">⚙️ Machinery Shop</a>
+        <a href="cart.html" class="cart">
+            🛒 <span id="cart-count" class="cart-count">0</span>
+        </a>
     </div>
-
 </header>
 
+<div class="main-wrapper">
+    <a href="index.html" class="back">← Continue Shopping</a>
 
-<a href="index.html" class="back">
-    ← Continue Shopping
-</a>
+    <h2 class="cart-title">🛒 আপনার Shopping Cart</h2>
 
+    <div class="cart-layout">
+        <div id="cart-items"></div>
 
-<div class="cart-container">
+        <div class="cart-summary" id="cart-summary">
+            <div class="summary-row">
+                <span>উপমোট (Subtotal):</span>
+                <span id="subtotal-price">৳ 0</span>
+            </div>
+            <div class="summary-row">
+                <span>ডেলিভারি চার্জ:</span>
+                <span>Checkout-এ নির্ধারিত হবে</span>
+            </div>
+            <div class="summary-row cart-total">
+                <span>সর্বমোট:</span>
+                <span id="cart-total">৳ 0</span>
+            </div>
 
-    <h2 class="cart-title">
-        🛒 আপনার Shopping Cart
-    </h2>
-
-    <div id="cart-items"></div>
-
-
-    <div class="cart-summary">
-
-        <div class="cart-total">
-            মোট: <span id="cart-total">৳ 0</span>
+            <button class="checkout-btn" onclick="proceedToCheckout()">
+                Proceed to Checkout ➔
+            </button>
         </div>
-
-        <button class="checkout-btn">
-            Proceed to Checkout
-        </button>
-
     </div>
-
 </div>
 
-
 <footer>
-
     <h3>Machinery Shop</h3>
-
-    <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
-
+    <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
     <p>🚚 সারা বাংলাদেশে Delivery</p>
-
 </footer>
 
-
 <script src="script.js"></script>
+<script>
+function renderCartPage() {
+    const itemsContainer = document.getElementById("cart-items");
+    const summaryContainer = document.getElementById("cart-summary");
+    const totalElement = document.getElementById("cart-total");
+    const subtotalElement = document.getElementById("subtotal-price");
 
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (typeof updateCartCount === "function") {
+        updateCartCount();
+    }
+
+    if (!cart || cart.length === 0) {
+        if (itemsContainer) {
+            itemsContainer.innerHTML = `
+                <div class="empty-cart">
+                    <h3>আপনার কার্ট বর্তমানে খালি!</h3>
+                    <p>পছন্দের প্রোডাক্ট যোগ করতে শপে যান।</p>
+                    <a href="index.html">কেনাকাটা শুরু করুন</a>
+                </div>`;
+        }
+        if (summaryContainer) summaryContainer.style.display = "none";
+        return;
+    }
+
+    if (summaryContainer) summaryContainer.style.display = "block";
+
+    let total = 0;
+    if (itemsContainer) {
+        itemsContainer.innerHTML = cart.map((item, index) => {
+            const qty = item.quantity || 1;
+            const itemTotal = item.price * qty;
+            total += itemTotal;
+
+            return `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <p>৳ ${Number(item.price).toLocaleString()} ${qty > 1 ? 'x ' + qty : ''}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="qty-controls">
+                            <button onclick="updateItemQuantity(${index}, -1)">−</button>
+                            <span>${qty}</span>
+                            <button onclick="updateItemQuantity(${index}, 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeItemFromCart(${index})">🗑️ ডিলিট</button>
+                    </div>
+                </div>`;
+        }).join("");
+    }
+
+    if (totalElement) totalElement.innerText = "৳ " + total.toLocaleString();
+    if (subtotalElement) subtotalElement.innerText = "৳ " + total.toLocaleString();
+}
+
+function updateItemQuantity(index, change) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (!cart[index]) return;
+
+    cart[index].quantity = (cart[index].quantity || 1) + change;
+
+    if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCartPage();
+}
+
+function removeItemFromCart(index) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCartPage();
+}
+
+function proceedToCheckout() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+        alert("আপনার কার্ট খালি!");
+        return;
+    }
+    window.location.href = "checkout.html";
+}
+
+document.addEventListener("DOMContentLoaded", renderCartPage);
+</script>
 </body>
 </html>
