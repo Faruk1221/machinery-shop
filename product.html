@@ -1,274 +1,1568 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Product Details - Machinery Shop</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background: #f3f4f6;
-            color: #1f2937;
+            background: #f6f7f9;
+            color: #172033;
+            padding-bottom: 80px;
         }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
 
         header {
             background: white;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
+            padding: 14px 15px;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .top {
+        .top-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: #16a34a;
-            font-size: 21px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 800;
         }
 
-        .cart {
-            font-size: 23px;
-        }
-
-        .back {
-            display: block;
-            margin: 15px;
-            color: #16a34a;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .product-container {
-            background: white;
-            margin: 15px;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .product-image {
-            width: 100%;
-            height: 280px;
-            background: #f3f4f6;
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: #ecfdf3;
             border-radius: 10px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            font-size: 100px;
+            font-size: 22px;
         }
 
+        .header-cart {
+            position: relative;
+            font-size: 24px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -7px;
+            right: -9px;
+
+            min-width: 17px;
+            height: 17px;
+
+            padding: 0 4px;
+
+            background: #dc2626;
+            color: white;
+
+            border-radius: 50%;
+
+            font-size: 9px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back {
+            display: block;
+
+            max-width: 1100px;
+
+            margin: 15px auto;
+
+            padding: 0 15px;
+
+            color: #16a34a;
+
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           PRODUCT DETAILS
+        ========================= */
+
+        .product-container {
+
+            max-width: 1100px;
+
+            margin: 0 auto 20px;
+
+            padding: 15px;
+
+            display: grid;
+
+            grid-template-columns: 1fr;
+
+            gap: 20px;
+        }
+
+
+        /* =========================
+           PRODUCT IMAGE
+        ========================= */
+
+        .product-image-box {
+
+            background: white;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            border: 1px solid #eeeeee;
+
+            min-height: 300px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+        }
+
+        .product-image-box img {
+
+            width: 100%;
+
+            height: 350px;
+
+            object-fit: contain;
+
+            display: block;
+        }
+
+        .product-placeholder {
+
+            font-size: 110px;
+
+            color: #16a34a;
+        }
+
+
+        /* =========================
+           BADGE
+        ========================= */
+
+        .offer-badge {
+
+            position: absolute;
+
+            top: 12px;
+
+            left: 12px;
+
+            background: #dc2626;
+
+            color: white;
+
+            padding: 6px 10px;
+
+            border-radius: 6px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            z-index: 2;
+        }
+
+
+        /* =========================
+           PRODUCT INFO
+        ========================= */
+
         .product-info {
-            padding-top: 20px;
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
+            border: 1px solid #eeeeee;
         }
 
         .product-info h1 {
-            font-size: 23px;
-            margin-bottom: 12px;
+
+            font-size: 25px;
+
+            line-height: 1.35;
+
+            margin-bottom: 10px;
         }
+
+
+        /* =========================
+           RATING
+        ========================= */
 
         .rating {
+
             color: #f59e0b;
-            margin-bottom: 12px;
+
+            font-size: 14px;
+
+            margin-bottom: 15px;
         }
 
+
+        /* =========================
+           PRICE
+        ========================= */
+
         .price {
+
             color: #16a34a;
-            font-size: 27px;
-            font-weight: bold;
+
+            font-size: 28px;
+
+            font-weight: 800;
         }
 
         .old-price {
+
             color: #999;
+
             text-decoration: line-through;
-            margin-top: 5px;
+
+            margin-top: 4px;
+
+            font-size: 13px;
         }
 
+
+        /* =========================
+           STOCK
+        ========================= */
+
         .stock {
+
             color: #16a34a;
+
+            background: #f0fdf4;
+
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 6px;
+
+            font-size: 12px;
+
             font-weight: bold;
+
             margin: 15px 0;
         }
 
+
+        /* =========================
+           DESCRIPTION
+        ========================= */
+
         .description {
-            line-height: 1.6;
+
             color: #555;
-            margin-bottom: 20px;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            margin-bottom: 18px;
         }
 
-        .buttons {
+
+        /* =========================
+           QUANTITY
+        ========================= */
+
+        .quantity-title {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        .quantity {
+
             display: flex;
+
+            align-items: center;
+
+            width: fit-content;
+
+            border: 1px solid #ddd;
+
+            border-radius: 7px;
+
+            overflow: hidden;
+
+            margin-bottom: 18px;
+        }
+
+        .quantity button {
+
+            width: 40px;
+
+            height: 40px;
+
+            border: none;
+
+            background: #f3f4f6;
+
+            font-size: 20px;
+
+            cursor: pointer;
+        }
+
+        .quantity span {
+
+            min-width: 45px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .buttons {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
             gap: 10px;
         }
 
         .buttons button {
-            flex: 1;
-            padding: 13px;
+
             border: none;
-            border-radius: 6px;
+
+            border-radius: 8px;
+
+            padding: 13px 8px;
+
+            font-size: 14px;
+
             font-weight: bold;
-            font-size: 15px;
+
+            cursor: pointer;
         }
 
         .cart-btn {
+
             background: #f59e0b;
+
             color: white;
         }
 
         .buy-btn {
+
             background: #16a34a;
+
             color: white;
         }
 
+
+        /* =========================
+           SPECIFICATIONS
+        ========================= */
+
         .specifications {
+
             margin-top: 20px;
+
             background: #f9fafb;
+
             padding: 15px;
-            border-radius: 8px;
+
+            border-radius: 10px;
         }
 
         .specifications h2 {
-            margin-bottom: 12px;
-            font-size: 19px;
+
+            font-size: 18px;
+
+            margin-bottom: 10px;
         }
 
-        .specifications p {
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
+        .spec-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 9px 0;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            font-size: 13px;
         }
+
+        .spec-row:last-child {
+
+            border-bottom: none;
+        }
+
+        .spec-label {
+
+            color: #666;
+        }
+
+        .spec-value {
+
+            font-weight: bold;
+
+            text-align: right;
+        }
+
+
+        /* =========================
+           RELATED PRODUCTS
+        ========================= */
+
+        .related-section {
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 0 15px 25px;
+        }
+
+        .section-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 13px;
+        }
+
+        .section-title {
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+        .view-all {
+
+            color: #16a34a;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        .related-products {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 12px;
+        }
+
+        .related-card {
+
+            background: white;
+
+            border: 1px solid #eeeeee;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+        }
+
+        .related-image {
+
+            height: 145px;
+
+            background: #f3f4f6;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 55px;
+        }
+
+        .related-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: contain;
+        }
+
+        .related-info {
+
+            padding: 10px;
+        }
+
+        .related-info h3 {
+
+            font-size: 13px;
+
+            line-height: 1.4;
+
+            min-height: 37px;
+        }
+
+        .related-price {
+
+            color: #16a34a;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            margin-top: 5px;
+        }
+
+        .related-btn {
+
+            display: block;
+
+            text-align: center;
+
+            background: #16a34a;
+
+            color: white;
+
+            padding: 8px;
+
+            border-radius: 6px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            margin-top: 8px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
 
         footer {
-            margin-top: 20px;
-            padding: 25px;
-            background: #1f2937;
+
+            background: #172033;
+
             color: white;
+
             text-align: center;
+
+            padding: 28px 15px;
         }
+
+        footer h3 {
+
+            color: #4ade80;
+
+            margin-bottom: 8px;
+        }
+
+        footer p {
+
+            color: #d1d5db;
+
+            font-size: 12px;
+
+            margin: 6px 0;
+        }
+
+
+        /* =========================
+           BOTTOM NAV
+        ========================= */
+
+        .bottom-nav {
+
+            position: fixed;
+
+            left: 10px;
+
+            right: 10px;
+
+            bottom: 10px;
+
+            height: 62px;
+
+            background: rgba(255,255,255,.97);
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 17px;
+
+            box-shadow: 0 5px 25px rgba(0,0,0,.15);
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            z-index: 2000;
+        }
+
+        .bottom-item {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #6b7280;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .bottom-item span {
+
+            font-size: 21px;
+
+            margin-bottom: 2px;
+        }
+
+        .bottom-item.active {
+
+            color: #16a34a;
+        }
+
+
+        /* =========================
+           DESKTOP
+        ========================= */
+
+        @media (min-width: 768px) {
+
+            .product-container {
+
+                grid-template-columns: 1fr 1fr;
+
+                align-items: start;
+
+                padding-top: 10px;
+            }
+
+            .product-image-box {
+
+                min-height: 500px;
+            }
+
+            .product-image-box img {
+
+                height: 500px;
+            }
+
+            .related-products {
+
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .bottom-nav {
+
+                max-width: 500px;
+
+                left: 50%;
+
+                right: auto;
+
+                transform: translateX(-50%);
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <header>
 
-    <div class="top">
+    <div class="top-header">
 
-        <div class="logo">
-            ⚙️ Machinery Shop
-        </div>
+        <a
+            href="index.html"
+            class="logo"
+        >
 
-        <div class="cart">
+            <div class="logo-icon">
+                ⚙️
+            </div>
+
+            Machinery Shop
+
+        </a>
+
+
+        <a
+            href="cart.html"
+            class="header-cart"
+        >
+
             🛒
-        </div>
+
+            <span
+                class="cart-badge"
+                id="cart-count"
+            >
+                0
+            </span>
+
+        </a>
 
     </div>
 
 </header>
 
 
-<a href="index.html" class="back">
+<!-- =========================
+     BACK
+========================= -->
+
+<a
+    href="index.html"
+    class="back"
+>
     ← Back to Home
 </a>
 
 
-<div class="product-container">
+<!-- =========================
+     PRODUCT DETAILS
+========================= -->
 
-    <div class="product-image">
-        ⚖️
-    </div>
+<main>
 
+    <div
+        class="product-container"
+        id="product-details"
+    >
 
-    <div class="product-info">
-
-        <h1>Digital Weighing Scale</h1>
-
-        <div class="rating">
-            ⭐⭐⭐⭐⭐ (4.8)
-        </div>
-
-        <div class="price">
-            ৳ ৩,৫০০
-        </div>
-
-        <div class="old-price">
-            ৳ ৪,০০০
-        </div>
-
-        <div class="stock">
-            ● In Stock
-        </div>
-
-        <p class="description">
-            ব্যবসা, দোকান, মুদি, ফল-সবজি ও বিভিন্ন
-            ওজন মাপার কাজে ব্যবহারযোগ্য Digital
-            Weighing Scale।
-        </p>
-
-
-        <div class="buttons">
-
-            <button class="cart-btn" onclick="addToCart('Digital Weighing Scale', 3500)">   
-                🛒 Add to Cart
-            </button>
-
-            <button class="buy-btn">
-                Buy Now
-            </button>
-
-        </div>
-
-
-        <div class="specifications">
-
-            <h2>Product Specifications</h2>
-
-            <p>
-                <strong>Capacity:</strong> 30 KG
-            </p>
-
-            <p>
-                <strong>Display:</strong> Digital LED
-            </p>
-
-            <p>
-                <strong>Body:</strong> Stainless Steel
-            </p>
-
-            <p>
-                <strong>Power:</strong> AC + Battery
-            </p>
-
-            <p>
-                <strong>Country:</strong> China
-            </p>
-
-        </div>
+        <!-- Product will load automatically -->
 
     </div>
 
-</div>
 
+    <!-- =========================
+         RELATED PRODUCTS
+    ========================= -->
+
+    <section
+        class="related-section"
+        id="related-section"
+    >
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                🔥 এই ক্যাটাগরির আরও পণ্য
+            </h2>
+
+            <a
+                href="index.html"
+                class="view-all"
+            >
+                View All →
+            </a>
+
+        </div>
+
+
+        <div
+            class="related-products"
+            id="related-products"
+        >
+
+            <!-- Related products -->
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
 
-    <h3>Machinery Shop</h3>
+    <h3>
+        ⚙️ Machinery Shop
+    </h3>
 
-    <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
+    <p>
+        আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়
+    </p>
 
-    <p>🚚 সারা বাংলাদেশে Delivery</p>
+    <p>
+        🚚 সারা বাংলাদেশে Delivery
+    </p>
 
 </footer>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<nav class="bottom-nav">
+
+    <a
+        href="index.html"
+        class="bottom-item active"
+    >
+
+        <span>🏠</span>
+
+        Home
+
+    </a>
+
+
+    <a
+        href="index.html#searchInput"
+        class="bottom-item"
+    >
+
+        <span>🔍</span>
+
+        Search
+
+    </a>
+
+
+    <a
+        href="cart.html"
+        class="bottom-item"
+    >
+
+        <span>🛒</span>
+
+        Cart
+
+    </a>
+
+</nav>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script src="products.js"></script>
 <script src="script.js"></script>
+
+
+<script>
+
+/* =========================================
+   PRODUCT DETAILS SYSTEM
+========================================= */
+
+
+let selectedProduct = null;
+
+let selectedQuantity = 1;
+
+
+/* =========================================
+   GET PRODUCT ID
+========================================= */
+
+function getProductId() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    return (
+        params.get("id") ||
+        params.get("product") ||
+        ""
+    );
+
+}
+
+
+/* =========================================
+   FIND PRODUCT
+========================================= */
+
+function findProduct() {
+
+    if (
+        typeof products === "undefined" ||
+        !Array.isArray(products)
+    ) {
+
+        return null;
+
+    }
+
+
+    const id =
+        getProductId();
+
+
+    if (!id) {
+
+        return products[0] || null;
+
+    }
+
+
+    return products.find(
+        function(product) {
+
+            return (
+                String(product.id) ===
+                String(id)
+            );
+
+        }
+    ) || null;
+
+}
+
+
+/* =========================================
+   PRODUCT IMAGE
+========================================= */
+
+function productDetailsImage(product) {
+
+    if (!product.image) {
+
+        return `
+            <div class="product-placeholder">
+                ⚙️
+            </div>
+        `;
+
+    }
+
+
+    const image =
+        String(product.image);
+
+
+    if (
+        image.includes("/") ||
+        image.includes(".jpg") ||
+        image.includes(".jpeg") ||
+        image.includes(".png") ||
+        image.includes(".webp") ||
+        image.includes(".gif")
+    ) {
+
+        return `
+            <img
+                src="${image}"
+                alt="${product.name}"
+                onerror="
+                    this.style.display='none';
+                "
+            >
+        `;
+
+    }
+
+
+    return `
+        <div class="product-placeholder">
+            ${image}
+        </div>
+    `;
+
+}
+
+
+/* =========================================
+   LOAD PRODUCT DETAILS
+========================================= */
+
+function loadProductDetails() {
+
+    const container =
+        document.getElementById(
+            "product-details"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    selectedProduct =
+        findProduct();
+
+
+    if (!selectedProduct) {
+
+        container.innerHTML = `
+
+            <div class="product-info">
+
+                <h1>
+                    Product পাওয়া যায়নি
+                </h1>
+
+                <p class="description">
+                    দুঃখিত, এই Product বর্তমানে পাওয়া যাচ্ছে না।
+                </p>
+
+                <a
+                    href="index.html"
+                    class="view-all"
+                >
+                    ← Back to Products
+                </a>
+
+            </div>
+
+        `;
+
+        document.getElementById(
+            "related-section"
+        ).style.display = "none";
+
+        return;
+
+    }
+
+
+    document.title =
+        selectedProduct.name +
+        " - Machinery Shop";
+
+
+    const oldPrice =
+        selectedProduct.oldPrice
+            ? `
+                <div class="old-price">
+                    ৳ ${
+                        Number(
+                            selectedProduct.oldPrice
+                        ).toLocaleString()
+                    }
+                </div>
+            `
+            : "";
+
+
+    const badge =
+        selectedProduct.badge
+            ? `
+                <span class="offer-badge">
+                    ${selectedProduct.badge}
+                </span>
+            `
+            : "";
+
+
+    const rating =
+        selectedProduct.rating
+            ? `
+                <div class="rating">
+                    ⭐⭐⭐⭐⭐
+                    ${selectedProduct.rating}
+                </div>
+            `
+            : "";
+
+
+    const description =
+        selectedProduct.description ||
+        "এই Product সম্পর্কে বিস্তারিত তথ্য শীঘ্রই যোগ করা হবে।";
+
+
+    const stock =
+        selectedProduct.stock ||
+        "In Stock";
+
+
+    container.innerHTML = `
+
+        <div class="product-image-box">
+
+            ${badge}
+
+            ${productDetailsImage(
+                selectedProduct
+            )}
+
+        </div>
+
+
+        <div class="product-info">
+
+            <h1>
+                ${selectedProduct.name}
+            </h1>
+
+
+            ${rating}
+
+
+            <div class="price">
+                ৳ ${
+                    Number(
+                        selectedProduct.price
+                    ).toLocaleString()
+                }
+            </div>
+
+
+            ${oldPrice}
+
+
+            <div class="stock">
+                ● ${stock}
+            </div>
+
+
+            <p class="description">
+                ${description}
+            </p>
+
+
+            <div class="quantity-title">
+                Quantity
+            </div>
+
+
+            <div class="quantity">
+
+                <button
+                    type="button"
+                    onclick="changeProductQuantity(-1)"
+                >
+                    −
+                </button>
+
+
+                <span id="product-quantity">
+                    1
+                </span>
+
+
+                <button
+                    type="button"
+                    onclick="changeProductQuantity(1)"
+                >
+                    +
+                </button>
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    class="cart-btn"
+                    type="button"
+                    onclick="addSelectedProductToCart()"
+                >
+                    🛒 Add to Cart
+                </button>
+
+
+                <button
+                    class="buy-btn"
+                    type="button"
+                    onclick="buyNow()"
+                >
+                    ⚡ Buy Now
+                </button>
+
+            </div>
+
+
+            ${createSpecifications(
+                selectedProduct
+            )}
+
+        </div>
+
+    `;
+
+
+    loadRelatedProducts();
+
+}
+
+
+/* =========================================
+   SPECIFICATIONS
+========================================= */
+
+function createSpecifications(product) {
+
+    if (
+        !product.specifications ||
+        typeof product.specifications !== "object"
+    ) {
+
+        return "";
+
+    }
+
+
+    const rows =
+        Object.entries(
+            product.specifications
+        )
+        .map(function(item) {
+
+            return `
+
+                <div class="spec-row">
+
+                    <span class="spec-label">
+                        ${item[0]}
+                    </span>
+
+                    <span class="spec-value">
+                        ${item[1]}
+                    </span>
+
+                </div>
+
+            `;
+
+        })
+        .join("");
+
+
+    if (!rows) {
+        return "";
+    }
+
+
+    return `
+
+        <div class="specifications">
+
+            <h2>
+                Product Specifications
+            </h2>
+
+            ${rows}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+   CHANGE QUANTITY
+========================================= */
+
+function changeProductQuantity(change) {
+
+    selectedQuantity += change;
+
+
+    if (selectedQuantity < 1) {
+
+        selectedQuantity = 1;
+
+    }
+
+
+    const quantityElement =
+        document.getElementById(
+            "product-quantity"
+        );
+
+
+    if (quantityElement) {
+
+        quantityElement.innerText =
+            selectedQuantity;
+
+    }
+
+}
+
+
+/* =========================================
+   ADD SELECTED PRODUCT TO CART
+========================================= */
+
+function addSelectedProductToCart() {
+
+    if (!selectedProduct) {
+        return;
+    }
+
+
+    for (
+        let i = 0;
+        i < selectedQuantity;
+        i++
+    ) {
+
+        addToCart(
+            selectedProduct.name,
+            selectedProduct.price
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   BUY NOW
+========================================= */
+
+function buyNow() {
+
+    if (!selectedProduct) {
+        return;
+    }
+
+
+    for (
+        let i = 0;
+        i < selectedQuantity;
+        i++
+    ) {
+
+        addToCart(
+            selectedProduct.name,
+            selectedProduct.price
+        );
+
+    }
+
+
+    window.location.href =
+        "cart.html";
+
+}
+
+
+/* =========================================
+   RELATED PRODUCTS
+========================================= */
+
+function loadRelatedProducts() {
+
+    const container =
+        document.getElementById(
+            "related-products"
+        );
+
+
+    if (
+        !container ||
+        !selectedProduct ||
+        typeof products === "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    const related =
+        products
+        .filter(function(product) {
+
+            return (
+                product.id !==
+                selectedProduct.id &&
+
+                product.category ===
+                selectedProduct.category
+
+            );
+
+        })
+        .slice(0, 4);
+
+
+    if (related.length === 0) {
+
+        document.getElementById(
+            "related-section"
+        ).style.display = "none";
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        related
+        .map(function(product) {
+
+            return `
+
+                <div class="related-card">
+
+                    <a
+                        href="product.html?id=${product.id}"
+                    >
+
+                        <div class="related-image">
+
+                            ${
+                                product.image
+                                    ? `
+                                        <img
+                                            src="${product.image}"
+                                            alt="${product.name}"
+                                            loading="lazy"
+                                        >
+                                      `
+                                    : "⚙️"
+                            }
+
+                        </div>
+
+                    </a>
+
+
+                    <div class="related-info">
+
+                        <h3>
+                            ${product.name}
+                        </h3>
+
+
+                        <div class="related-price">
+                            ৳ ${
+                                Number(
+                                    product.price
+                                ).toLocaleString()
+                            }
+                        </div>
+
+
+                        <a
+                            href="product.html?id=${product.id}"
+                            class="related-btn"
+                        >
+                            View Product
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        })
+        .join("");
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadProductDetails();
+
+        updateCartCount();
+
+    }
+);
+
+</script>
+
+
 </body>
+
 </html>
