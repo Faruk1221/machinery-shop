@@ -1,7 +1,6 @@
 /* =========================================
    MACHINERY SHOP
    FINAL PRODUCT DATABASE
-   সহজে নতুন Product Add করার জন্য তৈরি
    ========================================= */
 
 const products = [
@@ -13,7 +12,7 @@ const products = [
     {
         id: "machinery-001",
         name: "Manual Cup Sealing Machine",
-        bnName: "ম্যানুয়াল কাপ সিলিং মেশিন",
+        bnName: "ম্যানুয়াল কাপ সিলিং মেশিন",
         category: "machinery",
         categoryName: "Machinery",
         subCategory: "Cup Sealing Machine",
@@ -29,8 +28,7 @@ const products = [
 
         badge: "BEST SELLER",
 
-        description:
-            "জুস, শরবত ও ফাস্টফুড ব্যবসার জন্য কাপ সিলিং মেশিন।",
+        description: "জুস, শরবত ও ফাস্টফুড ব্যবসার জন্য কাপ সিলিং মেশিন।",
 
         keywords: [
             "cup sealer",
@@ -50,9 +48,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=machinery-001"
     },
-
 
     {
         id: "machinery-002",
@@ -73,8 +70,7 @@ const products = [
 
         badge: "POPULAR",
 
-        description:
-            "কটন ক্যান্ডি ব্যবসা ও ইভেন্টের জন্য উপযোগী মেশিন।",
+        description: "কটন ক্যান্ডি ব্যবসা ও ইভেন্টের জন্য উপযোগী মেশিন।",
 
         keywords: [
             "cotton candy",
@@ -94,9 +90,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=machinery-002"
     },
-
 
     {
         id: "machinery-003",
@@ -117,8 +112,7 @@ const products = [
 
         badge: "BEST SELLER",
 
-        description:
-            "আখের জুস ব্যবসার জন্য AC & DC সহ বাণিজ্যিক মেশিন।",
+        description: "আখের জুস ব্যবসার জন্য AC & DC সহ বাণিজ্যিক মেশিন।",
 
         keywords: [
             "sugarcane machine",
@@ -138,14 +132,13 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=machinery-003"
     },
-
 
     {
         id: "machinery-004",
         name: "Commercial Juice Machine",
-        bnName: "কমার্শিয়াল জুস মেশিন",
+        bnName: "কমার্শিয়াল জুস মেশিন",
         category: "machinery",
         categoryName: "Machinery",
         subCategory: "Juice Machine",
@@ -161,8 +154,7 @@ const products = [
 
         badge: "POPULAR",
 
-        description:
-            "জুস শপ, রেস্টুরেন্ট ও ব্যবসার জন্য কমার্শিয়াল জুস মেশিন।",
+        description: "জুস শপ, রেস্টুরেন্ট ও ব্যবসার জন্য কমার্শিয়াল জুস মেশিন।",
 
         keywords: [
             "juice machine",
@@ -182,9 +174,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=machinery-004"
     },
-
 
     {
         id: "machinery-005",
@@ -205,8 +196,7 @@ const products = [
 
         badge: "POPULAR",
 
-        description:
-            "ফাস্টফুড, সিনেমা ও স্ন্যাকস ব্যবসার জন্য পপকর্ন মেশিন।",
+        description: "ফাস্টফুড, সিনেমা ও স্ন্যাকস ব্যবসার জন্য পপকর্ন মেশিন।",
 
         keywords: [
             "popcorn machine",
@@ -225,9 +215,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=machinery-005"
     },
-
 
     /* =========================
        FOOD & RESTAURANT
@@ -236,7 +225,7 @@ const products = [
     {
         id: "food-001",
         name: "Commercial Waffle Maker",
-        bnName: "ওয়াফল মেকার",
+        bnName: "ওয়াফল মেকার",
         category: "food",
         categoryName: "Food & Restaurant",
         subCategory: "Waffle Maker",
@@ -252,14 +241,13 @@ const products = [
 
         badge: "OFFER",
 
-        description:
-            "ক্যাফে ও ফাস্টফুড ব্যবসার জন্য কমার্শিয়াল ওয়াফল মেকার।",
+        description: "ক্যাফে ও ফাস্টফুড ব্যবসার জন্য কমার্শিয়াল ওয়াফল মেকার।",
 
         keywords: [
             "waffle maker",
             "waffle machine",
-            "ওয়াফল মেকার",
-            "ওয়াফল মেশিন"
+            "ওয়াফল মেকার",
+            "ওয়াফল মেশিন"
         ],
 
         specifications: {
@@ -272,14 +260,13 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=food-001"
     },
-
 
     {
         id: "food-002",
         name: "Commercial Deep Fryer",
-        bnName: "ডিপ ফ্রায়ার",
+        bnName: "ডিপ ফ্রায়ার",
         category: "food",
         categoryName: "Food & Restaurant",
         subCategory: "Deep Fryer",
@@ -295,14 +282,13 @@ const products = [
 
         badge: "POPULAR",
 
-        description:
-            "রেস্টুরেন্ট ও ফাস্টফুড ব্যবসার জন্য কমার্শিয়াল ডিপ ফ্রায়ার।",
+        description: "রেস্টুরেন্ট ও ফাস্টফুড ব্যবসার জন্য কমার্শিয়াল ডিপ ফ্রায়ার।",
 
         keywords: [
             "deep fryer",
             "fryer machine",
-            "ডিপ ফ্রায়ার",
-            "ফ্রায়ার মেশিন"
+            "ডিপ ফ্রায়ার",
+            "ফ্রায়ার মেশিন"
         ],
 
         specifications: {
@@ -315,9 +301,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=food-002"
     },
-
 
     /* =========================
        HOME
@@ -326,7 +311,7 @@ const products = [
     {
         id: "home-001",
         name: "Mini Vacuum Cleaner",
-        bnName: "মিনি ভ্যাকুয়াম ক্লিনার",
+        bnName: "মিনি ভ্যাকুয়াম ক্লিনার",
         category: "home",
         categoryName: "Home",
         subCategory: "Cleaning",
@@ -342,13 +327,12 @@ const products = [
 
         badge: "NEW",
 
-        description:
-            "বাড়ি ও অফিস পরিষ্কারের জন্য ছোট ও সহজে ব্যবহারযোগ্য ভ্যাকুয়াম ক্লিনার।",
+        description: "বাড়ি ও অফিস পরিষ্কারের জন্য ছোট ও সহজে ব্যবহারযোগ্য ভ্যাকুয়াম ক্লিনার।",
 
         keywords: [
             "vacuum cleaner",
             "mini vacuum",
-            "ভ্যাকুয়াম ক্লিনার",
+            "ভ্যাকুয়াম ক্লিনার",
             "ক্লিনার"
         ],
 
@@ -362,9 +346,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=home-001"
     },
-
 
     /* =========================
        DAILY NEED
@@ -373,7 +356,7 @@ const products = [
     {
         id: "daily-001",
         name: "Daily Use Product",
-        bnName: "দৈনন্দিন প্রয়োজনীয় পণ্য",
+        bnName: "দৈনন্দিন প্রয়োজনীয় পণ্য",
         category: "daily",
         categoryName: "Daily Need",
         subCategory: "Daily Products",
@@ -389,14 +372,13 @@ const products = [
 
         badge: "NEW",
 
-        description:
-            "দৈনন্দিন জীবনে প্রয়োজনীয় পণ্য।",
+        description: "দৈনন্দিন জীবনে প্রয়োজনীয় পণ্য।",
 
         keywords: [
             "daily need",
             "daily product",
             "দৈনন্দিন পণ্য",
-            "প্রয়োজনীয় পণ্য"
+            "প্রয়োজনীয় পণ্য"
         ],
 
         specifications: {
@@ -409,9 +391,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=daily-001"
     },
-
 
     /* =========================
        FASHION
@@ -436,8 +417,7 @@ const products = [
 
         badge: "NEW",
 
-        description:
-            "পুরুষ ও নারীদের জন্য নির্বাচিত ফ্যাশন পণ্য।",
+        description: "পুরুষ ও নারীদের জন্য নির্বাচিত ফ্যাশন পণ্য।",
 
         keywords: [
             "fashion",
@@ -456,9 +436,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=fashion-001"
     },
-
 
     /* =========================
        HEALTH & CARE
@@ -467,7 +446,7 @@ const products = [
     {
         id: "health-001",
         name: "Health & Care Product",
-        bnName: "হেলথ ও কেয়ার পণ্য",
+        bnName: "হেলথ ও কেয়ার পণ্য",
         category: "health",
         categoryName: "Health & Care",
         subCategory: "Health Care",
@@ -483,15 +462,14 @@ const products = [
 
         badge: "NEW",
 
-        description:
-            "দৈনন্দিন স্বাস্থ্য ও ব্যক্তিগত যত্নের প্রয়োজনীয় পণ্য।",
+        description: "দৈনন্দিন স্বাস্থ্য ও ব্যক্তিগত যত্নের প্রয়োজনীয় পণ্য।",
 
         keywords: [
             "health",
             "health care",
             "care product",
             "হেলথ",
-            "কেয়ার",
+            "কেয়ার",
             "স্বাস্থ্য পণ্য"
         ],
 
@@ -505,9 +483,8 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=health-001"
     },
-
 
     /* =========================
        TOOLS & OTHERS
@@ -532,8 +509,7 @@ const products = [
 
         badge: "POPULAR",
 
-        description:
-            "বাড়ি, ওয়ার্কশপ ও বিভিন্ন কাজের জন্য ইলেকট্রিক ড্রিল মেশিন।",
+        description: "বাড়ি, ওয়ার্কশপ ও বিভিন্ন কাজের জন্য ইলেকট্রিক ড্রিল মেশিন।",
 
         keywords: [
             "drill machine",
@@ -552,7 +528,7 @@ const products = [
         delivery: "All Bangladesh",
         seller: "Machinery Shop",
 
-        page: "product.html"
+        page: "product.html?id=tools-001"
     }
 
 ];
