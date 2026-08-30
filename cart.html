@@ -118,15 +118,31 @@
             border: 1px solid #e5e7eb;
         }
 
+        /* প্রোডাক্ট ইনফো ও ইমেজের নতুন স্টাইল */
+        .cart-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cart-item-img {
+            width: 65px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
         .cart-item-info h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
+            font-size: 15px;
+            margin-bottom: 4px;
         }
 
         .cart-item-info p {
             color: #16a34a;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .cart-item-actions {
@@ -205,10 +221,23 @@
             font-weight: bold;
             cursor: pointer;
             transition: opacity 0.2s;
+            margin-bottom: 10px;
         }
 
-        .checkout-btn:hover {
-            opacity: 0.9;
+        .whatsapp-btn {
+            width: 100%;
+            padding: 14px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .empty-cart {
@@ -288,6 +317,10 @@
             <button class="checkout-btn" onclick="proceedToCheckout()">
                 Proceed to Checkout ➔
             </button>
+
+            <button class="whatsapp-btn" onclick="sendOrderToWhatsApp()">
+                💬 WhatsApp-এ অর্ডার করুন
+            </button>
         </div>
     </div>
 </div>
@@ -305,12 +338,18 @@ function renderCartPage() {
     const summaryContainer = document.getElementById("cart-summary");
     const totalElement = document.getElementById("cart-total");
     const subtotalElement = document.getElementById("subtotal-price");
+    const cartCountEl = document.getElementById("cart-count");
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    if (typeof updateCartCount === "function") {
-        updateCartCount();
+    let cart = [];
+    try {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+    } catch (e) {
+        cart = [];
     }
+
+    // মোট কোয়ান্টিটি গণনা
+    const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    if (cartCountEl) cartCountEl.innerText = totalQty;
 
     if (!cart || cart.length === 0) {
         if (itemsContainer) {
@@ -330,15 +369,20 @@ function renderCartPage() {
     let total = 0;
     if (itemsContainer) {
         itemsContainer.innerHTML = cart.map((item, index) => {
-            const qty = item.quantity || 1;
-            const itemTotal = item.price * qty;
+            const qty = Number(item.quantity) || 1;
+            const price = Number(item.price) || 0;
+            const itemTotal = price * qty;
             total += itemTotal;
+            const imgSrc = item.image || 'https://via.placeholder.com/65'; // ডিফল্ট ইমেজ
 
             return `
                 <div class="cart-item">
-                    <div class="cart-item-info">
-                        <h3>${item.name}</h3>
-                        <p>৳ ${Number(item.price).toLocaleString()} ${qty > 1 ? 'x ' + qty : ''}</p>
+                    <div class="cart-item-left">
+                        <img src="${imgSrc}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-info">
+                            <h3>${item.name || 'Product'}</h3>
+                            <p>৳ ${price.toLocaleString()} ${qty > 1 ? 'x ' + qty : ''}</p>
+                        </div>
                     </div>
                     <div class="cart-item-actions">
                         <div class="qty-controls">
@@ -360,7 +404,7 @@ function updateItemQuantity(index, change) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (!cart[index]) return;
 
-    cart[index].quantity = (cart[index].quantity || 1) + change;
+    cart[index].quantity = (Number(cart[index].quantity) || 1) + change;
 
     if (cart[index].quantity <= 0) {
         cart.splice(index, 1);
@@ -384,6 +428,36 @@ function proceedToCheckout() {
         return;
     }
     window.location.href = "checkout.html";
+}
+
+// WhatsApp-এ অর্ডার মেসেজ পাঠানোর ফাংশন
+function sendOrderToWhatsApp() {
+    // ⚠️ এখানে আপনার আসল হোয়াটসঅ্যাপ নম্বরটি বসান (যেমন: 88017XXXXXXXX)
+    const phoneNumber = "8801973317146"; 
+    
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+        alert("আপনার কার্ট খালি!");
+        return;
+    }
+
+    let productListText = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        let qty = Number(item.quantity) || 1;
+        let price = Number(item.price) || 0;
+        let itemTotal = price * qty;
+        total += itemTotal;
+        productListText += `${index + 1}. ${item.name} - ${qty}টি (৳${itemTotal.toLocaleString()})\n`;
+    });
+
+    let message = `🛒 *নতুন অর্ডার এসেছে!*\n\n` +
+                  `📦 *প্রোডাক্টের তালিকা:*\n${productListText}\n` +
+                  `💰 *সর্বমোট:* ৳${total.toLocaleString()}`;
+
+    let whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
 }
 
 document.addEventListener("DOMContentLoaded", renderCartPage);
