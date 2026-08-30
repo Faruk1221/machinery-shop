@@ -118,7 +118,6 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* প্রোডাক্ট ইনফো ও ইমেজের নতুন স্টাইল */
         .cart-item-left {
             display: flex;
             align-items: center;
@@ -347,7 +346,6 @@ function renderCartPage() {
         cart = [];
     }
 
-    // মোট কোয়ান্টিটি গণনা
     const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
     if (cartCountEl) cartCountEl.innerText = totalQty;
 
@@ -373,12 +371,12 @@ function renderCartPage() {
             const price = Number(item.price) || 0;
             const itemTotal = price * qty;
             total += itemTotal;
-            const imgSrc = item.image || 'https://via.placeholder.com/65'; // ডিফল্ট ইমেজ
+            const imgSrc = item.image || 'https://via.placeholder.com/65';
 
             return `
                 <div class="cart-item">
                     <div class="cart-item-left">
-                        <img src="${imgSrc}" alt="${item.name}" class="cart-item-img">
+                        <img src="${imgSrc}" alt="${item.name || 'Product'}" class="cart-item-img">
                         <div class="cart-item-info">
                             <h3>${item.name || 'Product'}</h3>
                             <p>৳ ${price.toLocaleString()} ${qty > 1 ? 'x ' + qty : ''}</p>
@@ -430,11 +428,9 @@ function proceedToCheckout() {
     window.location.href = "checkout.html";
 }
 
-// WhatsApp-এ অর্ডার মেসেজ পাঠানোর ফাংশন
 function sendOrderToWhatsApp() {
-    // ⚠️ এখানে আপনার আসল হোয়াটসঅ্যাপ নম্বরটি বসান (যেমন: 88017XXXXXXXX)
     const phoneNumber = "8801973317146"; 
-    
+
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (cart.length === 0) {
         alert("আপনার কার্ট খালি!");
