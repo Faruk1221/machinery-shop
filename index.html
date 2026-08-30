@@ -2,14 +2,11 @@
 <html lang="bn">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Machinery Shop | Business Machinery</title>
 
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -88,6 +85,19 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            position: relative;
+        }
+
+        .header-btn .cart-badge-header {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #dc2626;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
         }
 
         /* =========================
@@ -179,11 +189,7 @@
             margin: 15px;
             border-radius: 16px;
             overflow: hidden;
-            background: linear-gradient(
-                135deg,
-                #14532d,
-                #16a34a
-            );
+            background: linear-gradient(135deg, #14532d, #16a34a);
             color: white;
             min-height: 210px;
             position: relative;
@@ -259,6 +265,7 @@
             font-size: 12px;
             color: #16a34a;
             font-weight: bold;
+            cursor: pointer;
         }
 
         /* =========================
@@ -312,7 +319,10 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid #eeeeee;
-            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-image {
@@ -321,8 +331,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 65px;
             position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .offer {
@@ -335,10 +351,15 @@
             border-radius: 5px;
             font-size: 9px;
             font-weight: bold;
+            z-index: 2;
         }
 
         .product-info {
             padding: 11px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
         }
 
         .product h3 {
@@ -377,6 +398,8 @@
             border-radius: 6px;
             font-size: 12px;
             font-weight: bold;
+            border: none;
+            cursor: pointer;
         }
 
         /* =========================
@@ -447,10 +470,10 @@
             right: 10px;
             bottom: 10px;
             height: 62px;
-            background: rgba(255,255,255,.97);
+            background: rgba(255, 255, 255, .97);
             border: 1px solid #e5e7eb;
             border-radius: 17px;
-            box-shadow: 0 5px 25px rgba(0,0,0,.15);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, .15);
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             z-index: 2000;
@@ -497,7 +520,6 @@
         ========================= */
 
         @media (min-width: 768px) {
-
             header {
                 padding: 18px 7%;
             }
@@ -528,452 +550,190 @@
                 right: auto;
                 transform: translateX(-50%);
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
-
-<header>
-
-    <div class="top-header">
-
-        <a href="index.html" class="logo">
-
-            <div class="logo-icon">
-                ⚙️
-            </div>
-
-            Machinery Shop
-
-        </a>
-
-
-        <div class="header-actions">
-
-            <a
-                href="cart.html"
-                class="header-btn"
-                aria-label="Cart"
-            >
-                🛒
+    <!-- HEADER -->
+    <header>
+        <div class="top-header">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">⚙️</div>
+                Machinery Shop
             </a>
 
-            <button
-                class="header-btn"
-                type="button"
-                aria-label="Menu"
-            >
-                ☰
-            </button>
-
+            <div class="header-actions">
+                <a href="cart.html" class="header-btn" aria-label="Cart">
+                    🛒
+                    <span class="cart-badge-header" id="header-cart-count">0</span>
+                </a>
+                <button class="header-btn" type="button" aria-label="Menu">☰</button>
+            </div>
         </div>
 
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="আপনার প্রয়োজনীয় পণ্য বা মেশিন খুঁজুন..." autocomplete="off">
+            <button type="button" onclick="searchProducts()" aria-label="Search">🔍</button>
+        </div>
+    </header>
+
+    <!-- CATEGORIES -->
+    <div class="categories-wrapper">
+        <div class="categories">
+            <a href="#products" class="category" onclick="filterCategory('all')">
+                <div class="category-icon">📦</div>
+                <div class="category-name">সবগুলো</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('machinery')">
+                <div class="category-icon">⚙️</div>
+                <div class="category-name">Machinery</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('food')">
+                <div class="category-icon">🍔</div>
+                <div class="category-name">Food & Restaurant</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('home')">
+                <div class="category-icon">🏠</div>
+                <div class="category-name">Home</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('daily')">
+                <div class="category-icon">🛒</div>
+                <div class="category-name">Daily Need</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('fashion')">
+                <div class="category-icon">👕</div>
+                <div class="category-name">Fashion</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('health')">
+                <div class="category-icon">💊</div>
+                <div class="category-name">Health & Care</div>
+            </a>
+            <a href="#products" class="category" onclick="filterCategory('tools')">
+                <div class="category-icon">🔧</div>
+                <div class="category-name">Tools & Others</div>
+            </a>
+        </div>
     </div>
 
+    <!-- HERO BANNER -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-small">MACHINERY SHOP</div>
+            <h1>আপনার ব্যবসার মেশিন এক জায়গায়</h1>
+            <p>Quality Machinery • Best Price • Nationwide Delivery</p>
+            <a href="#products" class="hero-btn">Shop Now →</a>
+        </div>
+        <div class="hero-machine">⚙️</div>
+    </section>
 
-    <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="আপনার প্রয়োজনীয় পণ্য বা মেশিন খুঁজুন..."
-            autocomplete="off"
-        >
-
-        <button
-            type="button"
-            onclick="searchProducts()"
-            aria-label="Search"
-        >
-            🔍
-        </button>
-
-    </div>
-
-</header>
-
-
-<!-- =========================
-     CATEGORIES
-========================= -->
-
-<div class="categories-wrapper">
-
-    <div class="categories">
-
-        <!-- MACHINERY -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('machinery')"
-        >
-            <div class="category-icon">⚙️</div>
-            <div class="category-name">
-                Machinery
+    <!-- FEATURES -->
+    <section class="section">
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🚚</div>
+                <strong>Fast Delivery</strong>
+                <span>সারা বাংলাদেশ</span>
             </div>
-        </a>
-
-
-        <!-- FOOD & RESTAURANT -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('food')"
-        >
-            <div class="category-icon">🍔</div>
-            <div class="category-name">
-                Food & Restaurant
+            <div class="feature">
+                <div class="feature-icon">🛡️</div>
+                <strong>Quality Product</strong>
+                <span>Trusted Quality</span>
             </div>
-        </a>
-
-
-        <!-- HOME -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('home')"
-        >
-            <div class="category-icon">🏠</div>
-            <div class="category-name">
-                Home
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <strong>Best Price</strong>
+                <span>Affordable</span>
             </div>
-        </a>
+        </div>
+    </section>
 
-
-        <!-- DAILY NEED -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('daily')"
-        >
-            <div class="category-icon">🛒</div>
-            <div class="category-name">
-                Daily Need
-            </div>
-        </a>
-
-
-        <!-- FASHION -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('fashion')"
-        >
-            <div class="category-icon">👕</div>
-            <div class="category-name">
-                Fashion
-            </div>
-        </a>
-
-
-        <!-- HEALTH & CARE -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('health')"
-        >
-            <div class="category-icon">💊</div>
-            <div class="category-name">
-                Health & Care
-            </div>
-        </a>
-
-
-        <!-- TOOLS & OTHERS -->
-        <a
-            href="#products"
-            class="category"
-            onclick="filterCategory('tools')"
-        >
-            <div class="category-icon">🔧</div>
-            <div class="category-name">
-                Tools & Others
-            </div>
-        </a>
-
-    </div>
-
-</div>
-
-<!-- =========================
-     HERO BANNER
-========================= -->
-
-<section class="hero">
-
-    <div class="hero-content">
-
-        <div class="hero-small">
-            MACHINERY SHOP
+    <!-- PRODUCTS -->
+    <section class="section" id="products">
+        <div class="section-header">
+            <h2 class="section-title">🔥 জনপ্রিয় পণ্য</h2>
+            <span class="section-subtitle" onclick="filterCategory('all')">View All →</span>
         </div>
 
-        <h1>
-            আপনার ব্যবসার মেশিন এক জায়গায়
-        </h1>
+        <div class="products" id="product-container">
+            <!-- JS থেকে লোড হবে -->
+        </div>
+    </section>
 
-        <p>
-            Quality Machinery • Best Price •
-            Nationwide Delivery
-        </p>
+    <!-- ABOUT -->
+    <section class="about">
+        <h2>⚙️ Machinery Shop</h2>
+        <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়। Quality Machinery, Best Price এবং সারা বাংলাদেশে Delivery সুবিধা।</p>
+    </section>
 
-        <a
-            href="#products"
-            class="hero-btn"
-        >
-            Shop Now →
+    <!-- FOOTER -->
+    <footer>
+        <h3>⚙️ Machinery Shop</h3>
+        <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
+        <p>🚚 সারা বাংলাদেশে Delivery</p>
+        <p>📞 Contact: 01XXXXXXXXX</p>
+        <p>© 2026 Machinery Shop</p>
+    </footer>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-item active">
+            <span>🏠</span>
+            Home
         </a>
-
-    </div>
-
-
-    <div class="hero-machine">
-        ⚙️
-    </div>
-
-</section>
-
-
-<!-- =========================
-     FEATURES
-========================= -->
-
-<section class="section">
-
-    <div class="features">
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🚚
-            </div>
-
-            <strong>
-                Fast Delivery
-            </strong>
-
-            <span>
-                সারা বাংলাদেশ
-            </span>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🛡️
-            </div>
-
-            <strong>
-                Quality Product
-            </strong>
-
-            <span>
-                Trusted Quality
-            </span>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                💰
-            </div>
-
-            <strong>
-                Best Price
-            </strong>
-
-            <span>
-                Affordable
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     PRODUCTS
-========================= -->
-
-<section
-    class="section"
-    id="products"
->
-
-    <div class="section-header">
-
-        <h2 class="section-title">
-            🔥 জনপ্রিয় পণ্য
-        </h2>
-
-        <span class="section-subtitle">
-            View All →
-        </span>
-
-    </div>
-
-
-    <!--
-        Products will be loaded automatically
-        from products.js
-    -->
-
-    <div class="products">
-
-        <!-- JavaScript products -->
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     ABOUT
-========================= -->
-
-<section class="about">
-
-    <h2>
-        ⚙️ Machinery Shop
-    </h2>
-
-    <p>
-        আপনার ব্যবসার প্রয়োজনীয় মেশিন
-        এক জায়গায়। Quality Machinery,
-        Best Price এবং সারা বাংলাদেশে
-        Delivery সুবিধা।
-    </p>
-
-</section>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-    <h3>
-        ⚙️ Machinery Shop
-    </h3>
-
-    <p>
-        আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়
-    </p>
-
-    <p>
-        🚚 সারা বাংলাদেশে Delivery
-    </p>
-
-    <p>
-        📞 Contact: 01XXXXXXXXX
-    </p>
-
-    <p>
-        © 2026 Machinery Shop
-    </p>
-
-</footer>
-
-
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
-
-<nav class="bottom-nav">
-
-
-    <a
-        href="index.html"
-        class="bottom-item active"
-    >
-
-        <span>
-            🏠
-        </span>
-
-        Home
-
-    </a>
-
-
-    <a
-        href="#searchInput"
-        class="bottom-item"
-        onclick="focusSearch()"
-    >
-
-        <span>
-            🔍
-        </span>
-
-        Search
-
-    </a>
-
-
-    <a
-        href="#products"
-        class="bottom-item"
-    >
-
-        <span>
-            📂
-        </span>
-
-        Products
-
-    </a>
-
-
-    <a
-        href="cart.html"
-        class="bottom-item"
-    >
-
-        <span>
-            🛒
-        </span>
-
-        <div
-            class="cart-badge"
-            id="cart-count"
-        >
-            0
-        </div>
-
-        Cart
-
-    </a>
-
-
-</nav>
-
-
-<!-- =========================
-     JAVASCRIPT
-========================= -->
-
-<script src="products.js"></script>
-<script src="script.js"></script>
-
-
+        <a href="#searchInput" class="bottom-item" onclick="focusSearch()">
+            <span>🔍</span>
+            Search
+        </a>
+        <a href="#products" class="bottom-item">
+            <span>📂</span>
+            Products
+        </a>
+        <a href="cart.html" class="bottom-item">
+            <span>🛒</span>
+            <div class="cart-badge" id="cart-count">0</div>
+            Cart
+        </a>
+    </nav>
+
+    <!-- JAVASCRIPT -->
+    <script src="products.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // কার্ট কাউন্ট আপডেট করার ফাংশন
+        function updateCartBadge() {
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem("cart")) || [];
+            } catch (e) {
+                cart = [];
+            }
+            const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+            
+            const badgeBottom = document.getElementById("cart-count");
+            const badgeHeader = document.getElementById("header-cart-count");
+            
+            if (badgeBottom) badgeBottom.innerText = totalQty;
+            if (badgeHeader) badgeHeader.innerText = totalQty;
+        }
+
+        // সার্চ এবং ফোকাস ইনপুট
+        function focusSearch() {
+            const searchInput = document.getElementById("searchInput");
+            if (searchInput) searchInput.focus();
+        }
+
+        // পেজ লোড হলে
+        document.addEventListener("DOMContentLoaded", () => {
+            updateCartBadge();
+            
+            // যদি products.js কাজ করে এবং products এরে ডিফাইন করা থাকে
+            if (typeof products !== "undefined" && typeof renderProducts === "function") {
+                renderProducts(products);
+            }
+        });
+    </script>
 </body>
 
-    </html>
+</html>
