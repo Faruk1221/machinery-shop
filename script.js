@@ -1,489 +1,377 @@
-/* =========================================
-   MACHINERY SHOP - MAIN SCRIPT
-   PRODUCT + SEARCH + CATEGORY + CART + DRAWER
-   ========================================= */
-
-/* =========================================
-   CART STATE MANAGEMENT
-========================================= */
-
-function getCart() {
-    try {
-        return JSON.parse(localStorage.getItem("cart")) || [];
-    } catch (e) {
-        return [];
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-function saveCart(cartData) {
-    localStorage.setItem("cart", JSON.stringify(cartData));
-    updateCartCount();
-    renderCartDrawer(); // Update side drawer whenever cart updates
+body {
+    background-color: #f4f6f8;
+    color: #333;
+    padding-bottom: 70px; /* মোবাইলের নিচের নেভবারের জন্য */
 }
 
-/* =========================================
-   ADD TO CART & QUICK BUY
-========================================= */
-
-function addToCart(productId, openDrawer = true) {
-    let cart = getCart();
-
-    if (typeof products === "undefined" || !Array.isArray(products)) {
-        console.error("products array unavailable!");
-        return;
-    }
-
-    const product = products.find(p => p.id === productId);
-
-    if (!product) {
-        console.error("Product not found!");
-        return;
-    }
-
-    const existingIndex = cart.findIndex(item => item.id === productId);
-
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 1) + 1;
-    } else {
-        cart.push({
-            id: product.id,
-            name: product.bnName || product.title || product.name || 'Product',
-            price: Number(product.price) || 0,
-            image: product.image || '',
-            quantity: 1
-        });
-    }
-
-    saveCart(cart);
-
-    if (openDrawer) {
-        toggleCartDrawer(true);
-    }
+/* Header */
+.header {
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-// Quick Buy - Directly open Side Cart / Checkout
-function quickBuy(productId) {
-    addToCart(productId, true);
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #059669;
 }
 
-/* =========================================
-   CART COUNT UPDATE
-========================================= */
-
-function updateCartCount() {
-    const cart = getCart();
-    const totalQty = cart.reduce((total, item) => total + (Number(item.quantity) || 1), 0);
-
-    const countById = document.getElementById("cart-count");
-    if (countById) {
-        countById.innerText = totalQty;
-    }
-
-    document.querySelectorAll(".cart-count").forEach(element => {
-        element.innerText = totalQty;
-    });
+.logo-icon {
+    font-size: 24px;
 }
 
-/* =========================================
-   REMOVE & QUANTITY MANAGEMENT
-========================================= */
-
-function removeFromCart(index) {
-    let cart = getCart();
-    if (index < 0 || index >= cart.length) return;
-
-    cart.splice(index, 1);
-    saveCart(cart);
-    showCart();
+.header-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
-function changeCartQuantity(index, change) {
-    let cart = getCart();
-    if (index < 0 || index >= cart.length) return;
-
-    cart[index].quantity = (Number(cart[index].quantity) || 1) + change;
-
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
-    }
-
-    saveCart(cart);
-    showCart();
+.cart-icon-btn {
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-/* =========================================
-   CART TOTAL & DISPLAY (On Cart Page & Drawer)
-========================================= */
-
-function getCartTotal() {
-    const cart = getCart();
-    return cart.reduce((total, item) => total + (Number(item.price) * Number(item.quantity)), 0);
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #e11d48;
+    color: #fff;
+    font-size: 11px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-weight: bold;
 }
 
-function showCart() {
-    const cartContainer = document.getElementById("cart-items");
-    const totalElement = document.getElementById("cart-total");
-
-    if (!cartContainer) return;
-
-    const cart = getCart();
-    cartContainer.innerHTML = "";
-
-    if (cart.length === 0) {
-        cartContainer.innerHTML = `
-            <div class="no-result">
-                🛒<br><br>
-                আপনার Cart এখনো খালি।
-                <br><br>
-                <a href="index.html">Shopping শুরু করুন →</a>
-            </div>`;
-
-        if (totalElement) totalElement.innerText = "৳ 0";
-        return;
-    }
-
-    cart.forEach((product, index) => {
-        const item = document.createElement("div");
-        item.className = "cart-item";
-        const qty = Number(product.quantity) || 1;
-        const price = Number(product.price) || 0;
-        const subtotal = price * qty;
-
-        item.innerHTML = `
-            <h3>${product.name}</h3>
-            <p>দাম: ${price > 0 ? '৳ ' + price.toLocaleString() : 'যোগাযোগ করুন'}</p>
-            <div class="cart-quantity">
-                <button type="button" onclick="changeCartQuantity(${index}, -1)">−</button>
-                <strong>${qty}</strong>
-                <button type="button" onclick="changeCartQuantity(${index}, 1)">+</button>
-            </div>
-            <p>Subtotal: <strong>${price > 0 ? '৳ ' + subtotal.toLocaleString() : 'যোগাযোগ করুন'}</strong></p>
-            <button type="button" onclick="removeFromCart(${index})">Remove</button>
-        `;
-
-        cartContainer.appendChild(item);
-    });
-
-    if (totalElement) {
-        totalElement.innerText = "৳ " + getCartTotal().toLocaleString();
-    }
+.menu-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-/* =========================================
-   GHORERBAZAR STYLE SIDE-OVER CART DRAWER
-========================================= */
-
-function toggleCartDrawer(open) {
-    const drawer = document.getElementById("cart-drawer");
-    const overlay = document.getElementById("drawer-overlay");
-    if (!drawer || !overlay) return;
-
-    if (open) {
-        drawer.classList.add("open");
-        overlay.classList.add("open");
-    } else {
-        drawer.classList.remove("open");
-        overlay.classList.remove("open");
-    }
+/* Search Container */
+.search-container {
+    display: flex;
+    padding: 12px 16px;
+    background: #fff;
 }
 
-function renderCartDrawer() {
-    const drawerContainer = document.getElementById("drawer-cart-items");
-    const drawerSubtotal = document.getElementById("drawer-subtotal");
-    if (!drawerContainer) return;
-
-    const cart = getCart();
-    drawerContainer.innerHTML = "";
-
-    if (cart.length === 0) {
-        drawerContainer.innerHTML = `<p style="text-align:center; padding: 20px; color:#6b7280;">আপনার কার্ট খালি!</p>`;
-        if (drawerSubtotal) drawerSubtotal.innerText = "৳ 0";
-        return;
-    }
-
-    cart.forEach((item, index) => {
-        const qty = Number(item.quantity) || 1;
-        const price = Number(item.price) || 0;
-        
-        const div = document.createElement("div");
-        div.className = "drawer-item";
-        div.style.cssText = "display: flex; gap: 10px; margin-bottom: 12px; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px;";
-        
-        div.innerHTML = `
-            <div style="flex-grow:1;">
-                <h4 style="font-size:13px; font-weight:bold; margin:0;">${item.name}</h4>
-                <div style="font-size:12px; color:#16a34a; font-weight:bold;">৳ ${price.toLocaleString()}</div>
-                <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
-                    <button type="button" onclick="changeCartQuantity(${index}, -1)" style="width:22px; height:22px;">-</button>
-                    <span>${qty}</span>
-                    <button type="button" onclick="changeCartQuantity(${index}, 1)" style="width:22px; height:22px;">+</button>
-                </div>
-            </div>
-            <button type="button" onclick="removeFromCart(${index})" style="border:none; background:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>
-        `;
-        drawerContainer.appendChild(div);
-    });
-
-    if (drawerSubtotal) {
-        drawerSubtotal.innerText = "৳ " + getCartTotal().toLocaleString();
-    }
+.search-container input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px 0 0 6px;
+    outline: none;
+    font-size: 14px;
 }
 
-/* =========================================
-   PRODUCT IMAGE HELPER
-========================================= */
-
-function getProductImage(product) {
-    if (!product.image) return "⚙️";
-
-    const image = String(product.image);
-
-    if (
-        image.includes("/") ||
-        image.includes(".jpg") ||
-        image.includes(".jpeg") ||
-        image.includes(".png") ||
-        image.includes(".webp") ||
-        image.includes(".gif")
-    ) {
-        const displayName = product.bnName || product.name || product.title;
-        return `
-            <img
-                src="${image}"
-                alt="${displayName}"
-                loading="lazy"
-                style="width:100%; height:100%; object-fit:cover;"
-                onerror="this.style.display='none';"
-            >
-        `;
-    }
-
-    return image;
+.search-btn {
+    background: #059669;
+    color: white;
+    border: none;
+    padding: 0 16px;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
 }
 
-/* =========================================
-   PRODUCT CARD UI CREATOR (GhorerBazar UI)
-========================================= */
-
-function createProductCard(product) {
-    const displayName = product.bnName || product.title || product.name;
-    const priceDisplay = product.price > 0 
-        ? `৳ ${Number(product.price).toLocaleString()}` 
-        : "দাম জানতে যোগাযোগ করুন";
-
-    const oldPrice = (product.oldPrice && product.oldPrice > 0)
-        ? `<span class="old-price" style="text-decoration:line-through; color:#9ca3af; font-size:12px; margin-left:5px;">৳ ${Number(product.oldPrice).toLocaleString()}</span>`
-        : "";
-
-    // Calculate Discount Savings
-    const savings = (product.oldPrice && product.oldPrice > product.price)
-        ? product.oldPrice - product.price
-        : 0;
-
-    const badge = product.badge
-        ? `<span class="offer" style="position:absolute; top:8px; left:8px; background:#ef4444; color:white; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:bold; z-index:2;">${product.badge}</span>`
-        : "";
-
-    const rating = product.rating
-        ? `<div class="rating" style="font-size:12px; color:#f59e0b; margin: 3px 0;">⭐ ${product.rating}</div>`
-        : "";
-
-    const page = product.page || `product.html?id=${product.id}`;
-    const keywordsAttr = Array.isArray(product.keywords) ? product.keywords.join(" ").toLowerCase() : "";
-
-    return `
-        <div
-            class="product"
-            style="position:relative;"
-            data-name="${String(product.name || product.title || "").toLowerCase()}"
-            data-bnname="${String(product.bnName || "").toLowerCase()}"
-            data-keywords="${keywordsAttr}"
-            data-category="${String(product.category || "").toLowerCase()}"
-        >
-            ${badge}
-            <a href="${page}" class="product-image">
-                ${getProductImage(product)}
-            </a>
-
-            <div class="product-info">
-                <h3>${displayName}</h3>
-                ${rating}
-                <div class="price">${priceDisplay} ${oldPrice}</div>
-                ${savings > 0 ? `<div style="font-size:11px; color:#dc2626; font-weight:bold; margin-bottom:5px;">Save ৳ ${savings.toLocaleString()}</div>` : ""}
-                
-                <div style="display:flex; gap:5px; margin-top:8px;">
-                    <button type="button" onclick="addToCart('${product.id}')" class="view-product" style="flex:1; background:#f3f4f6; color:#111; font-size:11px; border:1px solid #ccc; cursor:pointer;">🛒 Cart</button>
-                    <button type="button" onclick="quickBuy('${product.id}')" class="view-product" style="flex:1; background:#16a34a; color:white; font-size:11px; border:none; cursor:pointer;">অর্ডার করুন</button>
-                </div>
-            </div>
-        </div>
-    `;
+/* Category Filter */
+.category-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 16px;
+    white-space: nowrap;
+    background: #fff;
+    border-top: 1px solid #f3f4f6;
 }
 
-/* =========================================
-   LOAD PRODUCTS & CATEGORY COUNTERS
-========================================= */
-
-function renderCategoryCounters() {
-    if (typeof products === "undefined" || !Array.isArray(products)) return;
-    
-    const counts = { all: products.length };
-    products.forEach(p => {
-        const cat = String(p.category || "").toLowerCase().trim();
-        if (cat) counts[cat] = (counts[cat] || 0) + 1;
-    });
-
-    for (const cat in counts) {
-        const el = document.getElementById(`count-${cat}`);
-        if (el) el.innerText = `(${counts[cat]})`;
-    }
+.category-scroll::-webkit-scrollbar {
+    display: none;
 }
 
-function loadProducts() {
-    const container = document.querySelector(".products");
-
-    if (!container) return;
-
-    if (typeof products === "undefined" || !Array.isArray(products)) {
-        container.innerHTML = `
-            <div class="no-result">
-                ❌ Product loading error.<br><br>
-                products.js check করুন।
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML = products.map(createProductCard).join("");
-    renderCategoryCounters();
+.cat-btn {
+    background: #f3f4f6;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-/* =========================================
-   SEARCH & FILTER
-========================================= */
-
-function searchProducts() {
-    const input = document.getElementById("searchInput");
-    if (!input) return;
-
-    const search = input.value.toLowerCase().trim();
-    const productCards = document.querySelectorAll(".product");
-    let visibleProducts = 0;
-
-    productCards.forEach(function(product) {
-        const name = product.getAttribute("data-name") || "";
-        const bnName = product.getAttribute("data-bnname") || "";
-        const keywords = product.getAttribute("data-keywords") || "";
-        const text = product.innerText.toLowerCase();
-
-        const match =
-            search === "" ||
-            name.includes(search) ||
-            bnName.includes(search) ||
-            keywords.includes(search) ||
-            text.includes(search);
-
-        if (match) {
-            product.style.display = "";
-            visibleProducts++;
-        } else {
-            product.style.display = "none";
-        }
-    });
-
-    showNoResult(visibleProducts === 0 && search !== "");
+.cat-btn.active {
+    background: #059669;
+    color: white;
 }
 
-function setupSearch() {
-    const input = document.getElementById("searchInput");
-    if (!input) return;
-
-    input.addEventListener("input", searchProducts);
-    input.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            searchProducts();
-        }
-    });
+/* Hero Banner */
+.hero-banner {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: white;
+    padding: 24px 16px;
+    margin: 12px 16px;
+    border-radius: 12px;
 }
 
-function filterCategory(category) {
-    const productCards = document.querySelectorAll(".product");
-    const selectedCategory = String(category).toLowerCase().trim();
-    let visibleProducts = 0;
-
-    productCards.forEach(function(product) {
-        const productCategory = String(product.getAttribute("data-category") || "").toLowerCase().trim();
-        const match = selectedCategory === "all" || productCategory === selectedCategory;
-
-        if (match) {
-            product.style.display = "";
-            visibleProducts++;
-        } else {
-            product.style.display = "none";
-        }
-    });
-
-    showNoResult(visibleProducts === 0);
-
-    const input = document.getElementById("searchInput");
-    if (input) input.value = "";
+.hero-banner h3 { font-size: 12px; opacity: 0.9; letter-spacing: 1px; }
+.hero-banner h1 { font-size: 20px; margin: 6px 0; }
+.hero-banner p { font-size: 12px; opacity: 0.8; margin-bottom: 12px; }
+.shop-now-btn {
+    background: #fff;
+    color: #059669;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-function showNoResult(show) {
-    let message = document.getElementById("no-product-result");
-
-    if (!show) {
-        if (message) message.remove();
-        return;
-    }
-
-    if (message) return;
-
-    const container = document.querySelector(".products");
-    if (!container) return;
-
-    message = document.createElement("div");
-    message.id = "no-product-result";
-    message.className = "no-result";
-    message.innerHTML = `
-        🔍<br><br>
-        কোনো Product পাওয়া যায়নি।<br>
-        অন্য কিছু Search করুন।
-    `;
-
-    container.appendChild(message);
+/* Section Title */
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px 6px;
 }
 
-function focusSearch() {
-    const input = document.getElementById("searchInput");
-    setTimeout(function() {
-        if (input) {
-            input.focus();
-            input.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-    }, 200);
+.section-title a {
+    color: #059669;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-function showAllProducts() {
-    const productCards = document.querySelectorAll(".product");
-    productCards.forEach(function(product) {
-        product.style.display = "";
-    });
-
-    showNoResult(false);
-
-    const input = document.getElementById("searchInput");
-    if (input) input.value = "";
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 10px 16px;
 }
 
-/* =========================================
-   INITIALIZATION
-========================================= */
+/* 📌 PRODUCT CARD FIXES (যেখানে সমস্যাগুলো হচ্ছিল) */
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    position: relative; /* ব্যাজ পজিশন সঠিক রাখার জন্য */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    border: 1px solid #e5e7eb;
+}
 
-document.addEventListener("DOMContentLoaded", function() {
-    loadProducts();
-    setupSearch();
-    updateCartCount();
-    showCart();
-    renderCartDrawer();
-});
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e11d48;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+/* ছবির জায়গা ঠিক রাখার জন্য প্লেসহোল্ডার */
+.product-image-box {
+    width: 100%;
+    height: 110px;
+    background: #f8fafc;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.product-image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-top: 18px; /* ব্যাজ থেকে দূরত্ব রাখার জন্য */
+    line-height: 1.3;
+    min-height: 36px; /* কার্ড যাতে সমান থাকে */
+}
+
+.rating {
+    color: #f59e0b;
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+.price-text {
+    font-size: 12px;
+    color: #4b5563;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.card-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-cart {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    flex: 1;
+}
+
+.btn-order {
+    background: #059669;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    flex: 1;
+}
+
+/* Mobile Bottom Nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    z-index: 99;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 11px;
+    position: relative;
+}
+
+.nav-item i { font-size: 18px; margin-bottom: 2px; }
+.nav-item.active { color: #059669; }
+
+.nav-badge {
+    position: absolute;
+    top: -4px;
+    right: 12px;
+    background: #e11d48;
+    color: white;
+    font-size: 10px;
+    border-radius: 50%;
+    padding: 1px 5px;
+}
+
+/* Cart Drawer */
+.cart-drawer-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1000;
+}
+
+.cart-drawer {
+    position: fixed;
+    top: 0; right: -100%; width: 85%; max-width: 360px; height: 100%;
+    background: white;
+    z-index: 1001;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-drawer.open { right: 0; }
+
+.cart-header {
+    padding: 16px;
+    background: #059669;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-cart { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+
+.cart-items { flex: 1; overflow-y: auto; padding: 16px; }
+
+.cart-footer {
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.whatsapp-btn {
+    width: 100%;
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Footer */
+.footer {
+    background: #1f2937;
+    color: #9ca3af;
+    padding: 24px 16px;
+    margin-top: 24px;
+}
+
+.footer h3 { color: white; margin-bottom: 8px; }
+.footer p { font-size: 13px; line-height: 1.6; margin-bottom: 6px; }
+.copyright { text-align: center; margin-top: 16px; font-size: 12px; border-top: 1px solid #374151; padding-top: 12px; }
