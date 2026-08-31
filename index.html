@@ -443,6 +443,45 @@
         }
 
         /* =========================
+           DRAWER (SIDE MENU & CART)
+        ========================= */
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            max-width: 85%;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.15);
+            z-index: 3000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 15px;
+            background: #16a34a;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .drawer-body {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* =========================
            FOOTER
         ========================= */
 
@@ -492,6 +531,7 @@
             font-size: 11px;
             font-weight: 600;
             position: relative;
+            cursor: pointer;
         }
 
         .bottom-item span {
@@ -569,11 +609,11 @@
             </a>
 
             <div class="header-actions">
-                <a href="cart.html" class="header-btn" aria-label="Cart">
+                <button class="header-btn" onclick="toggleCartDrawer()" type="button" aria-label="Cart">
                     🛒
                     <span class="cart-badge-header" id="header-cart-count">0</span>
-                </a>
-                <button class="header-btn" type="button" aria-label="Menu">☰</button>
+                </button>
+                <button class="header-btn" onclick="toggleMenuDrawer()" type="button" aria-label="Menu">☰</button>
             </div>
         </div>
 
@@ -671,12 +711,62 @@
         <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়। Quality Machinery, Best Price এবং সারা বাংলাদেশে Delivery সুবিধা।</p>
     </section>
 
+    <!-- SIDEBAR MENU DRAWER -->
+    <div class="drawer" id="side-menu-drawer">
+        <div class="drawer-header">
+            <span>ক্যাটাগরি ও মেনু</span>
+            <button onclick="toggleMenuDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+        <div class="drawer-body">
+            <h4 style="margin-bottom: 12px; color: #16a34a;">📂 ক্যাটাগরি সমূহ</h4>
+            <ul style="list-style: none; padding-left: 0; line-height: 2.2; font-size: 14px;">
+                <li><a href="#products" onclick="filterCategory('machinery'); toggleMenuDrawer();">⚙️ Machinery</a></li>
+                <li><a href="#products" onclick="filterCategory('food'); toggleMenuDrawer();">🍔 Food & Restaurant</a></li>
+                <li><a href="#products" onclick="filterCategory('home'); toggleMenuDrawer();">🏠 Home</a></li>
+                <li><a href="#products" onclick="filterCategory('daily'); toggleMenuDrawer();">🛒 Daily Need</a></li>
+                <li><a href="#products" onclick="filterCategory('fashion'); toggleMenuDrawer();">👕 Fashion</a></li>
+                <li><a href="#products" onclick="filterCategory('health'); toggleMenuDrawer();">💊 Health & Care</a></li>
+                <li><a href="#products" onclick="filterCategory('tools'); toggleMenuDrawer();">🔧 Tools & Others</a></li>
+            </ul>
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+            <h4 style="margin-bottom: 10px; color: #16a34a;">📞 Contact Us</h4>
+            <p style="font-size: 13px; color: #555; margin-bottom: 5px;"><strong>মোবাইল:</strong> +8801700000000</p>
+            <p style="font-size: 13px; color: #555; margin-bottom: 5px;"><strong>ইমেইল:</strong> contact@machineryshop.com</p>
+            <p style="font-size: 13px; color: #555;"><strong>ঠিকানা:</strong> রামপুরা, ঢাকা, বাংলাদেশ</p>
+        </div>
+    </div>
+
+    <!-- CART DRAWER WITH "YOU MAY ALSO LIKE" -->
+    <div class="drawer" id="cart-drawer">
+        <div class="drawer-header">
+            <span>🛒 Shopping Cart</span>
+            <button onclick="toggleCartDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+        <div class="drawer-body">
+            <div id="cart-drawer-items">
+                <!-- Cart Items ডাইনামিকালি লোড হবে -->
+            </div>
+            
+            <hr style="margin: 18px 0; border: 0; border-top: 1px dashed #ccc;">
+
+            <!-- YOU MAY ALSO LIKE SECTION -->
+            <h4 style="font-size: 13px; color: #16a34a; margin-bottom: 10px; text-transform: uppercase;">You May Also Like</h4>
+            <div id="you-may-also-like-container">
+                <!-- দাম অনুযায়ী (কম থেকে বেশি) আইটেমগুলো লোড হবে -->
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="cart.html" style="display: block; text-align: center; background: #16a34a; color: white; padding: 12px; border-radius: 8px; font-weight: bold;">Checkout Page →</a>
+            </div>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer>
         <h3>⚙️ Machinery Shop</h3>
         <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
         <p>🚚 সারা বাংলাদেশে Delivery</p>
-        <p>📞 Contact: 01XXXXXXXXX</p>
+        <p>📞 Contact: +8801700000000</p>
         <p>© 2026 Machinery Shop</p>
     </footer>
 
@@ -690,11 +780,11 @@
             <span>🔍</span>
             Search
         </a>
-        <a href="#products" class="bottom-item" onclick="showAllProducts()">
+        <a href="javascript:void(0)" class="bottom-item" onclick="toggleMenuDrawer()">
             <span>📂</span>
-            Products
+            Categories
         </a>
-        <a href="cart.html" class="bottom-item">
+        <a href="javascript:void(0)" class="bottom-item" onclick="toggleCartDrawer()">
             <span>🛒</span>
             <div class="cart-badge" id="cart-count">0</div>
             Cart
@@ -706,4 +796,4 @@
     <script src="script.js"></script>
 </body>
 
-</html>
+    </html>
