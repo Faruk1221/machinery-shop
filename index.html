@@ -86,6 +86,7 @@
             justify-content: center;
             font-size: 18px;
             position: relative;
+            cursor: pointer;
         }
 
         .header-btn .cart-badge-header {
@@ -179,6 +180,11 @@
             font-size: 12px;
             font-weight: 600;
             color: #374151;
+        }
+
+        .category-name span {
+            color: #16a34a;
+            font-size: 10px;
         }
 
         /* =========================
@@ -314,98 +320,84 @@
             gap: 12px;
         }
 
-        .product {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #eeeeee;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+        /* =========================
+           SIDE CART DRAWER (NEW)
+        ========================= */
+        .drawer-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2500;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .cart-drawer {
+            position: fixed;
+            top: 0; right: -320px;
+            width: 320px; max-width: 100%;
+            height: 100vh;
+            background: #fff;
+            z-index: 3000;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
-
-        .product-image {
-            height: 155px;
-            background: #f3f4f6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+        .cart-drawer.open {
+            right: 0;
         }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .offer {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: #dc2626;
-            color: white;
-            padding: 4px 7px;
-            border-radius: 5px;
-            font-size: 9px;
-            font-weight: bold;
-            z-index: 2;
-        }
-
-        .product-info {
-            padding: 11px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .product h3 {
-            font-size: 14px;
-            line-height: 1.4;
-            min-height: 39px;
-        }
-
-        .rating {
-            color: #f59e0b;
-            font-size: 11px;
-            margin: 6px 0;
-        }
-
-        .price {
-            color: #16a34a;
-            font-size: 17px;
-            font-weight: 800;
-        }
-
-        .old-price {
-            color: #999;
-            font-size: 11px;
-            text-decoration: line-through;
-            margin-top: 3px;
-        }
-
-        .view-product {
-            display: block;
-            width: 100%;
-            text-align: center;
+        .drawer-header {
+            padding: 15px;
             background: #16a34a;
             color: white;
-            padding: 9px;
-            margin-top: 9px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .drawer-header h2 { font-size: 16px; margin: 0; }
+        .close-drawer {
+            background: none; border: none; color: white;
+            font-size: 20px; cursor: pointer;
+        }
+        .drawer-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .drawer-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background: #f9fafb;
+        }
+        .drawer-subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            background: #25D366;
+            color: white;
+            text-align: center;
+            padding: 12px;
             border-radius: 6px;
-            font-size: 12px;
             font-weight: bold;
             border: none;
             cursor: pointer;
+            font-size: 15px;
         }
 
         /* =========================
-           NO RESULT
+           NO RESULT, ABOUT, FOOTER
         ========================= */
-
         .no-result {
             grid-column: 1 / -1;
             background: white;
@@ -415,10 +407,6 @@
             color: #6b7280;
         }
 
-        /* =========================
-           ABOUT
-        ========================= */
-
         .about {
             margin: 5px 15px 20px;
             background: #ffffff;
@@ -427,20 +415,8 @@
             border: 1px solid #eeeeee;
         }
 
-        .about h2 {
-            font-size: 19px;
-            margin-bottom: 9px;
-        }
-
-        .about p {
-            color: #666;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        /* =========================
-           FOOTER
-        ========================= */
+        .about h2 { font-size: 19px; margin-bottom: 9px; }
+        .about p { color: #666; font-size: 13px; line-height: 1.7; }
 
         footer {
             background: #172033;
@@ -449,21 +425,12 @@
             text-align: center;
         }
 
-        footer h3 {
-            color: #4ade80;
-            margin-bottom: 8px;
-        }
-
-        footer p {
-            color: #d1d5db;
-            font-size: 12px;
-            margin: 6px 0;
-        }
+        footer h3 { color: #4ade80; margin-bottom: 8px; }
+        footer p { color: #d1d5db; font-size: 12px; margin: 6px 0; }
 
         /* =========================
            BOTTOM NAVIGATION
         ========================= */
-
         .bottom-nav {
             position: fixed;
             left: 10px;
@@ -490,14 +457,8 @@
             position: relative;
         }
 
-        .bottom-item span {
-            font-size: 21px;
-            margin-bottom: 2px;
-        }
-
-        .bottom-item.active {
-            color: #16a34a;
-        }
+        .bottom-item span { font-size: 21px; margin-bottom: 2px; }
+        .bottom-item.active { color: #16a34a; }
 
         .cart-badge {
             position: absolute;
@@ -515,41 +476,13 @@
             justify-content: center;
         }
 
-        /* =========================
-           DESKTOP
-        ========================= */
-
         @media (min-width: 768px) {
-            header {
-                padding: 18px 7%;
-            }
-
-            .categories {
-                justify-content: center;
-            }
-
-            .hero {
-                max-width: 1100px;
-                margin: 25px auto;
-            }
-
-            .section,
-            .about {
-                max-width: 1100px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .products {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .bottom-nav {
-                max-width: 500px;
-                left: 50%;
-                right: auto;
-                transform: translateX(-50%);
-            }
+            header { padding: 18px 7%; }
+            .categories { justify-content: center; }
+            .hero { max-width: 1100px; margin: 25px auto; }
+            .section, .about { max-width: 1100px; margin-left: auto; margin-right: auto; }
+            .products { grid-template-columns: repeat(4, 1fr); }
+            .bottom-nav { max-width: 500px; left: 50%; right: auto; transform: translateX(-50%); }
         }
     </style>
 </head>
@@ -565,9 +498,10 @@
             </a>
 
             <div class="header-actions">
-                <a href="cart.html" class="header-btn" aria-label="Cart">
+                <!-- Changed to trigger Side Drawer instead of linking to cart.html -->
+                <a href="#" class="header-btn" onclick="toggleCartDrawer(true); return false;" aria-label="Cart">
                     🛒
-                    <span class="cart-badge-header" id="header-cart-count">0</span>
+                    <span class="cart-badge-header cart-count" id="header-cart-count">0</span>
                 </a>
                 <button class="header-btn" type="button" aria-label="Menu">☰</button>
             </div>
@@ -584,35 +518,35 @@
         <div class="categories">
             <a href="#products" class="category" onclick="filterCategory('all')">
                 <div class="category-icon">📦</div>
-                <div class="category-name">সবগুলো</div>
+                <div class="category-name">সবগুলো <span id="count-all"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('machinery')">
                 <div class="category-icon">⚙️</div>
-                <div class="category-name">Machinery</div>
+                <div class="category-name">Machinery <span id="count-machinery"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('food')">
                 <div class="category-icon">🍔</div>
-                <div class="category-name">Food & Restaurant</div>
+                <div class="category-name">Food & Restaurant <span id="count-food"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('home')">
                 <div class="category-icon">🏠</div>
-                <div class="category-name">Home</div>
+                <div class="category-name">Home <span id="count-home"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('daily')">
                 <div class="category-icon">🛒</div>
-                <div class="category-name">Daily Need</div>
+                <div class="category-name">Daily Need <span id="count-daily"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('fashion')">
                 <div class="category-icon">👕</div>
-                <div class="category-name">Fashion</div>
+                <div class="category-name">Fashion <span id="count-fashion"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('health')">
                 <div class="category-icon">💊</div>
-                <div class="category-name">Health & Care</div>
+                <div class="category-name">Health & Care <span id="count-health"></span></div>
             </a>
             <a href="#products" class="category" onclick="filterCategory('tools')">
                 <div class="category-icon">🔧</div>
-                <div class="category-name">Tools & Others</div>
+                <div class="category-name">Tools & Others <span id="count-tools"></span></div>
             </a>
         </div>
     </div>
@@ -690,50 +624,68 @@
             <span>📂</span>
             Products
         </a>
-        <a href="cart.html" class="bottom-item">
+        <!-- Changed to trigger Side Drawer instead of linking to cart.html -->
+        <a href="#" class="bottom-item" onclick="toggleCartDrawer(true); return false;">
             <span>🛒</span>
-            <div class="cart-badge" id="cart-count">0</div>
+            <div class="cart-badge cart-count" id="cart-count">0</div>
             Cart
         </a>
     </nav>
+
+    <!-- NEW: CART SIDE DRAWER HTML -->
+    <div id="drawer-overlay" class="drawer-overlay" onclick="toggleCartDrawer(false)"></div>
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="drawer-header">
+            <h2>🛒 আপনার শপিং কার্ট</h2>
+            <button class="close-drawer" onclick="toggleCartDrawer(false)">✕</button>
+        </div>
+        <div id="drawer-cart-items" class="drawer-body">
+            <!-- JavaScript (script.js) থেকে কার্টের প্রোডাক্ট এখানে দেখাবে -->
+        </div>
+        <div class="drawer-footer">
+            <div class="drawer-subtotal-row">
+                <span>সর্বমোট:</span>
+                <span id="drawer-subtotal">৳ 0</span>
+            </div>
+            <!-- WhatsApp Order Button -->
+            <button class="whatsapp-btn" onclick="orderViaWhatsApp()">
+                <span style="margin-right:5px;">💬</span> WhatsApp এ অর্ডার করুন
+            </button>
+        </div>
+    </div>
 
     <!-- JAVASCRIPT -->
     <script src="products.js"></script>
     <script src="script.js"></script>
     <script>
-        // কার্ট কাউন্ট আপডেট করার ফাংশন
-        function updateCartBadge() {
-            let cart = [];
-            try {
-                cart = JSON.parse(localStorage.getItem("cart")) || [];
-            } catch (e) {
-                cart = [];
+        // WhatsApp এ সরাসরি অর্ডারের ফাংশন
+        function orderViaWhatsApp() {
+            const cart = getCart(); 
+            if(cart.length === 0) {
+                alert("আপনার কার্ট খালি! আগে প্রোডাক্ট যোগ করুন।");
+                return;
             }
-            const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-            
-            const badgeBottom = document.getElementById("cart-count");
-            const badgeHeader = document.getElementById("header-cart-count");
-            
-            if (badgeBottom) badgeBottom.innerText = totalQty;
-            if (badgeHeader) badgeHeader.innerText = totalQty;
-        }
 
-        // সার্চ এবং ফোকাস ইনপুট
-        function focusSearch() {
-            const searchInput = document.getElementById("searchInput");
-            if (searchInput) searchInput.focus();
-        }
-
-        // পেজ লোড হলে
-        document.addEventListener("DOMContentLoaded", () => {
-            updateCartBadge();
+            let text = "হ্যালো, আমি ওয়েবসাইট থেকে একটি অর্ডার করতে চাই:\n\n";
+            let total = 0;
             
-            // যদি products.js কাজ করে এবং products এরে ডিফাইন করা থাকে
-            if (typeof products !== "undefined" && typeof renderProducts === "function") {
-                renderProducts(products);
-            }
-        });
+            cart.forEach((item, index) => {
+                const price = Number(item.price) || 0;
+                const qty = Number(item.quantity) || 1;
+                text += `${index + 1}. ${item.name} - ${qty} পিস (৳${price * qty})\n`;
+                total += (price * qty);
+            });
+
+            text += `\nসর্বমোট বিল: ৳${total}\n\n`;
+            text += "দয়া করে আমার অর্ডারটি কনফার্ম করুন।";
+            
+            // নিচে আপনার দোকানের আসল WhatsApp নাম্বারটি দিন (Country code 880 সহ)
+            const whatsappNumber = "8801973317146"; 
+            
+            const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+            window.open(url, "_blank");
+        }
     </script>
 </body>
 
-</html>
+    </html>
