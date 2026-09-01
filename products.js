@@ -606,6 +606,160 @@ const products = [
         page: "product.html?id=health-001"
     },
 
+   // ১. সেফটি হেলমেট
+    {
+        id: "health-002",
+        name: "Industrial Construction Safety Helmet",
+        bnName: "ইন্ডাস্ট্রিয়াল সেফটি হেলমেট",
+        category: "health",
+        categoryName: "Health & Care",
+        subCategory: "Safety Equipment",
+
+        price: 450,
+        oldPrice: 600,
+
+        image: "images/safety-helmet.png", // আপনার ইমেজের ফরম্যাট অনুযায়ী .png বা .jpg
+        gallery: [
+            "images/safety-helmet-1.png"
+        ],
+        video: "",
+
+        rating: 5,
+        reviews: 6,
+
+        badge: "NEW",
+
+        description: "কনস্ট্রাকশন ও ওয়ার্কশপের কাজের জন্য মজবুত এবং টেকসই সেফটি হেলমেট। মাথাকে যেকোনো আঘাত থেকে রক্ষা করে।",
+
+        keywords: [
+            "safety helmet",
+            "hard hat",
+            "সেফটি হেলমেট",
+            "হেলমেট"
+        ],
+
+        specifications: {
+            "Material": "High-Density ABS Plastic",
+            "Adjustable Strap": "Yes",
+            "Color": "Yellow",
+            "Application": "Construction, Factory, Workshop"
+        },
+
+        features: [
+            "আঘাত প্রতিরোধী শক্ত প্লাস্টিক",
+            "মাথার মাপ অনুযায়ী এডজাস্ট করার সুবিধা",
+            "হালকা ও দীর্ঘক্ষণ পরে থাকার উপযোগী"
+        ],
+
+        stock: 20,
+        status: "available",
+        delivery: "সারা বাংলাদেশে Delivery Available",
+        seller: "Machinery Shop",
+
+        page: "product.html?id=health-002"
+    },
+
+    // ২. ফুল ফেস প্রটেক্টিভ শিল্ড
+    {
+        id: "health-003",
+        name: "Transparent Full Face Protective Shield",
+        bnName: "ট্রান্সপারেন্ট ফুল ফেস শিল্ড",
+        category: "health",
+        categoryName: "Health & Care",
+        subCategory: "Safety Equipment",
+
+        price: 350,
+        oldPrice: 500,
+
+        image: "images/full-face-shield.png",
+        gallery: [],
+        video: "",
+
+        rating: 5,
+        reviews: 4,
+
+        badge: "NEW",
+
+        description: "ধুলোবালি, কেমিক্যাল ছিটে আসা বা গ্রাইন্ডিং কাজের সময় মুখ ও চোখ সম্পূর্ণ নিরাপদ রাখার জন্য ফুল ফেস শিল্ড।",
+
+        keywords: [
+            "face shield",
+            "full face mask",
+            "ফেস শিল্ড",
+            "প্রটেক্টিভ মাস্ক"
+        ],
+
+        specifications: {
+            "Material": "HD Clear Polycarbonate",
+            "Feature": "Anti-Fog, Dustproof, Splash-Proof",
+            "Size": "Universal Fit"
+        },
+
+        features: [
+            "স্পষ্ট দেখার জন্য একদম ট্রান্সপারেন্ট",
+            "ধুলো ও কেমিক্যাল থেকে মুখ সুরক্ষিত রাখে",
+            "সহজে ধুয়ে পরিষ্কার করা যায়"
+        ],
+
+        stock: 30,
+        status: "available",
+        delivery: "সারা বাংলাদেশে Delivery Available",
+        seller: "Machinery Shop",
+
+        page: "product.html?id=health-003"
+    },
+
+    // ৩. গগলস সহ সেফটি ও রাইডিং মাস্ক
+    {
+        id: "health-004",
+        name: "Detachable Safety Goggles Mask",
+        bnName: "গগলস সহ সেফটি ও বাইকিং মাস্ক",
+        category: "health",
+        categoryName: "Health & Care",
+        subCategory: "Safety Equipment",
+
+        price: 550,
+        oldPrice: 750,
+
+        image: "images/safety-goggles-mask.png",
+        gallery: [],
+        video: "",
+
+        rating: 5,
+        reviews: 9,
+
+        badge: "POPULAR",
+
+        description: "বাইক রাইডিং বা যেকোনো মেকানিক্যাল কাজে চোখ ও মুখ বাতাসের ধুলোবালি থেকে বাঁচাতে গগলস সহ কুল ডিজাইনের সেফটি মাস্ক।",
+
+        keywords: [
+            "riding mask",
+            "goggles mask",
+            "সেফটি গগলস",
+            "বাইকিং মাস্ক"
+        ],
+
+        specifications: {
+            "Material": "TPU Frame + PC Lens",
+            "Features": "UV Protection, Windproof, Dustproof",
+            "Strap": "Adjustable Elastic Band"
+        },
+
+        features: [
+            "গগলস ও মাস্ক আলাদা করা যায়",
+            "বাতাস চলাচলের ফিল্টারযুক্ত ফেন্ট",
+            "চোখ ও মুখকে ধুলোবালি থেকে শতভাগ রক্ষা করে"
+        ],
+
+        stock: 15,
+        status: "available",
+        delivery: "সারা বাংলাদেশে Delivery Available",
+        seller: "Machinery Shop",
+
+        page: "product.html?id=health-004"
+    },
+
+   
     /* =========================
        TOOLS & OTHERS
     ========================= */
