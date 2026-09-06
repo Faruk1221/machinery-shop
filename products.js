@@ -134,7 +134,7 @@ const products = [
         oldPrice: 35000,
 
         image: "sugarcane-machine.jpg",
-        gallery: ["sugarcane-machine-1.jpg"],["sugarcane-machine-2.jpg"],
+        gallery: ["sugarcane-machine-1.jpg"],
 
         rating: 5,
         reviews: 15,
@@ -259,7 +259,7 @@ const products = [
         oldPrice: 25000,
 
         image: "popcorn-machine.jpg",
-        gallery: ["popcorn-machine-1.jpg"],["popcorn-machine-2.png"],
+        gallery: ["popcorn-machine-1.jpg"],
 
         rating: 5,
         reviews: 9,
@@ -571,7 +571,7 @@ const products = [
         price: 650,
         oldPrice: 850,
 
-        image: "images/health-product.jpg",
+        image: "health-product.jpg",
         gallery: [],
 
         rating: 5,
@@ -618,9 +618,9 @@ const products = [
         price: 450,
         oldPrice: 600,
 
-        image: "images/safety-helmet.png", // আপনার ইমেজের ফরম্যাট অনুযায়ী .png বা .jpg
+        image: "safety-helmet.png", // আপনার ইমেজের ফরম্যাট অনুযায়ী .png বা .jpg
         gallery: [
-            "images/safety-helmet-1.png"
+            "safety-helmet-1.png"
         ],
         video: "",
 
@@ -721,7 +721,7 @@ const products = [
         price: 550,
         oldPrice: 750,
 
-        image: "images/safety-goggles-mask.png",
+        image: "safety-goggles-mask.png",
         gallery: [],
         video: "",
 
