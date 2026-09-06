@@ -277,11 +277,11 @@ const products = [
         price: 22000,
         oldPrice: 25000,
 
-        image: "images/popcom-machine.jpg",
+        image: "images/popcorn-machine.jpg",
       
        gallery: [  
-          "images/popcom-machine-1.jpg",
-          "images/popcom-machine-2.png"],
+          "images/popcorn-machine-1.jpg",
+          "images/popcorn-machine-2.png"],
   
        videos: [],
        
