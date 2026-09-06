@@ -20,8 +20,13 @@ const products = [
         price: 14500,
         oldPrice: 16500,
 
-        image: "cup-sealing-machine.png",
-        gallery: ["cup-sealing-machine-1.jpg"],
+        image: "images/cup-sealing-machine.png",
+       
+       gallery: [
+         "images/cup-sealing-machine-1.jpg",
+         "images/cup-sealing-roll.jpg"],
+     
+       videos: [],
 
         rating: 5,
         reviews: 12,
@@ -74,8 +79,12 @@ const products = [
         price: 19400,
         oldPrice: 20000,
 
-        image: "cotton-candy-machine.jpg",
-        gallery: ["cotton-candy-machine-1.jpg"],
+        image: "images/cotton-candy-machine.jpg",      
+       
+       gallery: ["images/cotton-candy-machine-1.jpg"],
+
+       videos: [],
+        
 
         rating: 5,
         reviews: 8,
@@ -133,9 +142,15 @@ const products = [
         price: 32000,
         oldPrice: 35000,
 
-        image: "sugarcane-machine.jpg",
-        gallery: ["sugarcane-machine-1.jpg"],
+        image: "images/sugarcane-machine.jpg",
 
+
+       gallery: [
+          "images/sugarcane-machine-1.jpg",
+          "images/sugarcane-machine-2.jpg"],
+
+       videos: [],
+       
         rating: 5,
         reviews: 15,
 
@@ -203,8 +218,12 @@ const products = [
         price: 38000,
         oldPrice: 42000,
 
-        image: "juice-machine.jpg",
-        gallery: [],
+        image: "images/juice-machine-.jpg",
+       
+       gallery: [
+          "images/juice-machine-1.jpg"],
+      
+       videos: [],
 
         rating: 5,
         reviews: 6,
@@ -258,9 +277,14 @@ const products = [
         price: 22000,
         oldPrice: 25000,
 
-        image: "popcorn-machine.jpg",
-        gallery: ["popcorn-machine-1.jpg"],
-
+        image: "images/popcom-machine.jpg",
+      
+       gallery: [  
+          "images/popcom-machine-1.jpg",
+          "images/popcom-machine-2.png"],
+  
+       videos: [],
+       
         rating: 5,
         reviews: 9,
 
@@ -571,8 +595,13 @@ const products = [
         price: 650,
         oldPrice: 850,
 
-        image: "health-product.jpg",
-        gallery: [],
+        image: "images/safety-goggles-mask.jpg",
+
+       gallery: [
+          "images/safety-goggles-mask-1.jpg",
+          "images/safety goggles mask-2.jpg"],
+   
+       videos: [],
 
         rating: 5,
         reviews: 7,
@@ -618,11 +647,13 @@ const products = [
         price: 450,
         oldPrice: 600,
 
-        image: "safety-helmet.png", // আপনার ইমেজের ফরম্যাট অনুযায়ী .png বা .jpg
-        gallery: [
-            "safety-helmet-1.png"
-        ],
-        video: "",
+        image: "images/safety-helmet.jpg",
+      
+       gallery: [  
+          "images/safety-helmet-1.jpg",
+          "images/safety-helmet-face-max.jpg"],
+       
+       videos: [],
 
         rating: 5,
         reviews: 6,
@@ -671,9 +702,12 @@ const products = [
         price: 350,
         oldPrice: 500,
 
-        image: "images/full-face-shield.png",
-        gallery: [],
-        video: "",
+        image: "images/full-face-shield.jpg",
+
+       gallery: [
+          "images/full-face-shield-1.jpg"],
+       
+       videos: [],
 
         rating: 5,
         reviews: 4,
@@ -721,9 +755,13 @@ const products = [
         price: 550,
         oldPrice: 750,
 
-        image: "safety-goggles-mask.png",
-        gallery: [],
-        video: "",
+        image: "images/safety-goggles-mask.jpg",
+
+       gallery: [
+          "images/safety-goggles-mask-1.jpg",
+          "images/safety goggles mask-2.jpg"],
+
+       videos: [],
 
         rating: 5,
         reviews: 9,
