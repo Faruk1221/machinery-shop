@@ -203,7 +203,7 @@ const products = [
         price: 38000,
         oldPrice: 42000,
 
-        image: "images/juice-machine.jpg",
+        image: "juice-machine.jpg",
         gallery: [],
 
         rating: 5,
@@ -258,8 +258,8 @@ const products = [
         price: 22000,
         oldPrice: 25000,
 
-        image: "images/popcorn-machine.jpg",
-        gallery: [],
+        image: "popcorn-machine.jpg",
+        gallery: ["popcorn-machine-1.jpg"],["popcorn-machine-2.png"],
 
         rating: 5,
         reviews: 9,
