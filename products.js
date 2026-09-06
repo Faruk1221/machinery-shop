@@ -20,8 +20,8 @@ const products = [
         price: 14500,
         oldPrice: 16500,
 
-        image: "images/cup-sealing-machine.jpg",
-        gallery: [],
+        image: "cup-sealing-machine.png",
+        gallery: ["cup-sealing-machine-1.jpg"],
 
         rating: 5,
         reviews: 12,
@@ -133,8 +133,8 @@ const products = [
         price: 32000,
         oldPrice: 35000,
 
-        image: "images/sugarcane-machine.jpg",
-        gallery: [],
+        image: "sugarcane-machine.jpg",
+        gallery: ["sugarcane-machine-1.jpg"],["sugarcane-machine-2.jpg"],
 
         rating: 5,
         reviews: 15,
