@@ -74,8 +74,8 @@ const products = [
         price: 19400,
         oldPrice: 20000,
 
-        image: "images/cotton-candy-machine.jpg",
-        gallery: [],
+        image: "cotton-candy-machine.jpg",
+        gallery: ["cotton-candy-machine-1.jpg"],
 
         rating: 5,
         reviews: 8,
