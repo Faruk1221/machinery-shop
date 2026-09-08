@@ -208,6 +208,69 @@
             margin-bottom: 10px;
         }
 
+        /* Custom Popup Alert Styling */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .custom-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-modal-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .custom-modal-overlay.active .custom-modal-box {
+            transform: scale(1);
+        }
+
+        .custom-modal-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #16a34a;
+            margin-bottom: 12px;
+        }
+
+        .custom-modal-body {
+            font-size: 15px;
+            color: #374151;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .custom-modal-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
         footer {
             margin-top: 40px;
             padding: 25px 15px;
@@ -248,12 +311,12 @@
                 <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
                     <div class="form-group">
                         <label for="fullname">আপনার নাম *</label>
-                        <input type="text" id="fullname" placeholder="পুরো নাম লিখুন" required>
+                        <input type="text" id="fullname" placeholder="পুরো নাম লিখুন">
                     </div>
 
                     <div class="form-group">
                         <label for="phone">মোবাইল নম্বর *</label>
-                        <input type="tel" id="phone" placeholder="০১৭xxxxxxxx" required pattern="[0-9]{11}">
+                        <input type="tel" id="phone" placeholder="০১৭xxxxxxxx">
                     </div>
 
                     <div class="form-group">
@@ -266,7 +329,7 @@
 
                     <div class="form-group">
                         <label for="address">সম্পূর্ণ ঠিকানা *</label>
-                        <textarea id="address" rows="3" placeholder="বাসা নম্বর, রোড নম্বর, এলাকা, থানা ও জেলা লিখুন" required></textarea>
+                        <textarea id="address" rows="3" placeholder="বাসা নম্বর, রোড নম্বর, এলাকা, থানা ও জেলা লিখুন"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -312,6 +375,19 @@
     </div>
 </div>
 
+<!-- Custom Popup Alert Modal -->
+<div id="customModal" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+        <div class="custom-modal-header">
+            ⚙️ Machinery Shop
+        </div>
+        <div id="customModalMessage" class="custom-modal-body">
+            দয়া করে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন!
+        </div>
+        <button class="custom-modal-btn" onclick="closeCustomModal()">ঠিক আছে</button>
+    </div>
+</div>
+
 <footer>
     <h3>Machinery Shop</h3>
     <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
@@ -320,6 +396,16 @@
 
 <script src="script.js"></script>
 <script>
+/* Custom Popup Alert Functions */
+function showCustomModal(message) {
+    document.getElementById("customModalMessage").innerText = message;
+    document.getElementById("customModal").classList.add("active");
+}
+
+function closeCustomModal() {
+    document.getElementById("customModal").classList.remove("active");
+}
+
 /* Checkout Logic */
 let cartSubtotal = 0;
 
@@ -397,12 +483,18 @@ function calculateCheckoutTotal() {
 function handlePlaceOrder(event) {
     event.preventDefault();
 
-    const name = document.getElementById("fullname").value;
-    const phone = document.getElementById("phone").value;
+    const name = document.getElementById("fullname").value.trim();
+    const phone = document.getElementById("phone").value.trim();
     const areaSelectValue = document.getElementById("area").value;
     const area = areaSelectValue === "outside" ? "ঢাকার বাইরে" : "ঢাকার ভেতরে";
-    const address = document.getElementById("address").value;
-    const notes = document.getElementById("notes").value;
+    const address = document.getElementById("address").value.trim();
+    const notes = document.getElementById("notes").value.trim();
+
+    // Validation Check for Custom Alert
+    if (!name || !phone || !address) {
+        showCustomModal("দয়া করে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন!");
+        return;
+    }
 
     let cart = JSON.parse(localStorage.getItem("cart")) || JSON.parse(localStorage.getItem("machinery_cart")) || [];
     const shippingCost = areaSelectValue === "outside" ? 120 : 60;
@@ -439,7 +531,7 @@ function handlePlaceOrder(event) {
 function showOrderSuccess(order) {
     const mainWrapper = document.getElementById("checkout-content");
     
-    // Header cart count ০ করে দেওয়া
+    // Header cart count ০ করে দেওয়া
     updateHeaderCartCount([]);
 
     // WhatsApp Message
