@@ -1,749 +1,1808 @@
-/* =========================================
-   MACHINERY SHOP - MAIN SCRIPT
-   PRODUCT + SEARCH + CATEGORY + CART + DRAWER
-   ========================================= */
+/* =========================================================
+   MACHINERY SHOP
+   MAIN SCRIPT
+   Cart + Customer Profile + Account + WhatsApp
+   ========================================================= */
 
-/* =========================================
-   TOAST NOTIFICATION (Add to Cart Feedback)
-========================================= */
+
+/* =========================================================
+   1. ADD TO CART TOAST
+   ========================================================= */
+
 function injectToastStyles() {
-    if (document.getElementById("toast-style")) return;
+    if (document.getElementById("machinery-toast-style")) return;
+
     const style = document.createElement("style");
-    style.id = "toast-style";
-    style.innerHTML = `
-        .cart-toast {
+    style.id = "machinery-toast-style";
+
+    style.textContent = `
+        .machinery-toast {
             position: fixed;
             left: 50%;
-            bottom: 90px;
+            bottom: 85px;
             transform: translateX(-50%) translateY(20px);
             background: #16a34a;
             color: white;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 13px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 6px 20px rgba(0,0,0,.2);
-            z-index: 9999;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.20);
+            z-index: 99999;
             opacity: 0;
-            transition: opacity 0.25s ease, transform 0.25s ease;
             pointer-events: none;
+            transition: all 0.25s ease;
             max-width: 90%;
+            text-align: center;
         }
-        .cart-toast.show {
+
+        .machinery-toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-        .cart-toast .toast-check {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            color: #16a34a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
     `;
+
     document.head.appendChild(style);
 }
 
-let toastTimer = null;
 function showAddToCartToast(productName) {
     injectToastStyles();
 
-    let toast = document.getElementById("cart-toast");
+    let toast = document.getElementById("machinery-add-cart-toast");
+
     if (!toast) {
         toast = document.createElement("div");
-        toast.id = "cart-toast";
-        toast.className = "cart-toast";
+        toast.id = "machinery-add-cart-toast";
+        toast.className = "machinery-toast";
         document.body.appendChild(toast);
     }
 
-    toast.innerHTML = `<span class="toast-check">✓</span> "${productName}" কার্টে যোগ হয়েছে`;
+    toast.innerHTML = `✓ "${escapeHTML(productName)}" কার্টে যোগ হয়েছে`;
     toast.classList.add("show");
 
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
+    clearTimeout(window.machineryToastTimer);
+
+    window.machineryToastTimer = setTimeout(() => {
         toast.classList.remove("show");
-    }, 1800);
+    }, 2200);
 }
 
-/* =========================================
-   1. WHATSAPP DIRECT ORDER FUNCTION
-========================================= */
 
-function sendToWhatsApp() {
-    const cart = getCart();
-    if (cart.length === 0) {
-        alert("আপনার কার্ট খালি!");
+/* =========================================================
+   2. CUSTOM MACHINERY SHOP MODAL
+   ========================================================= */
+
+function injectCustomModal() {
+    if (document.getElementById("machinery-custom-modal")) return;
+
+    const style = document.createElement("style");
+    style.id = "machinery-custom-modal-style";
+
+    style.textContent = `
+        .machinery-custom-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .machinery-custom-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .machinery-custom-modal-box {
+            width: 100%;
+            max-width: 390px;
+            background: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+            transform: scale(0.88);
+            transition: transform 0.25s ease;
+        }
+
+        .machinery-custom-modal.active .machinery-custom-modal-box {
+            transform: scale(1);
+        }
+
+        .machinery-custom-modal-header {
+            background: #16a34a;
+            color: #ffffff;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .machinery-custom-modal-close {
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .machinery-custom-modal-body {
+            padding: 22px 20px 10px;
+            text-align: center;
+            color: #374151;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .machinery-custom-modal-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .machinery-custom-modal-footer {
+            padding: 15px 20px 20px;
+            text-align: center;
+        }
+
+        .machinery-custom-modal-btn {
+            min-width: 120px;
+            border: none;
+            background: #16a34a;
+            color: white;
+            padding: 11px 22px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .machinery-custom-modal-btn:hover {
+            opacity: 0.9;
+        }
+    `;
+
+    document.head.appendChild(style);
+
+    const modal = document.createElement("div");
+    modal.id = "machinery-custom-modal";
+    modal.className = "machinery-custom-modal";
+
+    modal.innerHTML = `
+        <div class="machinery-custom-modal-box">
+
+            <div class="machinery-custom-modal-header">
+                <span>⚙️ Machinery Shop</span>
+
+                <button
+                    type="button"
+                    class="machinery-custom-modal-close"
+                    onclick="closeMachineryModal()"
+                >×</button>
+            </div>
+
+            <div class="machinery-custom-modal-body">
+                <div class="machinery-custom-modal-icon">📝</div>
+
+                <div id="machinery-custom-modal-message">
+                    দয়া করে প্রয়োজনীয় তথ্য পূরণ করুন।
+                </div>
+            </div>
+
+            <div class="machinery-custom-modal-footer">
+                <button
+                    type="button"
+                    class="machinery-custom-modal-btn"
+                    onclick="closeMachineryModal()"
+                >
+                    ঠিক আছে
+                </button>
+            </div>
+
+        </div>
+    `;
+
+    modal.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            closeMachineryModal();
+        }
+    });
+
+    document.body.appendChild(modal);
+}
+
+function showCustomModal(message) {
+    /*
+       Checkout.html-এ যদি আগে থেকেই customModal থাকে,
+       সেটাই ব্যবহার করা হবে।
+    */
+
+    const existingModal = document.getElementById("customModal");
+    const existingMessage = document.getElementById("customModalMessage");
+
+    if (existingModal && existingMessage) {
+        existingMessage.innerText = message;
+        existingModal.classList.add("active");
         return;
     }
 
-    const phoneNumber = "8801973317146"; // আপনার WhatsApp নম্বর
-    const profile = getCustomerProfile(); // অ্যাকাউন্ট থেকে তথ্য নেওয়া
+    injectCustomModal();
 
-    let message = `🛒 *নতুন অর্ডার ডিটেইলস*\n`;
-    message += `----------------------------------\n`;
+    const modal = document.getElementById("machinery-custom-modal");
+    const messageBox = document.getElementById("machinery-custom-modal-message");
 
-    let totalPrice = 0;
-    cart.forEach((item, index) => {
-        const itemTotal = (Number(item.price) || 0) * (Number(item.quantity) || 1);
-        totalPrice += itemTotal;
-        message += `${index + 1}. *${item.name}*\n   পরিমাণ: ${item.quantity} টি | দাম: ৳${itemTotal.toLocaleString()}\n`;
-    });
-
-    message += `----------------------------------\n`;
-    message += `💰 *সর্বমোট মূল্য:* ৳${totalPrice.toLocaleString()}\n\n`;
-
-    // অ্যাকাউন্ট তথ্য থাকলে তা মেসেজের নিচে যুক্ত হবে
-    if (profile && profile.name) {
-        message += `👤 *গ্রাহকের তথ্য (Customer Details):*\n`;
-        message += `• নাম: ${profile.name}\n`;
-        message += `• মোবাইল: ${profile.phone}\n`;
-        if (profile.address) {
-            message += `• ঠিকানা: ${profile.address}\n`;
-        }
-    } else {
-        message += `⚠️ *গ্রাহকের তথ্য:* অ্যাকাউন্টে কোনো তথ্য সেভ করা নেই।\n`;
+    if (messageBox) {
+        messageBox.innerText = message;
     }
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    
-    window.open(whatsappURL, "_blank");
+    if (modal) {
+        modal.classList.add("active");
+    }
 }
 
-/* =========================================
-   2. CART STATE MANAGEMENT
-========================================= */
+function closeCustomModal() {
+    const existingModal = document.getElementById("customModal");
+
+    if (existingModal) {
+        existingModal.classList.remove("active");
+    }
+
+    closeMachineryModal();
+}
+
+function closeMachineryModal() {
+    const modal = document.getElementById("machinery-custom-modal");
+
+    if (modal) {
+        modal.classList.remove("active");
+    }
+}
+
+
+/* =========================================================
+   3. CUSTOMER PROFILE
+   ========================================================= */
+
+function getCustomerProfile() {
+    try {
+        const profile = JSON.parse(
+            localStorage.getItem("customerProfile")
+        );
+
+        if (profile && typeof profile === "object") {
+            return profile;
+        }
+
+        return null;
+
+    } catch (error) {
+        return null;
+    }
+}
+
+function saveCustomerProfile(profile) {
+    if (!profile || typeof profile !== "object") return;
+
+    const cleanProfile = {
+        name: String(profile.name || "").trim(),
+        phone: String(profile.phone || "").trim(),
+        address: String(profile.address || "").trim()
+    };
+
+    localStorage.setItem(
+        "customerProfile",
+        JSON.stringify(cleanProfile)
+    );
+}
+
+
+/* =========================================================
+   4. PROFILE CHECK
+   ========================================================= */
+
+function isCustomerProfileComplete() {
+    const profile = getCustomerProfile();
+
+    return !!(
+        profile &&
+        profile.name &&
+        profile.phone &&
+        profile.address
+    );
+}
+
+function requireCustomerProfile() {
+    const profile = getCustomerProfile();
+
+    if (
+        profile &&
+        profile.name &&
+        profile.phone &&
+        profile.address
+    ) {
+        return true;
+    }
+
+    showCustomModal(
+        "অর্ডার করার জন্য আগে আপনার নাম, মোবাইল নম্বর এবং পূর্ণাঙ্গ ঠিকানা দিন। আপনি Account থেকে তথ্য Save করতে পারেন।"
+    );
+
+    setTimeout(() => {
+        const accountDrawer = document.getElementById("account-drawer");
+
+        if (accountDrawer) {
+            accountDrawer.classList.add("active");
+            renderAccountDrawer(true);
+        }
+    }, 350);
+
+    return false;
+}
+
+
+/* =========================================================
+   5. CART
+   ========================================================= */
 
 function getCart() {
     try {
-        return JSON.parse(localStorage.getItem("cart")) || [];
-    } catch (e) {
+        const cart = JSON.parse(
+            localStorage.getItem("cart")
+        );
+
+        return Array.isArray(cart) ? cart : [];
+
+    } catch (error) {
         return [];
     }
 }
 
 function saveCart(cartData) {
-    localStorage.setItem("cart", JSON.stringify(cartData));
-}
+    if (!Array.isArray(cartData)) {
+        cartData = [];
+    }
 
-/* =========================================
-   3. ADD TO CART & SUGGESTION LOGIC
-========================================= */
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cartData)
+    );
+}
 
 function addToCart(productId) {
+
+    if (!requireCustomerProfile()) {
+        return;
+    }
+
+    const prod = Array.isArray(window.products)
+        ? window.products.find(p => p.id === productId)
+        : (
+            typeof products !== "undefined"
+                ? products.find(p => p.id === productId)
+                : null
+        );
+
+    if (!prod) {
+        showCustomModal("এই প্রোডাক্টটি পাওয়া যাচ্ছে না।");
+        return;
+    }
+
     let cart = getCart();
 
-    if (typeof products === "undefined" || !Array.isArray(products)) {
-        console.error("products array unavailable!");
-        return;
-    }
+    const existingIndex = cart.findIndex(
+        item => item.id === productId
+    );
 
-    const product = products.find(p => String(p.id) === String(productId));
+    if (existingIndex !== -1) {
 
-    if (!product) {
-        console.error("Product not found!");
-        return;
-    }
+        cart[existingIndex].quantity =
+            (Number(cart[existingIndex].quantity) || 1) + 1;
 
-    const existingIndex = cart.findIndex(item => String(item.id) === String(productId));
-    const prodName = product.bnName || product.title || product.name || 'Product';
-
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 1) + 1;
     } else {
+
         cart.push({
-            id: product.id,
-            name: prodName,
-            price: Number(product.price) || 0,
-            image: product.image || '',
+            id: prod.id,
+            name: prod.bnName || prod.name || prod.title || "Product",
+            price: Number(prod.price) || 0,
+            image: prod.image || "",
             quantity: 1
         });
     }
 
     saveCart(cart);
+
     updateCartCount();
     showCart();
     renderYouMayAlsoLike();
-    showAddToCartToast(prodName);
+
+    showAddToCartToast(
+        prod.bnName || prod.name || prod.title || "Product"
+    );
 }
+
+
+/* =========================================================
+   6. ADD TO CART FROM SUGGESTIONS
+   ========================================================= */
 
 function addToCartFromSuggestion(productId) {
-    if (typeof products === "undefined" || !Array.isArray(products)) return;
-    const product = products.find(p => String(p.id) === String(productId));
-    if (!product) return;
+
+    if (!requireCustomerProfile()) {
+        return;
+    }
+
+    const prod = Array.isArray(window.products)
+        ? window.products.find(p => p.id === productId)
+        : (
+            typeof products !== "undefined"
+                ? products.find(p => p.id === productId)
+                : null
+        );
+
+    if (!prod) {
+        showCustomModal("এই প্রোডাক্টটি পাওয়া যাচ্ছে না।");
+        return;
+    }
 
     let cart = getCart();
-    const existingIndex = cart.findIndex(item => String(item.id) === String(productId));
 
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 1) + 1;
+    const existingIndex = cart.findIndex(
+        item => item.id === productId
+    );
+
+    if (existingIndex !== -1) {
+
+        cart[existingIndex].quantity =
+            (Number(cart[existingIndex].quantity) || 1) + 1;
+
     } else {
+
         cart.push({
-            id: product.id,
-            name: product.bnName || product.title || product.name || 'Product',
-            price: Number(product.price) || 0,
-            image: product.image || '',
+            id: prod.id,
+            name: prod.bnName || prod.name || prod.title || "Product",
+            price: Number(prod.price) || 0,
+            image: prod.image || "",
             quantity: 1
         });
     }
 
     saveCart(cart);
+
     updateCartCount();
     showCart();
     renderYouMayAlsoLike();
+
+    showAddToCartToast(
+        prod.bnName || prod.name || prod.title || "Product"
+    );
 }
 
-/* =========================================
-   4. CART COUNT UPDATE
-========================================= */
+
+/* =========================================================
+   7. CART COUNT
+   ========================================================= */
 
 function updateCartCount() {
+
     const cart = getCart();
-    const totalQty = cart.reduce((total, item) => total + (Number(item.quantity) || 1), 0);
 
-    const countBottom = document.getElementById("cart-count");
-    const countHeader = document.getElementById("header-cart-count");
-    
-    if (countBottom) countBottom.innerText = totalQty;
-    if (countHeader) countHeader.innerText = totalQty;
+    const totalQty = cart.reduce(
+        (sum, item) =>
+            sum + (Number(item.quantity) || 1),
+        0
+    );
 
-    document.querySelectorAll(".cart-count").forEach(element => {
-        element.innerText = totalQty;
+    const ids = [
+        "cart-count",
+        "header-cart-count"
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+
+        if (el) {
+            el.innerText = totalQty;
+        }
+    });
+
+    document.querySelectorAll(".cart-count").forEach(el => {
+        el.innerText = totalQty;
     });
 }
 
-/* =========================================
-   5. REMOVE & QUANTITY MANAGEMENT
-========================================= */
 
-function removeFromCart(index) {
+/* =========================================================
+   8. REMOVE CART ITEM
+   ========================================================= */
+
+function removeFromCart(productId) {
+
     let cart = getCart();
-    if (index < 0 || index >= cart.length) return;
 
-    cart.splice(index, 1);
+    cart = cart.filter(
+        item => item.id !== productId
+    );
+
     saveCart(cart);
+
     updateCartCount();
     showCart();
     renderYouMayAlsoLike();
 }
 
-function changeCartQuantity(index, change) {
-    let cart = getCart();
-    if (index < 0 || index >= cart.length) return;
 
-    cart[index].quantity = (Number(cart[index].quantity) || 1) + change;
+/* =========================================================
+   9. CHANGE CART QUANTITY
+   ========================================================= */
+
+function changeCartQuantity(productId, change) {
+
+    let cart = getCart();
+
+    const index = cart.findIndex(
+        item => item.id === productId
+    );
+
+    if (index === -1) return;
+
+    cart[index].quantity =
+        (Number(cart[index].quantity) || 1) + change;
 
     if (cart[index].quantity <= 0) {
         cart.splice(index, 1);
     }
 
     saveCart(cart);
+
     updateCartCount();
     showCart();
     renderYouMayAlsoLike();
 }
 
-/* =========================================
-   6. CART TOTAL & DISPLAY (WITH PICTURES)
-========================================= */
+
+/* =========================================================
+   10. CART TOTAL
+   ========================================================= */
 
 function getCartTotal() {
-    const cart = getCart();
-    return cart.reduce((total, item) => total + (Number(item.price) * Number(item.quantity)), 0);
-}
-
-function showCart() {
-    const cartContainer = document.getElementById("cart-items") || document.getElementById("cart-drawer-items");
-    const totalElement = document.getElementById("cart-total");
-
-    if (!cartContainer) return;
 
     const cart = getCart();
-    cartContainer.innerHTML = "";
 
-    if (cart.length === 0) {
-        cartContainer.innerHTML = `
-            <div class="no-result">
-                🛒<br><br>
-                আপনার Cart এখনো খালি।
-                <br><br>
-                <a href="index.html" style="color:#16a34a; font-weight:bold;">Shopping শুরু করুন →</a>
-            </div>`;
+    return cart.reduce((total, item) => {
 
-        if (totalElement) totalElement.innerText = "৳ 0";
-        return;
-    }
+        const price = Number(item.price) || 0;
+        const quantity = Number(item.quantity) || 1;
 
-    cart.forEach((product, index) => {
-        const item = document.createElement("div");
-        item.className = "cart-item";
-        item.style.cssText = "padding: 10px 0; border-bottom: 1px solid #eee; display: flex; gap: 10px; align-items: center;";
-        
-        const qty = Number(product.quantity) || 1;
-        const price = Number(product.price) || 0;
-        const subtotal = price * qty;
+        return total + (price * quantity);
 
-        // ছবির লেআউট
-        const imgHtml = `
-            <div style="width: 50px; height: 50px; flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #f3f4f6;">
-                ${getProductImage(product)}
-            </div>
-        `;
-
-        item.innerHTML = `
-            ${imgHtml}
-            <div style="flex-grow: 1;">
-                <h3 style="font-size: 13px; margin: 0 0 4px 0;">${product.name}</h3>
-                <p style="font-size: 11px; color: #555; margin: 0;">দাম: ${price > 0 ? '৳ ' + price.toLocaleString() : 'যোগাযোগ করুন'}</p>
-                <div class="cart-quantity" style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
-                    <button type="button" onclick="changeCartQuantity(${index}, -1)" style="width: 20px; height: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; line-height: 1;">−</button>
-                    <strong style="font-size: 12px;">${qty}</strong>
-                    <button type="button" onclick="changeCartQuantity(${index}, 1)" style="width: 20px; height: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; line-height: 1;">+</button>
-                </div>
-                <p style="font-size: 11px; margin: 0;">Subtotal: <strong>${price > 0 ? '৳ ' + subtotal.toLocaleString() : 'যোগাযোগ করুন'}</strong></p>
-            </div>
-            <button type="button" onclick="removeFromCart(${index})" style="color:red; background:none; border:none; cursor:pointer; font-size:14px; font-weight:bold;">✕</button>
-        `;
-
-        cartContainer.appendChild(item);
-    });
-
-    if (totalElement) {
-        totalElement.innerText = "৳ " + getCartTotal().toLocaleString();
-    }
+    }, 0);
 }
 
-function renderYouMayAlsoLike() {
-    const container = document.getElementById("you-may-also-like-container");
-    if (!container || typeof products === "undefined" || !Array.isArray(products)) return;
 
-    const cart = getCart();
-    const cartItemIds = cart.map(item => String(item.id));
-
-    const suggestedProducts = products
-        .filter(p => !cartItemIds.includes(String(p.id)))
-        .sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-
-    if (suggestedProducts.length === 0) {
-        container.innerHTML = "<p style='font-size: 11px; color: #777;'>কোনো অতিরিক্ত পণ্য নেই।</p>";
-        return;
-    }
-
-    container.innerHTML = suggestedProducts.map(product => `
-        <div class="suggested-item" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="width: 38px; height: 38px; overflow: hidden; border-radius: 6px; background: #f3f4f6;">
-                    ${getProductImage(product)}
-                </div>
-                <div>
-                    <h5 style="font-size: 11px; margin: 0; color: #333; font-weight: bold;">${product.bnName || product.title || product.name}</h5>
-                    <span style="font-size: 11px; color: #16a34a; font-weight: bold;">৳${Number(product.price).toLocaleString()}</span>
-                </div>
-            </div>
-            <button type="button" onclick="addToCartFromSuggestion('${product.id}')" style="background: #16a34a; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;">
-                + Add
-            </button>
-        </div>
-    `).join("");
-}
-
-/* =========================================
-   7. DRAWER TOGGLES (SIDE MENU & CART & ACCOUNT)
-========================================= */
-
-function toggleMenuDrawer() {
-    const menuDrawer = document.getElementById("side-menu-drawer");
-    if (menuDrawer) {
-        menuDrawer.classList.toggle("open");
-    }
-}
-
-function toggleCartDrawer() {
-    const cartDrawer = document.getElementById("cart-drawer");
-    if (cartDrawer) {
-        cartDrawer.classList.toggle("open");
-        if (cartDrawer.classList.contains("open")) {
-            showCart();
-            renderYouMayAlsoLike();
-        }
-    }
-}
-
-function toggleAccountDrawer() {
-    const drawer = document.getElementById("account-drawer");
-    if (drawer) {
-        drawer.classList.toggle("open");
-        if (drawer.classList.contains("open")) {
-            renderAccountDrawer();
-        }
-    }
-}
-
-/* =========================================
-   8. PRODUCT IMAGE HELPER
-========================================= */
+/* =========================================================
+   11. PRODUCT IMAGE
+   ========================================================= */
 
 function getProductImage(product) {
-    if (!product.image) return "⚙️";
 
-    const image = String(product.image);
-
-    if (
-        image.includes("/") ||
-        image.includes(".jpg") ||
-        image.includes(".jpeg") ||
-        image.includes(".png") ||
-        image.includes(".webp") ||
-        image.includes(".gif")
-    ) {
-        const displayName = product.bnName || product.name || product.title;
-        return `
-            <img
-                src="${image}"
-                alt="${displayName}"
-                loading="lazy"
-                style="width:100%; height:100%; object-fit:cover;"
-                onerror="this.style.display='none';"
-            >
-        `;
+    if (!product) {
+        return "";
     }
 
-    return image;
+    if (product.image) {
+        return product.image;
+    }
+
+    if (product.images && Array.isArray(product.images)) {
+        return product.images[0] || "";
+    }
+
+    return "";
 }
 
-/* =========================================
-   9. PRODUCT CARD UI CREATOR
-========================================= */
+
+/* =========================================================
+   12. SHOW CART DRAWER
+   ========================================================= */
+
+function showCart() {
+
+    const container =
+        document.getElementById("cart-items") ||
+        document.getElementById("cart-drawer-items");
+
+    if (!container) return;
+
+    const cart = getCart();
+
+    if (cart.length === 0) {
+
+        container.innerHTML = `
+            <div style="
+                padding:25px 15px;
+                text-align:center;
+                color:#6b7280;
+            ">
+                <div style="font-size:35px;margin-bottom:8px;">🛒</div>
+                <p style="font-weight:bold;">
+                    আপনার কার্ট খালি
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = cart.map(item => {
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+        const price =
+            Number(item.price) || 0;
+
+        const image =
+            item.image || "";
+
+        return `
+            <div class="cart-item"
+                 style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:10px;
+                 ">
+
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                    min-width:0;
+                ">
+
+                    ${
+                        image
+                        ? `
+                            <img
+                                src="${escapeAttribute(image)}"
+                                alt="${escapeAttribute(item.name || "Product")}"
+                                style="
+                                    width:55px;
+                                    height:55px;
+                                    object-fit:cover;
+                                    border-radius:6px;
+                                    border:1px solid #e5e7eb;
+                                "
+                            >
+                        `
+                        : ""
+                    }
+
+                    <div style="min-width:0;">
+                        <div style="
+                            font-weight:bold;
+                            font-size:14px;
+                            margin-bottom:4px;
+                        ">
+                            ${escapeHTML(item.name || "Product")}
+                        </div>
+
+                        <div style="
+                            color:#16a34a;
+                            font-weight:bold;
+                            font-size:13px;
+                        ">
+                            ৳${price.toLocaleString()}
+                        </div>
+
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            gap:5px;
+                            margin-top:6px;
+                        ">
+                            <button
+                                type="button"
+                                onclick="changeCartQuantity('${escapeAttribute(item.id)}', -1)"
+                                style="
+                                    width:26px;
+                                    height:26px;
+                                    border:1px solid #ddd;
+                                    background:#f3f4f6;
+                                    border-radius:4px;
+                                    cursor:pointer;
+                                "
+                            >−</button>
+
+                            <span style="
+                                min-width:24px;
+                                text-align:center;
+                                font-weight:bold;
+                            ">
+                                ${quantity}
+                            </span>
+
+                            <button
+                                type="button"
+                                onclick="changeCartQuantity('${escapeAttribute(item.id)}', 1)"
+                                style="
+                                    width:26px;
+                                    height:26px;
+                                    border:1px solid #ddd;
+                                    background:#f3f4f6;
+                                    border-radius:4px;
+                                    cursor:pointer;
+                                "
+                            >+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="removeFromCart('${escapeAttribute(item.id)}')"
+                    style="
+                        border:none;
+                        background:#dc2626;
+                        color:white;
+                        padding:6px 8px;
+                        border-radius:5px;
+                        cursor:pointer;
+                        font-size:12px;
+                    "
+                >
+                    🗑️
+                </button>
+
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+/* =========================================================
+   13. YOU MAY ALSO LIKE
+   ========================================================= */
+
+function renderYouMayAlsoLike() {
+
+    const container =
+        document.getElementById(
+            "you-may-also-like-container"
+        );
+
+    if (!container) return;
+
+    const allProducts =
+        typeof products !== "undefined"
+            ? products
+            : [];
+
+    const cart = getCart();
+
+    const cartIds = cart.map(item => item.id);
+
+    const suggestions = allProducts
+        .filter(product => !cartIds.includes(product.id))
+        .slice(0, 4);
+
+    if (suggestions.length === 0) {
+        container.innerHTML = "";
+        return;
+    }
+
+    container.innerHTML = suggestions.map(product => {
+
+        const name =
+            product.bnName ||
+            product.name ||
+            product.title ||
+            "Product";
+
+        const price =
+            Number(product.price) || 0;
+
+        const image =
+            getProductImage(product);
+
+        return `
+            <div style="
+                background:white;
+                border:1px solid #e5e7eb;
+                border-radius:8px;
+                padding:10px;
+            ">
+
+                ${
+                    image
+                    ? `
+                        <img
+                            src="${escapeAttribute(image)}"
+                            alt="${escapeAttribute(name)}"
+                            style="
+                                width:100%;
+                                height:110px;
+                                object-fit:contain;
+                                border-radius:6px;
+                                margin-bottom:8px;
+                            "
+                        >
+                    `
+                    : ""
+                }
+
+                <div style="
+                    font-size:13px;
+                    font-weight:bold;
+                    margin-bottom:5px;
+                ">
+                    ${escapeHTML(name)}
+                </div>
+
+                <div style="
+                    color:#16a34a;
+                    font-weight:bold;
+                    margin-bottom:8px;
+                ">
+                    ৳${price.toLocaleString()}
+                </div>
+
+                <button
+                    type="button"
+                    onclick="addToCartFromSuggestion('${escapeAttribute(product.id)}')"
+                    style="
+                        width:100%;
+                        padding:8px;
+                        border:none;
+                        border-radius:5px;
+                        background:#16a34a;
+                        color:white;
+                        font-weight:bold;
+                        cursor:pointer;
+                        font-size:12px;
+                    "
+                >
+                    Add to Cart
+                </button>
+
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+/* =========================================================
+   14. DRAWERS
+   ========================================================= */
+
+function toggleMenuDrawer() {
+
+    const drawer =
+        document.getElementById("side-menu-drawer");
+
+    if (!drawer) return;
+
+    drawer.classList.toggle("active");
+}
+
+
+function toggleCartDrawer() {
+
+    const drawer =
+        document.getElementById("cart-drawer");
+
+    if (!drawer) return;
+
+    drawer.classList.toggle("active");
+
+    if (drawer.classList.contains("active")) {
+        showCart();
+        renderYouMayAlsoLike();
+    }
+}
+
+
+function toggleAccountDrawer() {
+
+    const drawer =
+        document.getElementById("account-drawer");
+
+    if (!drawer) return;
+
+    const opening =
+        !drawer.classList.contains("active");
+
+    drawer.classList.toggle("active");
+
+    if (opening) {
+        renderAccountDrawer();
+    }
+}
+
+
+/* =========================================================
+   15. PRODUCT CARD
+   ========================================================= */
 
 function createProductCard(product) {
-    const displayName = product.bnName || product.title || product.name;
-    const priceDisplay = product.price > 0 
-        ? `৳ ${Number(product.price).toLocaleString()}` 
-        : "দাম জানতে যোগাযোগ করুন";
 
-    const oldPrice = (product.oldPrice && product.oldPrice > 0)
-        ? `<div class="old-price">৳ ${Number(product.oldPrice).toLocaleString()}</div>`
-        : "";
+    const name =
+        product.bnName ||
+        product.title ||
+        product.name ||
+        "Product";
 
-    const badge = product.badge
-        ? `<span class="offer">${product.badge}</span>`
-        : "";
+    const price =
+        Number(product.price) || 0;
 
-    const rating = product.rating
-        ? `<div class="rating">⭐⭐⭐⭐⭐ ${product.rating}</div>`
-        : "";
+    const oldPrice =
+        Number(product.oldPrice) || 0;
 
-    const page = product.page || `product.html?id=${product.id}`;
-    const keywordsAttr = Array.isArray(product.keywords) ? product.keywords.join(" ").toLowerCase() : "";
+    const image =
+        getProductImage(product);
+
+    const discount =
+        oldPrice > price
+            ? Math.round(
+                ((oldPrice - price) / oldPrice) * 100
+              )
+            : 0;
 
     return `
-        <div
-            class="product"
-            data-name="${String(product.name || product.title || "").toLowerCase()}"
-            data-bnname="${String(product.bnName || "").toLowerCase()}"
-            data-keywords="${keywordsAttr}"
-            data-category="${String(product.category || "").toLowerCase()}"
-        >
-            <a href="${page}" class="product-image">
-                ${badge}
-                ${getProductImage(product)}
+        <div class="product-card">
+
+            <a
+                href="product.html?id=${encodeURIComponent(product.id)}"
+                style="text-decoration:none;color:inherit;"
+            >
+
+                ${
+                    image
+                    ? `
+                        <img
+                            src="${escapeAttribute(image)}"
+                            alt="${escapeAttribute(name)}"
+                            class="product-image"
+                        >
+                    `
+                    : `
+                        <div class="product-image"
+                             style="
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                font-size:45px;
+                             ">
+                            🛠️
+                        </div>
+                    `
+                }
+
             </a>
 
             <div class="product-info">
-                <h3>${displayName}</h3>
-                ${rating}
-                <div class="price">${priceDisplay}</div>
-                ${oldPrice}
-                <button type="button" onclick="addToCart('${product.id}')" class="view-product">Add to Cart</button>
+
+                <a
+                    href="product.html?id=${encodeURIComponent(product.id)}"
+                    style="text-decoration:none;color:inherit;"
+                >
+                    <h3>
+                        ${escapeHTML(name)}
+                    </h3>
+                </a>
+
+                ${
+                    oldPrice > price
+                    ? `
+                        <div>
+                            <span style="
+                                color:#16a34a;
+                                font-weight:bold;
+                                font-size:18px;
+                            ">
+                                ৳${price.toLocaleString()}
+                            </span>
+
+                            <span style="
+                                color:#9ca3af;
+                                text-decoration:line-through;
+                                margin-left:5px;
+                                font-size:13px;
+                            ">
+                                ৳${oldPrice.toLocaleString()}
+                            </span>
+                        </div>
+                    `
+                    : `
+                        <div style="
+                            color:#16a34a;
+                            font-weight:bold;
+                            font-size:18px;
+                        ">
+                            ৳${price.toLocaleString()}
+                        </div>
+                    `
+                }
+
+                ${
+                    discount
+                    ? `
+                        <span style="
+                            display:inline-block;
+                            margin-top:5px;
+                            background:#fee2e2;
+                            color:#dc2626;
+                            padding:3px 6px;
+                            border-radius:4px;
+                            font-size:11px;
+                            font-weight:bold;
+                        ">
+                            ${discount}% OFF
+                        </span>
+                    `
+                    : ""
+                }
+
+                ${
+                    product.rating
+                    ? `
+                        <div style="
+                            margin-top:5px;
+                            color:#f59e0b;
+                            font-size:13px;
+                        ">
+                            ⭐ ${product.rating}
+                            ${
+                                product.reviews
+                                ? `(${product.reviews})`
+                                : ""
+                            }
+                        </div>
+                    `
+                    : ""
+                }
+
+                <button
+                    type="button"
+                    onclick="addToCart('${escapeAttribute(product.id)}')"
+                    class="view-product"
+                >
+                    Add to Cart
+                </button>
+
             </div>
+
         </div>
     `;
 }
 
-/* =========================================
-   10. LOAD & RENDER PRODUCTS
-========================================= */
+
+/* =========================================================
+   16. LOAD PRODUCTS
+   ========================================================= */
 
 function loadProducts() {
-    const container = document.getElementById("product-container") || document.querySelector(".products");
+
+    const container =
+        document.getElementById("product-container");
 
     if (!container) return;
 
-    if (typeof products === "undefined" || !Array.isArray(products)) {
+    if (
+        typeof products === "undefined" ||
+        !Array.isArray(products)
+    ) {
         container.innerHTML = `
-            <div class="no-result">
-                ❌ Product loading error.<br><br>
-                products.js check করুন।
-            </div>
+            <p style="text-align:center;padding:30px;">
+                Product loading হচ্ছে...
+            </p>
         `;
         return;
     }
 
-    container.innerHTML = products.map(createProductCard).join("");
+    container.innerHTML =
+        products.map(createProductCard).join("");
 }
 
-/* =========================================
-   11. SEARCH & FILTER
-========================================= */
+
+/* =========================================================
+   17. SEARCH
+   ========================================================= */
 
 function searchProducts() {
-    const input = document.getElementById("searchInput");
-    if (!input) return;
 
-    const search = input.value.toLowerCase().trim();
-    const productCards = document.querySelectorAll(".product");
-    let visibleProducts = 0;
+    const input =
+        document.getElementById("searchInput");
 
-    productCards.forEach(function(product) {
-        const name = product.getAttribute("data-name") || "";
-        const bnName = product.getAttribute("data-bnname") || "";
-        const keywords = product.getAttribute("data-keywords") || "";
-        const text = product.innerText.toLowerCase();
+    const container =
+        document.getElementById("product-container");
 
-        const match =
-            search === "" ||
-            name.includes(search) ||
-            bnName.includes(search) ||
-            keywords.includes(search) ||
-            text.includes(search);
+    if (!input || !container) return;
 
-        if (match) {
-            product.style.display = "";
-            visibleProducts++;
-        } else {
-            product.style.display = "none";
-        }
-    });
+    const query =
+        input.value.trim().toLowerCase();
 
-    showNoResult(visibleProducts === 0 && search !== "");
+    if (!query) {
+        loadProducts();
+        return;
+    }
+
+    const results =
+        products.filter(product => {
+
+            const searchableText = [
+                product.name,
+                product.bnName,
+                product.title,
+                product.category,
+                product.categoryName,
+                product.subCategory,
+                ...(Array.isArray(product.keywords)
+                    ? product.keywords
+                    : [])
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return searchableText.includes(query);
+        });
+
+    if (results.length === 0) {
+
+        container.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:40px 15px;
+            ">
+                <div style="font-size:40px;">🔍</div>
+                <h3>কোনো প্রোডাক্ট পাওয়া যায়নি</h3>
+                <p style="color:#6b7280;margin-top:6px;">
+                    অন্য কোনো নাম দিয়ে আবার চেষ্টা করুন।
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        results.map(createProductCard).join("");
 }
 
+
 function setupSearch() {
-    const input = document.getElementById("searchInput");
+
+    const input =
+        document.getElementById("searchInput");
+
     if (!input) return;
 
-    input.addEventListener("input", searchProducts);
     input.addEventListener("keydown", function(event) {
+
         if (event.key === "Enter") {
             searchProducts();
         }
+
     });
 }
+
+
+/* =========================================================
+   18. CATEGORY FILTER
+   ========================================================= */
 
 function filterCategory(category) {
-    const productCards = document.querySelectorAll(".product");
-    const selectedCategory = String(category).toLowerCase().trim();
-    let visibleProducts = 0;
 
-    productCards.forEach(function(product) {
-        const productCategory = String(product.getAttribute("data-category") || "").toLowerCase().trim();
-        const match = selectedCategory === "all" || productCategory === selectedCategory;
+    const container =
+        document.getElementById("product-container");
 
-        if (match) {
-            product.style.display = "";
-            visibleProducts++;
-        } else {
-            product.style.display = "none";
-        }
-    });
-
-    showNoResult(visibleProducts === 0);
-
-    const input = document.getElementById("searchInput");
-    if (input) input.value = "";
-}
-
-function showNoResult(show) {
-    let message = document.getElementById("no-product-result");
-
-    if (!show) {
-        if (message) message.remove();
-        return;
-    }
-
-    if (message) return;
-
-    const container = document.getElementById("product-container") || document.querySelector(".products");
     if (!container) return;
 
-    message = document.createElement("div");
-    message.id = "no-product-result";
-    message.className = "no-result";
-    message.innerHTML = `
-        🔍<br><br>
-        কোনো Product পাওয়া যায়নি।<br>
-        অন্য কিছু Search করুন।
-    `;
+    if (
+        typeof products === "undefined" ||
+        !Array.isArray(products)
+    ) return;
 
-    container.appendChild(message);
-}
-
-function focusSearch() {
-    const input = document.getElementById("searchInput");
-    setTimeout(function() {
-        if (input) {
-            input.focus();
-            input.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-    }, 200);
-}
-
-function showAllProducts() {
-    const productCards = document.querySelectorAll(".product");
-    productCards.forEach(function(product) {
-        product.style.display = "";
-    });
-
-    showNoResult(false);
-
-    const input = document.getElementById("searchInput");
-    if (input) input.value = "";
-}
-
-/* =========================================
-   12. INITIALIZATION
-========================================= */
-
-document.addEventListener("DOMContentLoaded", function() {
-    loadProducts();
-    setupSearch();
-    updateCartCount();
-    showCart();
-    renderYouMayAlsoLike();
-});
-
-window.addEventListener("storage", function() {
-    updateCartCount();
-    showCart();
-    renderYouMayAlsoLike();
-});
-
-/* =========================================
-   13. CUSTOMER PROFILE (localStorage-based "Account")
-========================================= */
-
-function getCustomerProfile() {
-    try {
-        return JSON.parse(localStorage.getItem("customerProfile")) || null;
-    } catch (e) {
-        return null;
-    }
-}
-
-function saveCustomerProfile(profile) {
-    localStorage.setItem("customerProfile", JSON.stringify(profile));
-}
-
-function getOrderHistory() {
-    try {
-        return JSON.parse(localStorage.getItem("orders")) || [];
-    } catch (e) {
-        return [];
-    }
-}
-
-function handleSaveProfile(event) {
-    event.preventDefault();
-
-    const name = document.getElementById("acc-name").value.trim();
-    const phone = document.getElementById("acc-phone").value.trim();
-    const address = document.getElementById("acc-address").value.trim();
-
-    if (!name || !phone) {
-        alert("অনুগ্রহ করে নাম ও মোবাইল নম্বর দিন।");
+    if (
+        !category ||
+        category.toLowerCase() === "all"
+    ) {
+        loadProducts();
         return;
     }
 
-    saveCustomerProfile({ name, phone, address });
-    renderAccountDrawer();
+    const selectedCategory =
+        category.toLowerCase();
+
+    const results =
+        products.filter(product => {
+
+            return (
+                String(product.category || "")
+                    .toLowerCase() === selectedCategory ||
+
+                String(product.subCategory || "")
+                    .toLowerCase() === selectedCategory ||
+
+                String(product.categoryName || "")
+                    .toLowerCase() === selectedCategory
+            );
+        });
+
+    if (results.length === 0) {
+
+        container.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:30px;
+            ">
+                এই ক্যাটাগরিতে কোনো প্রোডাক্ট পাওয়া যায়নি।
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        results.map(createProductCard).join("");
 }
+
+
+/* =========================================================
+   19. ACCOUNT PROFILE SAVE
+   ========================================================= */
+
+function handleSaveProfile(event) {
+
+    if (event) {
+        event.preventDefault();
+    }
+
+    const nameEl =
+        document.getElementById("acc-name");
+
+    const phoneEl =
+        document.getElementById("acc-phone");
+
+    const addressEl =
+        document.getElementById("acc-address");
+
+    const name =
+        nameEl ? nameEl.value.trim() : "";
+
+    const phone =
+        phoneEl ? phoneEl.value.trim() : "";
+
+    const address =
+        addressEl ? addressEl.value.trim() : "";
+
+    if (!name || !phone || !address) {
+
+        showCustomModal(
+            "দয়া করে আপনার নাম, মোবাইল নম্বর এবং পূর্ণাঙ্গ ঠিকানা দিন।"
+        );
+
+        return;
+    }
+
+    saveCustomerProfile({
+        name,
+        phone,
+        address
+    });
+
+    renderAccountDrawer(false);
+
+    showAddToCartToast(
+        "আপনার তথ্য সফলভাবে Save হয়েছে"
+    );
+}
+
+
+/* =========================================================
+   20. EDIT PROFILE
+   ========================================================= */
 
 function editProfile() {
     renderAccountDrawer(true);
 }
 
-function renderOrderHistoryHTML() {
-    const orders = getOrderHistory();
 
-    if (orders.length === 0) {
-        return `<p style="font-size: 13px; color: #888; text-align: center; padding: 15px 0;">এখনো কোনো Order নেই।</p>`;
+/* =========================================================
+   21. ORDER HISTORY
+   ========================================================= */
+
+function getOrderHistory() {
+
+    try {
+
+        const orders =
+            JSON.parse(
+                localStorage.getItem("orders")
+            );
+
+        return Array.isArray(orders)
+            ? orders
+            : [];
+
+    } catch (error) {
+        return [];
     }
-
-    return orders.slice().reverse().map(order => {
-        const itemCount = (order.items || []).reduce((sum, i) => sum + (Number(i.quantity) || 1), 0);
-        return `
-            <div style="border: 1px solid #eee; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;">
-                <div style="display:flex; justify-content:space-between; font-size: 12px; font-weight:bold; color:#172033;">
-                    <span>#${order.orderId}</span>
-                    <span style="color:#16a34a;">৳ ${Number(order.grandTotal || 0).toLocaleString()}</span>
-                </div>
-                <div style="font-size: 11px; color:#777; margin-top:3px;">
-                    ${order.date || ""} • ${itemCount} টি পণ্য
-                </div>
-            </div>
-        `;
-    }).join("");
 }
 
-function renderAccountDrawer(forceEdit) {
-    const container = document.getElementById("account-drawer-body");
-    if (!container) return;
 
-    const profile = getCustomerProfile();
+/* =========================================================
+   22. ORDER HISTORY HTML
+   ========================================================= */
 
-    if (!profile || forceEdit) {
-        container.innerHTML = `
-            <p style="font-size: 12px; color: #888; margin-bottom: 12px;">
-                একবার তথ্য দিলে পরবর্তী Order-এ আবার লিখতে হবে না।
-            </p>
-            <form onsubmit="handleSaveProfile(event)">
-                <div style="margin-bottom: 10px;">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">নাম *</label>
-                    <input type="text" id="acc-name" value="${profile ? escapeHTMLAttr(profile.name) : ''}" placeholder="আপনার নাম" style="width:100%; padding:9px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">মোবাইল নম্বর *</label>
-                    <input type="tel" id="acc-phone" value="${profile ? escapeHTMLAttr(profile.phone) : ''}" placeholder="০১৭xxxxxxxx" style="width:100%; padding:9px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
-                </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">ঠিকানা</label>
-                    <input type="text" id="acc-address" value="${profile ? escapeHTMLAttr(profile.address) : ''}" placeholder="জেলা, থানা, এলাকা" style="width:100%; padding:9px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
-                </div>
-                <button type="submit" style="width:100%; background:#16a34a; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:14px; cursor:pointer;">
-                    Save করুন
-                </button>
-            </form>
+function renderOrderHistoryHTML() {
+
+    const orders =
+        getOrderHistory();
+
+    if (orders.length === 0) {
+
+        return `
+            <div style="
+                padding:15px;
+                background:#f9fafb;
+                border-radius:8px;
+                text-align:center;
+                color:#6b7280;
+            ">
+                এখনো কোনো অর্ডার নেই।
+            </div>
         `;
+    }
+
+    return orders
+        .slice()
+        .reverse()
+        .map(order => {
+
+            const items =
+                Array.isArray(order.items)
+                    ? order.items
+                    : [];
+
+            const itemText =
+                items
+                    .map(item =>
+                        `${item.name || "Product"} ×${item.quantity || 1}`
+                    )
+                    .join(", ");
+
+            return `
+                <div style="
+                    border:1px solid #e5e7eb;
+                    border-radius:8px;
+                    padding:12px;
+                    margin-bottom:10px;
+                    background:white;
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        gap:8px;
+                        margin-bottom:6px;
+                    ">
+                        <strong>
+                            ${escapeHTML(order.orderId || "Order")}
+                        </strong>
+
+                        <span style="
+                            color:#16a34a;
+                            font-weight:bold;
+                        ">
+                            ৳${Number(order.grandTotal || 0).toLocaleString()}
+                        </span>
+                    </div>
+
+                    <div style="
+                        font-size:12px;
+                        color:#6b7280;
+                        line-height:1.5;
+                    ">
+                        ${escapeHTML(itemText)}
+                    </div>
+
+                    ${
+                        order.date
+                        ? `
+                            <div style="
+                                font-size:11px;
+                                color:#9ca3af;
+                                margin-top:6px;
+                            ">
+                                ${escapeHTML(order.date)}
+                            </div>
+                        `
+                        : ""
+                    }
+
+                </div>
+            `;
+
+        })
+        .join("");
+}
+
+
+/* =========================================================
+   23. ACCOUNT DRAWER
+   ========================================================= */
+
+function renderAccountDrawer(forceEdit = false) {
+
+    const body =
+        document.getElementById("account-drawer-body");
+
+    if (!body) return;
+
+    const profile =
+        getCustomerProfile();
+
+    if (forceEdit || !profile) {
+
+        body.innerHTML = `
+            <div style="padding:15px;">
+
+                <div style="
+                    text-align:center;
+                    font-size:42px;
+                    margin-bottom:10px;
+                ">
+                    👤
+                </div>
+
+                <h3 style="
+                    text-align:center;
+                    margin-bottom:6px;
+                ">
+                    ${profile ? "আপনার তথ্য পরিবর্তন করুন" : "Customer Profile"}
+                </h3>
+
+                <p style="
+                    text-align:center;
+                    color:#6b7280;
+                    font-size:13px;
+                    margin-bottom:18px;
+                ">
+                    একবার তথ্য Save করলে পরবর্তীতে
+                    বারবার লিখতে হবে না।
+                </p>
+
+                <form onsubmit="handleSaveProfile(event)">
+
+                    <div style="margin-bottom:12px;">
+                        <label style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                        ">
+                            নাম *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="acc-name"
+                            value="${escapeAttribute(profile?.name || "")}"
+                            placeholder="আপনার নাম"
+                            required
+                            style="
+                                width:100%;
+                                padding:10px;
+                                border:1px solid #d1d5db;
+                                border-radius:6px;
+                                outline:none;
+                            "
+                        >
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                        <label style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                        ">
+                            মোবাইল নম্বর *
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="acc-phone"
+                            value="${escapeAttribute(profile?.phone || "")}"
+                            placeholder="017xxxxxxxx"
+                            required
+                            style="
+                                width:100%;
+                                padding:10px;
+                                border:1px solid #d1d5db;
+                                border-radius:6px;
+                                outline:none;
+                            "
+                        >
+                    </div>
+
+                    <div style="margin-bottom:15px;">
+                        <label style="
+                            display:block;
+                            font-size:13px;
+                            font-weight:bold;
+                            margin-bottom:5px;
+                        ">
+                            পূর্ণাঙ্গ ঠিকানা *
+                        </label>
+
+                        <textarea
+                            id="acc-address"
+                            rows="3"
+                            placeholder="বাড়ি/রোড, এলাকা, থানা, জেলা"
+                            required
+                            style="
+                                width:100%;
+                                padding:10px;
+                                border:1px solid #d1d5db;
+                                border-radius:6px;
+                                resize:vertical;
+                                outline:none;
+                            "
+                        >${escapeHTML(profile?.address || "")}</textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        style="
+                            width:100%;
+                            padding:12px;
+                            border:none;
+                            border-radius:6px;
+                            background:#16a34a;
+                            color:white;
+                            font-weight:bold;
+                            cursor:pointer;
+                        "
+                    >
+                        💾 তথ্য Save করুন
+                    </button>
+
+                </form>
+
+            </div>
+        `;
+
         return;
     }
 
-    container.innerHTML = `
-        <div style="background:#f0fdf4; border:1px solid #dcfce7; border-radius:10px; padding:14px; margin-bottom:16px;">
-            <div style="font-weight:bold; font-size:15px; color:#172033;">${profile.name}</div>
-            <div style="font-size:13px; color:#555; margin-top:3px;">📱 ${profile.phone}</div>
-            ${profile.address ? `<div style="font-size:13px; color:#555; margin-top:3px;">📍 ${profile.address}</div>` : ""}
-            <button type="button" onclick="editProfile()" style="margin-top:10px; background:none; border:1px solid #16a34a; color:#16a34a; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:bold; cursor:pointer;">
-                ✎ তথ্য পরিবর্তন করুন
-            </button>
-        </div>
 
-        <h4 style="font-size: 13px; color: #16a34a; margin-bottom: 10px; text-transform: uppercase;">📦 আগের Order সমূহ</h4>
-        ${renderOrderHistoryHTML()}
+    /* Saved Profile View */
+
+    body.innerHTML = `
+        <div style="padding:15px;">
+
+            <div style="
+                text-align:center;
+                margin-bottom:18px;
+            ">
+
+                <div style="
+                    width:70px;
+                    height:70px;
+                    margin:0 auto 10px;
+                    border-radius:50%;
+                    background:#dcfce7;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:35px;
+                ">
+                    👤
+                </div>
+
+                <h3 style="margin-bottom:4px;">
+                    ${escapeHTML(profile.name)}
+                </h3>
+
+                <p style="
+                    color:#16a34a;
+                    font-size:13px;
+                    font-weight:bold;
+                ">
+                    ✓ Customer Profile Saved
+                </p>
+
+            </div>
+
+            <div style="
+                background:#f9fafb;
+                border-radius:8px;
+                padding:14px;
+                line-height:1.8;
+                margin-bottom:15px;
+            ">
+
+                <div>
+                    <strong>📱 মোবাইল:</strong>
+                    ${escapeHTML(profile.phone)}
+                </div>
+
+                <div>
+                    <strong>📍 ঠিকানা:</strong>
+                    ${escapeHTML(profile.address)}
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="editProfile()"
+                style="
+                    width:100%;
+                    padding:11px;
+                    border:1px solid #16a34a;
+                    border-radius:6px;
+                    background:white;
+                    color:#16a34a;
+                    font-weight:bold;
+                    cursor:pointer;
+                    margin-bottom:10px;
+                "
+            >
+                ✏️ তথ্য পরিবর্তন করুন
+            </button>
+
+            <h4 style="
+                margin:20px 0 10px;
+            ">
+                📦 Order History
+            </h4>
+
+            ${renderOrderHistoryHTML()}
+
+        </div>
     `;
 }
 
-function escapeHTMLAttr(value) {
-    return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+
+/* =========================================================
+   24. WHATSAPP ORDER FROM GLOBAL CART
+   ========================================================= */
+
+function sendToWhatsApp() {
+
+    const cart = getCart();
+
+    if (cart.length === 0) {
+
+        showCustomModal(
+            "আপনার কার্ট বর্তমানে খালি!"
+        );
+
+        return;
+    }
+
+    const profile =
+        getCustomerProfile();
+
+    if (
+        !profile ||
+        !profile.name ||
+        !profile.phone ||
+        !profile.address
+    ) {
+
+        showCustomModal(
+            "WhatsApp-এ অর্ডার করার আগে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা দিন।"
+        );
+
+        return;
+    }
+
+    const phoneNumber =
+        "8801973317146";
+
+    let productListText = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+
+        const qty =
+            Number(item.quantity) || 1;
+
+        const price =
+            Number(item.price) || 0;
+
+        const itemTotal =
+            price * qty;
+
+        total += itemTotal;
+
+        productListText +=
+            `${index + 1}. ${item.name} - ${qty}টি (৳${itemTotal.toLocaleString()})\n`;
+    });
+
+    const message =
+        `🛒 *নতুন অর্ডার এসেছে!*\n\n` +
+
+        `👤 *কাস্টমার তথ্য:*\n` +
+        `• নাম: ${profile.name}\n` +
+        `• ফোন: ${profile.phone}\n` +
+        `• ঠিকানা: ${profile.address}\n\n` +
+
+        `📦 *প্রোডাক্টের তালিকা:*\n` +
+        productListText +
+
+        `\n💵 *উপমোট:* ৳${total.toLocaleString()}\n` +
+
+        `💰 *সর্বমোট:* ৳${total.toLocaleString()}`;
+
+    const whatsappURL =
+        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
 }
+
+
+/* =========================================================
+   25. HTML SECURITY HELPERS
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function escapeHTMLAttr(value) {
+    return escapeHTML(value);
+}
+
+function escapeAttribute(value) {
+    return escapeHTML(value);
+}
+
+
+/* =========================================================
+   26. INITIALIZATION
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        injectToastStyles();
+
+        loadProducts();
+
+        setupSearch();
+
+        updateCartCount();
+
+        showCart();
+
+        renderYouMayAlsoLike();
+
+    }
+);
