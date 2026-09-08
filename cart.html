@@ -93,10 +93,10 @@
                 align-items: flex-start;
             }
             #cart-items {
-                flex: 2;
+                flex: 1.8;
             }
             .cart-summary {
-                flex: 1;
+                flex: 1.2;
                 position: sticky;
                 top: 80px;
             }
@@ -190,6 +190,44 @@
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
+        }
+
+        /* Customer Form Styles */
+        .customer-form {
+            margin-bottom: 20px;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 15px;
+        }
+
+        .customer-form h4 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #4b5563;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #16a34a;
         }
 
         .summary-row {
@@ -300,13 +338,37 @@
         <div id="cart-items"></div>
 
         <div class="cart-summary" id="cart-summary">
+            <!-- Customer Info Form -->
+            <div class="customer-form">
+                <h4>📋 ডেলিভারি তথ্য</h4>
+                <div class="form-group">
+                    <label for="cust-name">আপনার নাম *</label>
+                    <input type="text" id="cust-name" placeholder="যেমন: মোঃ রফিকুল ইসলাম">
+                </div>
+                <div class="form-group">
+                    <label for="cust-phone">মোবাইল নম্বর *</label>
+                    <input type="tel" id="cust-phone" placeholder="যেমন: 01700000000">
+                </div>
+                <div class="form-group">
+                    <label for="cust-address">পূর্ণাঙ্গ ঠিকানা *</label>
+                    <textarea id="cust-address" rows="2" placeholder="বাড়ি/রোড নম্বর, এলাকা, থানা, জেলা"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="delivery-location">ডেলিভারি এলাকা *</label>
+                    <select id="delivery-location" onchange="updateTotalWithDelivery()">
+                        <option value="60">ঢাকার ভেতরে (৳60)</option>
+                        <option value="120">ঢাকার বাইরে (৳120)</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="summary-row">
                 <span>উপমোট (Subtotal):</span>
                 <span id="subtotal-price">৳ 0</span>
             </div>
             <div class="summary-row">
                 <span>ডেলিভারি চার্জ:</span>
-                <span>Checkout-এ নির্ধারিত হবে</span>
+                <span id="delivery-charge-text">৳ 60</span>
             </div>
             <div class="summary-row cart-total">
                 <span>সর্বমোট:</span>
@@ -317,7 +379,6 @@
                 Proceed to Checkout ➔
             </button>
 
-            <!-- WhatsApp অর্ডার বাটন -->
             <button class="whatsapp-btn" onclick="sendOrderToWhatsApp()">
                 💬 WhatsApp-এ অর্ডার করুন
             </button>
@@ -331,18 +392,17 @@
     <p>🚚 সারা বাংলাদেশে Delivery</p>
 </footer>
 
-<script src="script.js"></script>
 <script>
+let currentSubtotal = 0;
+
 function renderCartPage() {
     const itemsContainer = document.getElementById("cart-items");
     const summaryContainer = document.getElementById("cart-summary");
-    const totalElement = document.getElementById("cart-total");
-    const subtotalElement = document.getElementById("subtotal-price");
     const cartCountEl = document.getElementById("cart-count");
 
     let cart = [];
     try {
-        cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = JSON.parse(localStorage.getItem("cart")) || JSON.parse(localStorage.getItem("machinery_cart")) || [];
     } catch (e) {
         cart = [];
     }
@@ -365,13 +425,13 @@ function renderCartPage() {
 
     if (summaryContainer) summaryContainer.style.display = "block";
 
-    let total = 0;
+    currentSubtotal = 0;
     if (itemsContainer) {
         itemsContainer.innerHTML = cart.map((item, index) => {
             const qty = Number(item.quantity) || 1;
             const price = Number(item.price) || 0;
             const itemTotal = price * qty;
-            total += itemTotal;
+            currentSubtotal += itemTotal;
             const imgSrc = item.image || 'https://via.placeholder.com/65';
 
             return `
@@ -395,8 +455,21 @@ function renderCartPage() {
         }).join("");
     }
 
-    if (totalElement) totalElement.innerText = "৳ " + total.toLocaleString();
-    if (subtotalElement) subtotalElement.innerText = "৳ " + total.toLocaleString();
+    updateTotalWithDelivery();
+}
+
+function updateTotalWithDelivery() {
+    const subtotalElement = document.getElementById("subtotal-price");
+    const totalElement = document.getElementById("cart-total");
+    const deliveryChargeText = document.getElementById("delivery-charge-text");
+    const deliverySelect = document.getElementById("delivery-location");
+
+    const deliveryCharge = Number(deliverySelect ? deliverySelect.value : 60);
+    const grandTotal = currentSubtotal + deliveryCharge;
+
+    if (subtotalElement) subtotalElement.innerText = "৳ " + currentSubtotal.toLocaleString();
+    if (deliveryChargeText) deliveryChargeText.innerText = "৳ " + deliveryCharge.toLocaleString();
+    if (totalElement) totalElement.innerText = "৳ " + grandTotal.toLocaleString();
 }
 
 function updateItemQuantity(index, change) {
@@ -410,6 +483,7 @@ function updateItemQuantity(index, change) {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("machinery_cart", JSON.stringify(cart));
     renderCartPage();
 }
 
@@ -417,6 +491,7 @@ function removeItemFromCart(index) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("machinery_cart", JSON.stringify(cart));
     renderCartPage();
 }
 
@@ -426,6 +501,16 @@ function proceedToCheckout() {
         alert("আপনার কার্ট খালি!");
         return;
     }
+    
+    // ফর্মের ডাটাগুলো সেভ করে Checkout-এ পাঠানো যাবে
+    const customerInfo = {
+        name: document.getElementById("cust-name").value,
+        phone: document.getElementById("cust-phone").value,
+        address: document.getElementById("cust-address").value,
+        deliveryCharge: document.getElementById("delivery-location").value
+    };
+    localStorage.setItem("checkout_customer_info", JSON.stringify(customerInfo));
+
     window.location.href = "checkout.html";
 }
 
@@ -435,6 +520,16 @@ function sendOrderToWhatsApp() {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (cart.length === 0) {
         alert("আপনার কার্ট খালি!");
+        return;
+    }
+
+    const name = document.getElementById("cust-name").value.trim();
+    const phone = document.getElementById("cust-phone").value.trim();
+    const address = document.getElementById("cust-address").value.trim();
+    const deliveryCharge = Number(document.getElementById("delivery-location").value);
+
+    if (!name || !phone || !address) {
+        alert("দয়া করে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন!");
         return;
     }
 
@@ -449,9 +544,17 @@ function sendOrderToWhatsApp() {
         productListText += `${index + 1}. ${item.name} - ${qty}টি (৳${itemTotal.toLocaleString()})\n`;
     });
 
+    let grandTotal = total + deliveryCharge;
+
     let message = `🛒 *নতুন অর্ডার এসেছে!*\n\n` +
+                  `👤 *কাস্টমার তথ্য:*\n` +
+                  `• নাম: ${name}\n` +
+                  `• ফোন: ${phone}\n` +
+                  `• ঠিকানা: ${address}\n\n` +
                   `📦 *প্রোডাক্টের তালিকা:*\n${productListText}\n` +
-                  `💰 *সর্বমোট:* ৳${total.toLocaleString()}`;
+                  `💵 উপমোট: ৳${total.toLocaleString()}\n` +
+                  `🚚 ডেলিভারি চার্জ: ৳${deliveryCharge}\n` +
+                  `💰 *সর্বমোট:* ৳${grandTotal.toLocaleString()}`;
 
     let whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
