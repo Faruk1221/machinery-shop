@@ -145,7 +145,9 @@ function addToCart(productId) {
     updateCartCount();
     showCart();
     renderYouMayAlsoLike();
-    alert(`"${product.bnName || product.title || product.name}" কার্টে যোগ করা হয়েছে!`);
+    showAddToCartToast({product.bnName || product.title || product.name}"কার্টে যোগ করা হয়েছে!");
+};
+
 }
 
 // "You May Also Like" থেকে দ্রুত সাইলেন্টলি কার্টে অ্যাড করা
@@ -343,6 +345,11 @@ function toggleCartDrawer() {
             renderYouMayAlsoLike();
         }
     }
+   
+ function toggleAccountDrawer() {
+     const drawer = document.getElementById("account-drawer");
+     if (drawer) drawer.classList.toggle("open");
+   }
 }
 
 /* =========================================
