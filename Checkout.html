@@ -327,8 +327,19 @@ function initCheckout() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const itemsSummary = document.getElementById("order-items-summary");
 
+    // Saved profile থাকলে auto-fill করো
+    try {
+        const profile = JSON.parse(localStorage.getItem("customerProfile"));
+        if (profile) {
+            if (profile.name) document.getElementById("fullname").value = profile.name;
+            if (profile.phone) document.getElementById("phone").value = profile.phone;
+            if (profile.address) document.getElementById("address").value = profile.address;
+        }
+    } catch (e) {}
+
     if (typeof updateCartCount === "function") {
         updateCartCount();
+        
     }
 
     if (cart.length === 0) {
@@ -392,6 +403,8 @@ function handlePlaceOrder(event) {
     let orders = JSON.parse(localStorage.getItem("orders")) || [];
     orders.push(orderData);
     localStorage.setItem("orders", JSON.stringify(orders));
+        // Profile-ও save/update করে দাও যাতে পরের বার auto-fill হয়
+    localStorage.setItem("customerProfile", JSON.stringify({ name, phone, address }));
 
     // Clear cart after successfully placing order
     localStorage.removeItem("cart");
