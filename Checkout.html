@@ -259,8 +259,8 @@
                     <div class="form-group">
                         <label for="area">ডেলিভারি এলাকা *</label>
                         <select id="area" onchange="calculateCheckoutTotal()" required>
-                            <option value="inside">ঢাকার ভেতরে (৳ ১২০)</option>
-                            <option value="outside">ঢাকার বাইরে (৳ ২০০)</option>
+                            <option value="inside">ঢাকার ভেতরে (৳ ৬০)</option>
+                            <option value="outside">ঢাকার বাইরে (৳ ১২০)</option>
                         </select>
                     </div>
 
@@ -292,7 +292,7 @@
                 </div>
                 <div class="summary-item">
                     <span>ডেলিভারি চার্জ:</span>
-                    <span id="shipping-cost">৳ 120</span>
+                    <span id="shipping-cost">৳ 60</span>
                 </div>
 
                 <div class="summary-item total">
@@ -323,24 +323,44 @@
 /* Checkout Logic */
 let cartSubtotal = 0;
 
+function updateHeaderCartCount(cart) {
+    const cartCountEl = document.getElementById("cart-count");
+    if (cartCountEl) {
+        const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+        cartCountEl.innerText = totalQty;
+    }
+}
+
 function initCheckout() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cart = [];
+    try {
+        cart = JSON.parse(localStorage.getItem("cart")) || JSON.parse(localStorage.getItem("machinery_cart")) || [];
+    } catch (e) {
+        cart = [];
+    }
+
     const itemsSummary = document.getElementById("order-items-summary");
 
-    // Saved profile থাকলে auto-fill করো
+    // Header Cart Count আপডেট
+    updateHeaderCartCount(cart);
+
+    // Auto-fill Customer Profile Info from LocalStorage or Cart Form
     try {
-        const profile = JSON.parse(localStorage.getItem("customerProfile"));
+        const profile = JSON.parse(localStorage.getItem("customerProfile")) || JSON.parse(localStorage.getItem("checkout_customer_info"));
         if (profile) {
             if (profile.name) document.getElementById("fullname").value = profile.name;
             if (profile.phone) document.getElementById("phone").value = profile.phone;
             if (profile.address) document.getElementById("address").value = profile.address;
+            if (profile.deliveryCharge) {
+                const areaSelect = document.getElementById("area");
+                if(profile.deliveryCharge === "120") {
+                    areaSelect.value = "outside";
+                } else {
+                    areaSelect.value = "inside";
+                }
+            }
         }
     } catch (e) {}
-
-    if (typeof updateCartCount === "function") {
-        updateCartCount();
-        
-    }
 
     if (cart.length === 0) {
         window.location.href = "cart.html";
@@ -356,7 +376,7 @@ function initCheckout() {
 
         return `
             <div class="order-item-row">
-                <span>${item.name} (x${qty})</span>
+                <span>${item.name || 'Product'} (x${qty})</span>
                 <span>৳ ${itemTotal.toLocaleString()}</span>
             </div>`;
     }).join("");
@@ -366,7 +386,7 @@ function initCheckout() {
 
 function calculateCheckoutTotal() {
     const areaSelect = document.getElementById("area");
-    const shippingCost = areaSelect.value === "outside" ? 200 : 120;
+    const shippingCost = areaSelect.value === "outside" ? 120 : 60;
     const grandTotal = cartSubtotal + shippingCost;
 
     document.getElementById("subtotal").innerText = "৳ " + cartSubtotal.toLocaleString();
@@ -379,12 +399,13 @@ function handlePlaceOrder(event) {
 
     const name = document.getElementById("fullname").value;
     const phone = document.getElementById("phone").value;
-    const area = document.getElementById("area").value === "outside" ? "ঢাকার বাইরে" : "ঢাকার ভেতরে";
+    const areaSelectValue = document.getElementById("area").value;
+    const area = areaSelectValue === "outside" ? "ঢাকার বাইরে" : "ঢাকার ভেতরে";
     const address = document.getElementById("address").value;
     const notes = document.getElementById("notes").value;
 
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const shippingCost = document.getElementById("area").value === "outside" ? 200 : 120;
+    let cart = JSON.parse(localStorage.getItem("cart")) || JSON.parse(localStorage.getItem("machinery_cart")) || [];
+    const shippingCost = areaSelectValue === "outside" ? 120 : 60;
     const grandTotal = cartSubtotal + shippingCost;
 
     const orderId = "MS-" + Math.floor(100000 + Math.random() * 900000);
@@ -403,11 +424,13 @@ function handlePlaceOrder(event) {
     let orders = JSON.parse(localStorage.getItem("orders")) || [];
     orders.push(orderData);
     localStorage.setItem("orders", JSON.stringify(orders));
-        // Profile-ও save/update করে দাও যাতে পরের বার auto-fill হয়
+    
+    // Save Profile for auto-fill in future
     localStorage.setItem("customerProfile", JSON.stringify({ name, phone, address }));
 
-    // Clear cart after successfully placing order
+    // Clear cart after placing order
     localStorage.removeItem("cart");
+    localStorage.removeItem("machinery_cart");
 
     // Display confirmation screen
     showOrderSuccess(orderData);
@@ -416,11 +439,13 @@ function handlePlaceOrder(event) {
 function showOrderSuccess(order) {
     const mainWrapper = document.getElementById("checkout-content");
     
-    // WhatsApp মেসেজ তৈরি
+    // Header cart count ০ করে দেওয়া
+    updateHeaderCartCount([]);
+
+    // WhatsApp Message
     let itemDetails = order.items.map(i => `${i.name} (x${i.quantity || 1})`).join(", ");
-    let waMessage = `NEW ORDER!%0AOrder ID: ${order.orderId}%0AName: ${order.customer.name}%0APhone: ${order.customer.phone}%0AItems: ${itemDetails}%0ATotal: BDT ${order.grandTotal}%0AAddress: ${order.customer.address}`;
+    let waMessage = `*NEW ORDER!*%0A*Order ID:* ${order.orderId}%0A*Name:* ${order.customer.name}%0A*Phone:* ${order.customer.phone}%0A*Items:* ${itemDetails}%0A*Total:* BDT ${order.grandTotal}%0A*Address:* ${order.customer.address}`;
     
-    // আপনার হোয়াটসঅ্যাপ নম্বর (৮৮ সহ)
     let adminPhone = "8801973317146"; 
     let waUrl = `https://wa.me/${adminPhone}?text=${waMessage}`;
 
@@ -435,10 +460,6 @@ function showOrderSuccess(order) {
                 <a href="index.html" style="background: #16a34a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">হোম পেজে ফিরে যান</a>
             </div>
         </div>`;
-    
-    if (typeof updateCartCount === "function") {
-        updateCartCount();
-    }
 }
 
 document.addEventListener("DOMContentLoaded", initCheckout);
