@@ -518,7 +518,7 @@
             border-radius: 17px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, .15);
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             z-index: 2000;
         }
 
@@ -739,30 +739,42 @@
     </div>
 
     <!-- CART DRAWER WITH "YOU MAY ALSO LIKE" -->
-    <div class="drawer" id="cart-drawer">
-        <div class="drawer-header">
-            <span>🛒 Shopping Cart</span>
-            <button onclick="toggleCartDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
-        </div>
-        <div class="drawer-body">
+    <div class="drawer-body">
             <div id="cart-drawer-items">
                 <!-- Cart Items ডাইনামিকালি লোড হবে -->
             </div>
-            
+
+            <div style="margin-top: 16px;">
+                <a href="cart.html" style="display: block; text-align: center; background: #16a34a; color: white; padding: 12px; border-radius: 8px; font-weight: bold;">Checkout Page →</a>
+            </div>
+
             <hr style="margin: 18px 0; border: 0; border-top: 1px dashed #ccc;">
 
             <!-- YOU MAY ALSO LIKE SECTION -->
             <h4 style="font-size: 13px; color: #16a34a; margin-bottom: 10px; text-transform: uppercase;">You May Also Like</h4>
             <div id="you-may-also-like-container">
-                <!-- দাম অনুযায়ী (কম থেকে বেশি) আইটেমগুলো লোড হবে -->
+                <!-- দাম অনুযায়ী (কম থেকে বেশি) আইটেমগুলো লোড হবে -->
             </div>
-
-            <div style="margin-top: 20px;">
-                <a href="cart.html" style="display: block; text-align: center; background: #16a34a; color: white; padding: 12px; border-radius: 8px; font-weight: bold;">Checkout Page →</a>
-            </div>
-        </div>
     </div>
 
+
+    <!-- ACCOUNT DRAWER (ভবিষ্যৎ notification feature-এর জন্য) -->
+    <div class="drawer" id="account-drawer">
+        <div class="drawer-header">
+            <span>👤 Account</span>
+            <button onclick="toggleAccountDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+        <div class="drawer-body">
+            <p style="font-size: 13px; color: #555; line-height: 1.7;">
+                🔔 এখানে ভবিষ্যতে নতুন প্রোডাক্ট ও অফার সংক্রান্ত নোটিফিকেশন দেখা যাবে।
+            </p>
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+            <h4 style="margin-bottom: 10px; color: #16a34a;">📞 Contact Us</h4>
+            <p style="font-size: 13px; color: #555;"><strong>মোবাইল:</strong> +8801973317146</p>
+            <p style="font-size: 13px; color: #555;"><strong>ইমেইল:</strong> contact@worldsbestmachinerybd.com</p>
+        </div>
+    </div>
+    
     <!-- FOOTER -->
     <footer>
         <h3>⚙️ Machinery Shop</h3>
@@ -771,25 +783,29 @@
         <p>📞 Contact: +8801973317146</p>
         <p>© 2026 Machinery Shop</p>
     </footer>
-
-    <!-- BOTTOM NAVIGATION -->
+    
+        <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a href="index.html" class="bottom-item active">
             <span>🏠</span>
             Home
         </a>
-        <a href="#searchInput" class="bottom-item" onclick="focusSearch()">
-            <span>🔍</span>
-            Search
-        </a>
         <a href="javascript:void(0)" class="bottom-item" onclick="toggleMenuDrawer()">
-            <span>📂</span>
-            Categories
+            <span>🛍️</span>
+            Shop
+        </a>
+        <a href="https://wa.me/8801973317146" target="_blank" class="bottom-item">
+            <span>📞</span>
+            Call
         </a>
         <a href="javascript:void(0)" class="bottom-item" onclick="toggleCartDrawer()">
             <span>🛒</span>
             <div class="cart-badge" id="cart-count">0</div>
             Cart
+        </a>
+        <a href="javascript:void(0)" class="bottom-item" onclick="toggleAccountDrawer()">
+            <span>👤</span>
+            Account
         </a>
     </nav>
 
