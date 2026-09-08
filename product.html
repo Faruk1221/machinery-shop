@@ -1184,7 +1184,7 @@ function submitQuickOrder() {
         `📞 ফোন: ${phone}\n` +
         `🏠 ঠিকানা: ${address}`;
 
-    const whatsappNumber = "8801700000000"; // আপনার হোয়াটসঅ্যাপ নম্বর দিন
+    const whatsappNumber = "8801973317146";
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
 }
@@ -1210,10 +1210,14 @@ function addSelectedProductToCart() {
         });
     }
 
-        localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCountUI();
-    showAddToCartToast(selectedProduct.bnName || selectedProduct.name);
-    alert("পণ্যটি কার্টে যোগ করা হয়েছে!");
+    
+    if (typeof showAddToCartToast === "function") {
+        showAddToCartToast(selectedProduct.bnName || selectedProduct.name);
+    } else {
+        alert("পণ্যটি কার্টে যোগ করা হয়েছে!");
+    }
 }
 
 function updateCartCountUI() {
@@ -1235,7 +1239,8 @@ function loadRelatedProducts() {
         .slice(0, 4);
 
     if (!related.length) {
-        document.getElementById("related-section").style.display = "none";
+        const relSec = document.getElementById("related-section");
+        if (relSec) relSec.style.display = "none";
         return;
     }
 
@@ -1247,16 +1252,16 @@ function loadRelatedProducts() {
             <div class="related-info">
                 <h3>${p.bnName || p.name}</h3>
                 <div class="related-price">৳ ${Number(p.price).toLocaleString()}</div>
-                <a href="product.html?id=${p.id}" class="related-btn">ভিউ ডিটেইলস</a>
+                <a href="product.html?id=${p.id}" class="related-btn">বিস্তারিত দেখুন</a>
             </div>
         </div>
     `).join("");
 }
 
+// Initialize on page load
 document.addEventListener("DOMContentLoaded", loadProductDetails);
 
 </script>
 
 </body>
-
 </html>
