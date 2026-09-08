@@ -2,6 +2,75 @@
    MACHINERY SHOP - MAIN SCRIPT
    PRODUCT + SEARCH + CATEGORY + CART + DRAWER
    ========================================= */
+/* =========================================
+   TOAST NOTIFICATION (Add to Cart Feedback)
+========================================= */
+function injectToastStyles() {
+    if (document.getElementById("toast-style")) return;
+    const style = document.createElement("style");
+    style.id = "toast-style";
+    style.innerHTML = `
+        .cart-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 90px;
+            transform: translateX(-50%) translateY(20px);
+            background: #16a34a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,.2);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+            max-width: 90%;
+        }
+        .cart-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .cart-toast .toast-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+let toastTimer = null;
+function showAddToCartToast(productName) {
+    injectToastStyles();
+
+    let toast = document.getElementById("cart-toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "cart-toast";
+        toast.className = "cart-toast";
+        document.body.appendChild(toast);
+    }
+
+    toast.innerHTML = `<span class="toast-check">✓</span> "${productName}" কার্টে যোগ হয়েছে`;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 1800);
+}
 
 /* =========================================
    1. WHATSAPP DIRECT ORDER FUNCTION
