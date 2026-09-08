@@ -1206,8 +1206,9 @@ function addSelectedProductToCart() {
         });
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+        localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCountUI();
+    showAddToCartToast(selectedProduct.bnName || selectedProduct.name);
     alert("পণ্যটি কার্টে যোগ করা হয়েছে!");
 }
 
