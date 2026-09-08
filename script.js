@@ -77,15 +77,40 @@ function showAddToCartToast(productName) {
    1. WHATSAPP DIRECT ORDER FUNCTION
 ========================================= */
 
-function sendToWhatsApp(productName, price, quantity = 1) {
-    const phoneNumber = "8801973317146"; // আপনার আসল WhatsApp নম্বর
-    const totalPrice = price * quantity;
-    
-    const message = `হ্যালো! আমি এই প্রোডাক্টটি অর্ডার করতে চাই:\n\n` +
-                    `📦 *পণ্য:* ${productName}\n` +
-                    `🔢 *পরিমাণ:* ${quantity}\n` +
-                    `💰 *মোট মূল্য:* ৳${totalPrice}\n\n` +
-                    `দয়া করে পরবর্তী প্রসেসটি জানান।`;
+function sendToWhatsApp() {
+    const cart = getCart();
+    if (cart.length === 0) {
+        alert("আপনার কার্ট খালি!");
+        return;
+    }
+
+    const phoneNumber = "8801973317146"; // আপনার WhatsApp নম্বর
+    const profile = getCustomerProfile(); // অ্যাকাউন্ট থেকে তথ্য নেওয়া
+
+    let message = `🛒 *নতুন অর্ডার ডিটেইলস*\n`;
+    message += `----------------------------------\n`;
+
+    let totalPrice = 0;
+    cart.forEach((item, index) => {
+        const itemTotal = (Number(item.price) || 0) * (Number(item.quantity) || 1);
+        totalPrice += itemTotal;
+        message += `${index + 1}. *${item.name}*\n   পরিমাণ: ${item.quantity} টি | দাম: ৳${itemTotal.toLocaleString()}\n`;
+    });
+
+    message += `----------------------------------\n`;
+    message += `💰 *সর্বমোট মূল্য:* ৳${totalPrice.toLocaleString()}\n\n`;
+
+    // অ্যাকাউন্ট তথ্য থাকলে তা মেসেজের নিচে যুক্ত হবে
+    if (profile && profile.name) {
+        message += `👤 *গ্রাহকের তথ্য (Customer Details):*\n`;
+        message += `• নাম: ${profile.name}\n`;
+        message += `• মোবাইল: ${profile.phone}\n`;
+        if (profile.address) {
+            message += `• ঠিকানা: ${profile.address}\n`;
+        }
+    } else {
+        message += `⚠️ *গ্রাহকের তথ্য:* অ্যাকাউন্টে কোনো তথ্য সেভ করা নেই।\n`;
+    }
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
@@ -150,7 +175,6 @@ function addToCart(productId) {
     showAddToCartToast(prodName);
 }
 
-// "You May Also Like" থেকে দ্রুত সাইলেন্টলি কার্টে অ্যাড করা
 function addToCartFromSuggestion(productId) {
     if (typeof products === "undefined" || !Array.isArray(products)) return;
     const product = products.find(p => String(p.id) === String(productId));
@@ -185,14 +209,12 @@ function updateCartCount() {
     const cart = getCart();
     const totalQty = cart.reduce((total, item) => total + (Number(item.quantity) || 1), 0);
 
-    // Update Bottom & Header Badges
     const countBottom = document.getElementById("cart-count");
     const countHeader = document.getElementById("header-cart-count");
     
     if (countBottom) countBottom.innerText = totalQty;
     if (countHeader) countHeader.innerText = totalQty;
 
-    // Update by Class if available
     document.querySelectorAll(".cart-count").forEach(element => {
         element.innerText = totalQty;
     });
@@ -230,7 +252,7 @@ function changeCartQuantity(index, change) {
 }
 
 /* =========================================
-   6. CART TOTAL & DISPLAY (WITH SUGGESTIONS)
+   6. CART TOTAL & DISPLAY (WITH PICTURES)
 ========================================= */
 
 function getCartTotal() {
@@ -263,22 +285,32 @@ function showCart() {
     cart.forEach((product, index) => {
         const item = document.createElement("div");
         item.className = "cart-item";
-        item.style.cssText = "padding: 10px 0; border-bottom: 1px solid #eee;";
+        item.style.cssText = "padding: 10px 0; border-bottom: 1px solid #eee; display: flex; gap: 10px; align-items: center;";
         
         const qty = Number(product.quantity) || 1;
         const price = Number(product.price) || 0;
         const subtotal = price * qty;
 
-        item.innerHTML = `
-            <h3 style="font-size: 13px; margin-bottom: 4px;">${product.name}</h3>
-            <p style="font-size: 12px; color: #555;">দাম: ${price > 0 ? '৳ ' + price.toLocaleString() : 'যোগাযোগ করুন'}</p>
-            <div class="cart-quantity" style="display: flex; align-items: center; gap: 8px; margin: 6px 0;">
-                <button type="button" onclick="changeCartQuantity(${index}, -1)" style="width: 24px; height: 24px; border: 1px solid #ccc; background: #fff; cursor: pointer;">−</button>
-                <strong>${qty}</strong>
-                <button type="button" onclick="changeCartQuantity(${index}, 1)" style="width: 24px; height: 24px; border: 1px solid #ccc; background: #fff; cursor: pointer;">+</button>
+        // ছবির লেআউট
+        const imgHtml = `
+            <div style="width: 50px; height: 50px; flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #f3f4f6;">
+                ${getProductImage(product)}
             </div>
-            <p style="font-size: 12px;">Subtotal: <strong>${price > 0 ? '৳ ' + subtotal.toLocaleString() : 'যোগাযোগ করুন'}</strong></p>
-            <button type="button" onclick="removeFromCart(${index})" style="color:red; margin-top:5px; background:none; border:none; cursor:pointer; font-size:11px;">Remove</button>
+        `;
+
+        item.innerHTML = `
+            ${imgHtml}
+            <div style="flex-grow: 1;">
+                <h3 style="font-size: 13px; margin: 0 0 4px 0;">${product.name}</h3>
+                <p style="font-size: 11px; color: #555; margin: 0;">দাম: ${price > 0 ? '৳ ' + price.toLocaleString() : 'যোগাযোগ করুন'}</p>
+                <div class="cart-quantity" style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
+                    <button type="button" onclick="changeCartQuantity(${index}, -1)" style="width: 20px; height: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; line-height: 1;">−</button>
+                    <strong style="font-size: 12px;">${qty}</strong>
+                    <button type="button" onclick="changeCartQuantity(${index}, 1)" style="width: 20px; height: 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; line-height: 1;">+</button>
+                </div>
+                <p style="font-size: 11px; margin: 0;">Subtotal: <strong>${price > 0 ? '৳ ' + subtotal.toLocaleString() : 'যোগাযোগ করুন'}</strong></p>
+            </div>
+            <button type="button" onclick="removeFromCart(${index})" style="color:red; background:none; border:none; cursor:pointer; font-size:14px; font-weight:bold;">✕</button>
         `;
 
         cartContainer.appendChild(item);
@@ -289,7 +321,6 @@ function showCart() {
     }
 }
 
-// "You May Also Like" Section (Lowest Price to Highest Price Sort)
 function renderYouMayAlsoLike() {
     const container = document.getElementById("you-may-also-like-container");
     if (!container || typeof products === "undefined" || !Array.isArray(products)) return;
@@ -297,7 +328,6 @@ function renderYouMayAlsoLike() {
     const cart = getCart();
     const cartItemIds = cart.map(item => String(item.id));
 
-    // কার্টে না থাকা প্রোডাক্ট দামের ক্রমানুসারে (Lowest -> Highest) সাজানো
     const suggestedProducts = products
         .filter(p => !cartItemIds.includes(String(p.id)))
         .sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
@@ -590,7 +620,6 @@ document.addEventListener("DOMContentLoaded", function() {
     renderYouMayAlsoLike();
 });
 
-// Sync cart across browser tabs
 window.addEventListener("storage", function() {
     updateCartCount();
     showCart();
