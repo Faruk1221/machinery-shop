@@ -599,7 +599,7 @@ const products = [
 
        gallery: [
           "images/safety-goggles-mask-1.jpg",
-          "images/safety goggles mask-2.jpg"],
+          "images/safety-goggles-mask-2.jpg"],
    
        videos: [],
 
