@@ -738,8 +738,13 @@
         </div>
     </div>
 
-    <!-- CART DRAWER WITH "YOU MAY ALSO LIKE" -->
-    <div class="drawer-body">
+        <!-- CART DRAWER WITH "YOU MAY ALSO LIKE" -->
+    <div class="drawer" id="cart-drawer">
+        <div class="drawer-header">
+            <span>🛒 Shopping Cart</span>
+            <button onclick="toggleCartDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+        <div class="drawer-body">
             <div id="cart-drawer-items">
                 <!-- Cart Items ডাইনামিকালি লোড হবে -->
             </div>
@@ -755,6 +760,7 @@
             <div id="you-may-also-like-container">
                 <!-- দাম অনুযায়ী (কম থেকে বেশি) আইটেমগুলো লোড হবে -->
             </div>
+        </div>
     </div>
     
         <!-- ACCOUNT DRAWER -->
