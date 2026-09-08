@@ -92,9 +92,11 @@
                 flex-direction: row;
                 align-items: flex-start;
             }
+
             #cart-items {
                 flex: 1.8;
             }
+
             .cart-summary {
                 flex: 1.2;
                 position: sticky;
@@ -116,12 +118,14 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid #e5e7eb;
+            gap: 10px;
         }
 
         .cart-item-left {
             display: flex;
             align-items: center;
             gap: 12px;
+            min-width: 0;
         }
 
         .cart-item-img {
@@ -131,11 +135,17 @@
             border-radius: 6px;
             border: 1px solid #e5e7eb;
             background: #f9fafb;
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            min-width: 0;
         }
 
         .cart-item-info h3 {
             font-size: 15px;
             margin-bottom: 4px;
+            word-break: break-word;
         }
 
         .cart-item-info p {
@@ -148,6 +158,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0;
         }
 
         .qty-controls {
@@ -156,6 +167,7 @@
             border: 1px solid #d1d5db;
             border-radius: 6px;
             background: #fff;
+            overflow: hidden;
         }
 
         .qty-controls button {
@@ -166,6 +178,10 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+        }
+
+        .qty-controls button:hover {
+            background: #e5e7eb;
         }
 
         .qty-controls span {
@@ -185,6 +201,10 @@
             font-size: 13px;
         }
 
+        .remove-btn:hover {
+            opacity: 0.9;
+        }
+
         .cart-summary {
             background: white;
             padding: 20px;
@@ -192,7 +212,7 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* Customer Form Styles */
+        /* Customer Form */
         .customer-form {
             margin-bottom: 20px;
             border-bottom: 1px dashed #cbd5e1;
@@ -203,6 +223,17 @@
             font-size: 16px;
             margin-bottom: 12px;
             color: #1f2937;
+        }
+
+        .saved-info {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
 
         .form-group {
@@ -217,7 +248,9 @@
             color: #4b5563;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 9px;
             border: 1px solid #d1d5db;
@@ -226,8 +259,11 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             border-color: #16a34a;
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.08);
         }
 
         .summary-row {
@@ -261,6 +297,10 @@
             margin-bottom: 10px;
         }
 
+        .checkout-btn:hover {
+            opacity: 0.9;
+        }
+
         .whatsapp-btn {
             width: 100%;
             padding: 14px;
@@ -275,6 +315,10 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+        }
+
+        .whatsapp-btn:hover {
+            opacity: 0.9;
         }
 
         .empty-cart {
@@ -315,6 +359,137 @@
             font-size: 13px;
             color: #9ca3af;
         }
+
+        /* =========================
+           MACHINERY SHOP CUSTOM MODAL
+           ========================= */
+
+        .machinery-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .machinery-modal-overlay.show {
+            display: flex;
+        }
+
+        .machinery-modal-box {
+            width: 100%;
+            max-width: 390px;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+            animation: modalPop 0.2s ease;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .machinery-modal-header {
+            background: #16a34a;
+            color: white;
+            padding: 15px 18px;
+            font-size: 17px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .machinery-modal-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .machinery-modal-body {
+            padding: 22px 18px;
+            text-align: center;
+        }
+
+        .machinery-modal-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .machinery-modal-body h3 {
+            font-size: 19px;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .machinery-modal-body p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4b5563;
+        }
+
+        .machinery-modal-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 18px 18px;
+        }
+
+        .modal-account-btn,
+        .modal-later-btn {
+            flex: 1;
+            padding: 11px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-account-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+        }
+
+        .modal-later-btn {
+            background: white;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
+        }
+
+        /* Mobile cart */
+        @media (max-width: 600px) {
+            .cart-item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .cart-item-left {
+                width: 100%;
+            }
+
+            .cart-item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .remove-btn {
+                padding: 8px 10px;
+            }
+        }
     </style>
 </head>
 
@@ -323,6 +498,7 @@
 <header>
     <div class="top">
         <a href="index.html" class="logo">⚙️ Machinery Shop</a>
+
         <a href="cart.html" class="cart">
             🛒 <span id="cart-count" class="cart-count">0</span>
         </a>
@@ -330,58 +506,99 @@
 </header>
 
 <div class="main-wrapper">
+
     <a href="index.html" class="back">← Continue Shopping</a>
 
     <h2 class="cart-title">🛒 আপনার Shopping Cart</h2>
 
     <div class="cart-layout">
+
         <div id="cart-items"></div>
 
         <div class="cart-summary" id="cart-summary">
+
             <!-- Customer Info Form -->
             <div class="customer-form">
+
                 <h4>📋 ডেলিভারি তথ্য</h4>
+
+                <div class="saved-info" id="saved-info-message">
+                    ✓ আপনার সংরক্ষিত তথ্য অটোমেটিকভাবে বসানো হয়েছে।
+                </div>
+
                 <div class="form-group">
                     <label for="cust-name">আপনার নাম *</label>
-                    <input type="text" id="cust-name" placeholder="যেমন: মোঃ রফিকুল ইসলাম">
+                    <input
+                        type="text"
+                        id="cust-name"
+                        placeholder="যেমন: মোঃ রফিকুল ইসলাম"
+                        autocomplete="name"
+                    >
                 </div>
+
                 <div class="form-group">
                     <label for="cust-phone">মোবাইল নম্বর *</label>
-                    <input type="tel" id="cust-phone" placeholder="যেমন: 01700000000">
+                    <input
+                        type="tel"
+                        id="cust-phone"
+                        placeholder="যেমন: 01700000000"
+                        autocomplete="tel"
+                    >
                 </div>
+
                 <div class="form-group">
                     <label for="cust-address">পূর্ণাঙ্গ ঠিকানা *</label>
-                    <textarea id="cust-address" rows="2" placeholder="বাড়ি/রোড নম্বর, এলাকা, থানা, জেলা"></textarea>
+                    <textarea
+                        id="cust-address"
+                        rows="2"
+                        placeholder="বাড়ি/রোড নম্বর, এলাকা, থানা, জেলা"
+                        autocomplete="street-address"
+                    ></textarea>
                 </div>
+
                 <div class="form-group">
                     <label for="delivery-location">ডেলিভারি এলাকা *</label>
-                    <select id="delivery-location" onchange="updateTotalWithDelivery()">
+
+                    <select
+                        id="delivery-location"
+                        onchange="updateTotalWithDelivery()"
+                    >
                         <option value="60">ঢাকার ভেতরে (৳60)</option>
                         <option value="120">ঢাকার বাইরে (৳120)</option>
                     </select>
                 </div>
+
             </div>
 
             <div class="summary-row">
                 <span>উপমোট (Subtotal):</span>
                 <span id="subtotal-price">৳ 0</span>
             </div>
+
             <div class="summary-row">
                 <span>ডেলিভারি চার্জ:</span>
                 <span id="delivery-charge-text">৳ 60</span>
             </div>
+
             <div class="summary-row cart-total">
                 <span>সর্বমোট:</span>
                 <span id="cart-total">৳ 0</span>
             </div>
 
-            <button class="checkout-btn" onclick="proceedToCheckout()">
+            <button
+                class="checkout-btn"
+                onclick="proceedToCheckout()"
+            >
                 Proceed to Checkout ➔
             </button>
 
-            <button class="whatsapp-btn" onclick="sendOrderToWhatsApp()">
+            <button
+                class="whatsapp-btn"
+                onclick="sendOrderToWhatsApp()"
+            >
                 💬 WhatsApp-এ অর্ডার করুন
             </button>
+
         </div>
     </div>
 </div>
@@ -392,175 +609,885 @@
     <p>🚚 সারা বাংলাদেশে Delivery</p>
 </footer>
 
+
+<!-- =========================
+     CUSTOM PROFILE MODAL
+     ========================= -->
+
+<div
+    class="machinery-modal-overlay"
+    id="profile-modal"
+    onclick="closeProfileModalOnOutside(event)"
+>
+    <div class="machinery-modal-box">
+
+        <div class="machinery-modal-header">
+            <span>⚙️ Machinery Shop</span>
+
+            <button
+                class="machinery-modal-close"
+                onclick="closeProfileModal()"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="machinery-modal-body">
+
+            <div class="machinery-modal-icon">👤</div>
+
+            <h3>আপনার তথ্য প্রয়োজন</h3>
+
+            <p id="profile-modal-message">
+                অর্ডার করার আগে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা সংরক্ষণ করুন।
+                একবার সংরক্ষণ করলে পরবর্তীতে এগুলো অটোমেটিকভাবে বসে যাবে।
+            </p>
+
+        </div>
+
+        <div class="machinery-modal-actions">
+
+            <button
+                class="modal-account-btn"
+                onclick="goToAccountProfile()"
+            >
+                👤 তথ্য দিন
+            </button>
+
+            <button
+                class="modal-later-btn"
+                onclick="closeProfileModal()"
+            >
+                পরে করব
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
 <script>
+/* =========================================================
+   MACHINERY SHOP CART PAGE
+   CUSTOMER PROFILE + AUTO FILL SYSTEM
+   ========================================================= */
+
 let currentSubtotal = 0;
 
-function renderCartPage() {
-    const itemsContainer = document.getElementById("cart-items");
-    const summaryContainer = document.getElementById("cart-summary");
-    const cartCountEl = document.getElementById("cart-count");
 
-    let cart = [];
+/* =========================================================
+   CUSTOMER PROFILE
+   ========================================================= */
+
+function getCustomerProfile() {
     try {
-        cart = JSON.parse(localStorage.getItem("cart")) || JSON.parse(localStorage.getItem("machinery_cart")) || [];
-    } catch (e) {
-        cart = [];
+        const profile = JSON.parse(
+            localStorage.getItem("customerProfile")
+        );
+
+        return profile || null;
+
+    } catch (error) {
+        return null;
+    }
+}
+
+
+function saveCustomerProfile(profile) {
+    localStorage.setItem(
+        "customerProfile",
+        JSON.stringify(profile)
+    );
+}
+
+
+function isCustomerProfileComplete(profile) {
+
+    if (!profile) {
+        return false;
     }
 
-    const totalQty = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-    if (cartCountEl) cartCountEl.innerText = totalQty;
+    const name = String(profile.name || "").trim();
+    const phone = String(profile.phone || "").trim();
+    const address = String(profile.address || "").trim();
 
-    if (!cart || cart.length === 0) {
-        if (itemsContainer) {
-            itemsContainer.innerHTML = `
-                <div class="empty-cart">
-                    <h3>আপনার কার্ট বর্তমানে খালি!</h3>
-                    <p>পছন্দের প্রোডাক্ট যোগ করতে শপে যান।</p>
-                    <a href="index.html">কেনাকাটা শুরু করুন</a>
-                </div>`;
-        }
-        if (summaryContainer) summaryContainer.style.display = "none";
+    return Boolean(name && phone && address);
+}
+
+
+/* =========================================================
+   AUTO FILL CUSTOMER INFORMATION
+   ========================================================= */
+
+function autoFillCustomerInformation() {
+
+    const profile = getCustomerProfile();
+
+    const nameInput = document.getElementById("cust-name");
+    const phoneInput = document.getElementById("cust-phone");
+    const addressInput = document.getElementById("cust-address");
+    const savedMessage = document.getElementById("saved-info-message");
+
+    if (!profile) {
         return;
     }
 
-    if (summaryContainer) summaryContainer.style.display = "block";
-
-    currentSubtotal = 0;
-    if (itemsContainer) {
-        itemsContainer.innerHTML = cart.map((item, index) => {
-            const qty = Number(item.quantity) || 1;
-            const price = Number(item.price) || 0;
-            const itemTotal = price * qty;
-            currentSubtotal += itemTotal;
-            const imgSrc = item.image || 'https://via.placeholder.com/65';
-
-            return `
-                <div class="cart-item">
-                    <div class="cart-item-left">
-                        <img src="${imgSrc}" alt="${item.name || 'Product'}" class="cart-item-img">
-                        <div class="cart-item-info">
-                            <h3>${item.name || 'Product'}</h3>
-                            <p>৳ ${price.toLocaleString()} ${qty > 1 ? 'x ' + qty : ''}</p>
-                        </div>
-                    </div>
-                    <div class="cart-item-actions">
-                        <div class="qty-controls">
-                            <button onclick="updateItemQuantity(${index}, -1)">−</button>
-                            <span>${qty}</span>
-                            <button onclick="updateItemQuantity(${index}, 1)">+</button>
-                        </div>
-                        <button class="remove-btn" onclick="removeItemFromCart(${index})">🗑️ ডিলিট</button>
-                    </div>
-                </div>`;
-        }).join("");
+    if (nameInput && profile.name) {
+        nameInput.value = profile.name;
     }
 
-    updateTotalWithDelivery();
-}
-
-function updateTotalWithDelivery() {
-    const subtotalElement = document.getElementById("subtotal-price");
-    const totalElement = document.getElementById("cart-total");
-    const deliveryChargeText = document.getElementById("delivery-charge-text");
-    const deliverySelect = document.getElementById("delivery-location");
-
-    const deliveryCharge = Number(deliverySelect ? deliverySelect.value : 60);
-    const grandTotal = currentSubtotal + deliveryCharge;
-
-    if (subtotalElement) subtotalElement.innerText = "৳ " + currentSubtotal.toLocaleString();
-    if (deliveryChargeText) deliveryChargeText.innerText = "৳ " + deliveryCharge.toLocaleString();
-    if (totalElement) totalElement.innerText = "৳ " + grandTotal.toLocaleString();
-}
-
-function updateItemQuantity(index, change) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    if (!cart[index]) return;
-
-    cart[index].quantity = (Number(cart[index].quantity) || 1) + change;
-
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
+    if (phoneInput && profile.phone) {
+        phoneInput.value = profile.phone;
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("machinery_cart", JSON.stringify(cart));
-    renderCartPage();
-}
-
-function removeItemFromCart(index) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("machinery_cart", JSON.stringify(cart));
-    renderCartPage();
-}
-
-function proceedToCheckout() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    if (cart.length === 0) {
-        alert("আপনার কার্ট খালি!");
-        return;
+    if (addressInput && profile.address) {
+        addressInput.value = profile.address;
     }
-    
-    // ফর্মের ডাটাগুলো সেভ করে Checkout-এ পাঠানো যাবে
-    const customerInfo = {
-        name: document.getElementById("cust-name").value,
-        phone: document.getElementById("cust-phone").value,
-        address: document.getElementById("cust-address").value,
-        deliveryCharge: document.getElementById("delivery-location").value
+
+    if (
+        savedMessage &&
+        profile.name &&
+        profile.phone &&
+        profile.address
+    ) {
+        savedMessage.style.display = "block";
+    }
+}
+
+
+/* =========================================================
+   SAVE CURRENT FORM DATA
+   ========================================================= */
+
+function saveCurrentCustomerInformation() {
+
+    const nameInput = document.getElementById("cust-name");
+    const phoneInput = document.getElementById("cust-phone");
+    const addressInput = document.getElementById("cust-address");
+
+    if (!nameInput || !phoneInput || !addressInput) {
+        return null;
+    }
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const address = addressInput.value.trim();
+
+    if (!name || !phone || !address) {
+        return null;
+    }
+
+    const oldProfile = getCustomerProfile() || {};
+
+    const profile = {
+        ...oldProfile,
+        name: name,
+        phone: phone,
+        address: address
     };
-    localStorage.setItem("checkout_customer_info", JSON.stringify(customerInfo));
 
-    window.location.href = "checkout.html";
+    saveCustomerProfile(profile);
+
+    return profile;
 }
 
-function sendOrderToWhatsApp() {
-    const phoneNumber = "8801973317146"; 
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    if (cart.length === 0) {
-        alert("আপনার কার্ট খালি!");
-        return;
+/* =========================================================
+   PROFILE MODAL
+   ========================================================= */
+
+function showProfileModal(message) {
+
+    const modal = document.getElementById("profile-modal");
+    const messageElement = document.getElementById(
+        "profile-modal-message"
+    );
+
+    if (messageElement && message) {
+        messageElement.innerText = message;
+    }
+
+    if (modal) {
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden";
+    }
+}
+
+
+function closeProfileModal() {
+
+    const modal = document.getElementById("profile-modal");
+
+    if (modal) {
+        modal.classList.remove("show");
+        document.body.style.overflow = "";
+    }
+}
+
+
+function closeProfileModalOnOutside(event) {
+
+    if (event.target.id === "profile-modal") {
+        closeProfileModal();
+    }
+}
+
+
+/* =========================================================
+   GO TO ACCOUNT
+   ========================================================= */
+
+function goToAccountProfile() {
+
+    sessionStorage.setItem(
+        "openAccountProfile",
+        "true"
+    );
+
+    closeProfileModal();
+
+    window.location.href = "index.html";
+}
+
+
+/* =========================================================
+   VALIDATE CUSTOMER INFORMATION
+   ========================================================= */
+
+function requireCustomerInformation() {
+
+    const profile = getCustomerProfile();
+
+    if (isCustomerProfileComplete(profile)) {
+
+        autoFillCustomerInformation();
+
+        return true;
     }
 
     const name = document.getElementById("cust-name").value.trim();
     const phone = document.getElementById("cust-phone").value.trim();
     const address = document.getElementById("cust-address").value.trim();
-    const deliveryCharge = Number(document.getElementById("delivery-location").value);
 
-    if (!name || !phone || !address) {
-        alert("দয়া করে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন!");
+    /*
+     * যদি customer এখনো Cart-এর form-এ তথ্য দেয়,
+     * তাহলে Account-এ আগে যেতে হবে না।
+     */
+    if (name && phone && address) {
+
+        saveCurrentCustomerInformation();
+
+        return true;
+    }
+
+    showProfileModal(
+        "অর্ডার করার আগে আপনার নাম, মোবাইল নম্বর এবং পূর্ণাঙ্গ ঠিকানা দিন। একবার তথ্য সংরক্ষণ করলে পরবর্তীতে আর বারবার লিখতে হবে না।"
+    );
+
+    return false;
+}
+
+
+/* =========================================================
+   GET CART
+   ========================================================= */
+
+function getCart() {
+
+    try {
+
+        const cart = JSON.parse(
+            localStorage.getItem("cart")
+        );
+
+        return Array.isArray(cart) ? cart : [];
+
+    } catch (error) {
+
+        return [];
+    }
+}
+
+
+/* =========================================================
+   SAVE CART
+   ========================================================= */
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+}
+
+
+/* =========================================================
+   RENDER CART
+   ========================================================= */
+
+function renderCartPage() {
+
+    const itemsContainer =
+        document.getElementById("cart-items");
+
+    const summaryContainer =
+        document.getElementById("cart-summary");
+
+    const cartCountEl =
+        document.getElementById("cart-count");
+
+    const cart = getCart();
+
+    const totalQty = cart.reduce(
+        (sum, item) =>
+            sum + (Number(item.quantity) || 1),
+        0
+    );
+
+    if (cartCountEl) {
+        cartCountEl.innerText = totalQty;
+    }
+
+
+    /* Empty Cart */
+
+    if (!cart || cart.length === 0) {
+
+        if (itemsContainer) {
+
+            itemsContainer.innerHTML = `
+                <div class="empty-cart">
+                    <h3>আপনার কার্ট বর্তমানে খালি!</h3>
+                    <p>পছন্দের প্রোডাক্ট যোগ করতে শপে যান।</p>
+
+                    <a href="index.html">
+                        কেনাকাটা শুরু করুন
+                    </a>
+                </div>
+            `;
+        }
+
+        if (summaryContainer) {
+            summaryContainer.style.display = "none";
+        }
+
+        currentSubtotal = 0;
+
         return;
     }
 
-    let productListText = "";
-    let total = 0;
 
-    cart.forEach((item, index) => {
-        let qty = Number(item.quantity) || 1;
-        let price = Number(item.price) || 0;
-        let itemTotal = price * qty;
-        total += itemTotal;
-        productListText += `${index + 1}. ${item.name} - ${qty}টি (৳${itemTotal.toLocaleString()})\n`;
-    });
+    /* Cart Has Products */
 
-    let grandTotal = total + deliveryCharge;
+    if (summaryContainer) {
+        summaryContainer.style.display = "block";
+    }
 
-    let message = `🛒 *নতুন অর্ডার এসেছে!*\n\n` +
-                  `👤 *কাস্টমার তথ্য:*\n` +
-                  `• নাম: ${name}\n` +
-                  `• ফোন: ${phone}\n` +
-                  `• ঠিকানা: ${address}\n\n` +
-                  `📦 *প্রোডাক্টের তালিকা:*\n${productListText}\n` +
-                  `💵 উপমোট: ৳${total.toLocaleString()}\n` +
-                  `🚚 ডেলিভারি চার্জ: ৳${deliveryCharge}\n` +
-                  `💰 *সর্বমোট:* ৳${grandTotal.toLocaleString()}`;
 
-    let whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
+    /* Auto-fill Saved Profile */
+
+    autoFillCustomerInformation();
+
+
+    currentSubtotal = 0;
+
+
+    if (itemsContainer) {
+
+        itemsContainer.innerHTML = cart.map(
+            (item, index) => {
+
+                const qty =
+                    Number(item.quantity) || 1;
+
+                const price =
+                    Number(item.price) || 0;
+
+                const itemTotal =
+                    price * qty;
+
+                currentSubtotal += itemTotal;
+
+
+                const imgSrc =
+                    item.image ||
+                    "https://via.placeholder.com/65";
+
+
+                const productName =
+                    escapeHTML(
+                        item.name || "Product"
+                    );
+
+
+                return `
+                    <div class="cart-item">
+
+                        <div class="cart-item-left">
+
+                            <img
+                                src="${escapeHTMLAttribute(imgSrc)}"
+                                alt="${productName}"
+                                class="cart-item-img"
+                            >
+
+                            <div class="cart-item-info">
+
+                                <h3>
+                                    ${productName}
+                                </h3>
+
+                                <p>
+                                    ৳ ${price.toLocaleString()}
+                                    ${qty > 1
+                                        ? " × " + qty
+                                        : ""
+                                    }
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="cart-item-actions">
+
+                            <div class="qty-controls">
+
+                                <button
+                                    onclick="updateItemQuantity(${index}, -1)"
+                                    aria-label="Decrease quantity"
+                                >
+                                    −
+                                </button>
+
+                                <span>
+                                    ${qty}
+                                </span>
+
+                                <button
+                                    onclick="updateItemQuantity(${index}, 1)"
+                                    aria-label="Increase quantity"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+
+                            <button
+                                class="remove-btn"
+                                onclick="removeItemFromCart(${index})"
+                            >
+                                🗑️ ডিলিট
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        ).join("");
+    }
+
+
+    updateTotalWithDelivery();
 }
 
-document.addEventListener("DOMContentLoaded", renderCartPage);
+
+/* =========================================================
+   DELIVERY + TOTAL
+   ========================================================= */
+
+function updateTotalWithDelivery() {
+
+    const subtotalElement =
+        document.getElementById("subtotal-price");
+
+    const totalElement =
+        document.getElementById("cart-total");
+
+    const deliveryChargeText =
+        document.getElementById("delivery-charge-text");
+
+    const deliverySelect =
+        document.getElementById("delivery-location");
+
+
+    const deliveryCharge =
+        Number(
+            deliverySelect
+                ? deliverySelect.value
+                : 60
+        );
+
+
+    const grandTotal =
+        currentSubtotal + deliveryCharge;
+
+
+    if (subtotalElement) {
+
+        subtotalElement.innerText =
+            "৳ " +
+            currentSubtotal.toLocaleString();
+    }
+
+
+    if (deliveryChargeText) {
+
+        deliveryChargeText.innerText =
+            "৳ " +
+            deliveryCharge.toLocaleString();
+    }
+
+
+    if (totalElement) {
+
+        totalElement.innerText =
+            "৳ " +
+            grandTotal.toLocaleString();
+    }
+}
+
+
+/* =========================================================
+   UPDATE QUANTITY
+   ========================================================= */
+
+function updateItemQuantity(index, change) {
+
+    const cart = getCart();
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        (Number(cart[index].quantity) || 1) +
+        change;
+
+
+    if (cart[index].quantity <= 0) {
+
+        cart.splice(index, 1);
+    }
+
+
+    saveCart(cart);
+
+    renderCartPage();
+
+
+    /*
+     * Header/cart drawer count update করার জন্য
+     * script.js থাকলে সেটাও update হবে।
+     */
+
+    if (typeof updateCartCount === "function") {
+        updateCartCount();
+    }
+}
+
+
+/* =========================================================
+   REMOVE ITEM
+   ========================================================= */
+
+function removeItemFromCart(index) {
+
+    const cart = getCart();
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart.splice(index, 1);
+
+    saveCart(cart);
+
+    renderCartPage();
+
+
+    if (typeof updateCartCount === "function") {
+        updateCartCount();
+    }
+}
+
+
+/* =========================================================
+   PROCEED TO CHECKOUT
+   ========================================================= */
+
+function proceedToCheckout() {
+
+    const cart = getCart();
+
+
+    if (cart.length === 0) {
+
+        showProfileModal(
+            "আপনার কার্ট বর্তমানে খালি। আগে কিছু প্রোডাক্ট কার্টে যোগ করুন।"
+        );
+
+        return;
+    }
+
+
+    /*
+     * Form-এর তথ্য নাও।
+     */
+
+    const name =
+        document.getElementById("cust-name")
+            .value.trim();
+
+    const phone =
+        document.getElementById("cust-phone")
+            .value.trim();
+
+    const address =
+        document.getElementById("cust-address")
+            .value.trim();
+
+
+    /*
+     * তথ্য না থাকলে custom modal।
+     */
+
+    if (!name || !phone || !address) {
+
+        showProfileModal(
+            "Checkout করার আগে আপনার নাম, মোবাইল নম্বর এবং পূর্ণাঙ্গ ঠিকানা দিন। তথ্য একবার সংরক্ষণ করলে পরবর্তীতে অটোমেটিকভাবে বসে যাবে।"
+        );
+
+        return;
+    }
+
+
+    /*
+     * Customer Profile Auto-save
+     */
+
+    const profile =
+        saveCurrentCustomerInformation();
+
+
+    const deliveryCharge =
+        Number(
+            document.getElementById(
+                "delivery-location"
+            ).value
+        );
+
+
+    const customerInfo = {
+
+        name: profile.name,
+
+        phone: profile.phone,
+
+        address: profile.address,
+
+        deliveryCharge: deliveryCharge
+
+    };
+
+
+    localStorage.setItem(
+        "checkout_customer_info",
+        JSON.stringify(customerInfo)
+    );
+
+
+    /*
+     * IMPORTANT:
+     * Actual filename = Checkout.html
+     */
+
+    window.location.href = "Checkout.html";
+}
+
+
+/* =========================================================
+   WHATSAPP ORDER
+   ========================================================= */
+
+function sendOrderToWhatsApp() {
+
+    const phoneNumber =
+        "8801973317146";
+
+
+    const cart = getCart();
+
+
+    if (cart.length === 0) {
+
+        showProfileModal(
+            "আপনার কার্ট বর্তমানে খালি। আগে কিছু প্রোডাক্ট কার্টে যোগ করুন।"
+        );
+
+        return;
+    }
+
+
+    const name =
+        document.getElementById("cust-name")
+            .value.trim();
+
+    const phone =
+        document.getElementById("cust-phone")
+            .value.trim();
+
+    const address =
+        document.getElementById("cust-address")
+            .value.trim();
+
+
+    const deliveryCharge =
+        Number(
+            document.getElementById(
+                "delivery-location"
+            ).value
+        );
+
+
+    /*
+     * Customer information validation
+     */
+
+    if (!name || !phone || !address) {
+
+        showProfileModal(
+            "WhatsApp-এ অর্ডার পাঠানোর আগে আপনার নাম, মোবাইল নম্বর এবং পূর্ণাঙ্গ ঠিকানা দিন।"
+        );
+
+        return;
+    }
+
+
+    /*
+     * Save customer profile automatically
+     */
+
+    const profile =
+        saveCurrentCustomerInformation();
+
+
+    let productListText = "";
+
+    let total = 0;
+
+
+    cart.forEach(
+        (item, index) => {
+
+            const qty =
+                Number(item.quantity) || 1;
+
+            const price =
+                Number(item.price) || 0;
+
+            const itemTotal =
+                price * qty;
+
+
+            total += itemTotal;
+
+
+            productListText +=
+                `${index + 1}. ${item.name} - ${qty}টি (৳${itemTotal.toLocaleString()})\n`;
+        }
+    );
+
+
+    const grandTotal =
+        total + deliveryCharge;
+
+
+    const message =
+        `🛒 *নতুন অর্ডার এসেছে!*\n\n` +
+
+        `👤 *কাস্টমার তথ্য:*\n` +
+
+        `• নাম: ${profile.name}\n` +
+
+        `• ফোন: ${profile.phone}\n` +
+
+        `• ঠিকানা: ${profile.address}\n\n` +
+
+        `📦 *প্রোডাক্টের তালিকা:*\n` +
+
+        `${productListText}\n` +
+
+        `💵 উপমোট: ৳${total.toLocaleString()}\n` +
+
+        `🚚 ডেলিভারি চার্জ: ৳${deliveryCharge.toLocaleString()}\n` +
+
+        `💰 *সর্বমোট: ৳${grandTotal.toLocaleString()}*`;
+
+
+    const whatsappURL =
+        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+}
+
+
+/* =========================================================
+   SECURITY / HTML ESCAPE
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function escapeHTMLAttribute(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+
+/* =========================================================
+   PAGE LOAD
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        renderCartPage();
+
+        /*
+         * Account থেকে আসা saved profile থাকলে
+         * সঙ্গে সঙ্গে form-এ বসাবে।
+         */
+
+        autoFillCustomerInformation();
+
+    }
+);
 </script>
+
 </body>
 </html>
