@@ -2,6 +2,7 @@
    MACHINERY SHOP - MAIN SCRIPT
    PRODUCT + SEARCH + CATEGORY + CART + DRAWER
    ========================================= */
+
 /* =========================================
    TOAST NOTIFICATION (Add to Cart Feedback)
 ========================================= */
@@ -77,7 +78,7 @@ function showAddToCartToast(productName) {
 ========================================= */
 
 function sendToWhatsApp(productName, price, quantity = 1) {
-    const phoneNumber = "8801973317146"; // এখানে আপনার আসল WhatsApp নম্বরটি দিন (কান্ট্রি কোড সহ)
+    const phoneNumber = "8801973317146"; // আপনার আসল WhatsApp নম্বর
     const totalPrice = price * quantity;
     
     const message = `হ্যালো! আমি এই প্রোডাক্টটি অর্ডার করতে চাই:\n\n` +
@@ -128,13 +129,14 @@ function addToCart(productId) {
     }
 
     const existingIndex = cart.findIndex(item => String(item.id) === String(productId));
+    const prodName = product.bnName || product.title || product.name || 'Product';
 
     if (existingIndex > -1) {
         cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 1) + 1;
     } else {
         cart.push({
             id: product.id,
-            name: product.bnName || product.title || product.name || 'Product',
+            name: prodName,
             price: Number(product.price) || 0,
             image: product.image || '',
             quantity: 1
@@ -145,9 +147,7 @@ function addToCart(productId) {
     updateCartCount();
     showCart();
     renderYouMayAlsoLike();
-    showAddToCartToast({product.bnName || product.title || product.name}"কার্টে যোগ করা হয়েছে!");
-};
-
+    showAddToCartToast(prodName);
 }
 
 // "You May Also Like" থেকে দ্রুত সাইলেন্টলি কার্টে অ্যাড করা
@@ -326,7 +326,7 @@ function renderYouMayAlsoLike() {
 }
 
 /* =========================================
-   7. DRAWER TOGGLES (SIDE MENU & CART)
+   7. DRAWER TOGGLES (SIDE MENU & CART & ACCOUNT)
 ========================================= */
 
 function toggleMenuDrawer() {
@@ -345,16 +345,16 @@ function toggleCartDrawer() {
             renderYouMayAlsoLike();
         }
     }
-   
- function toggleAccountDrawer() {
+}
+
+function toggleAccountDrawer() {
     const drawer = document.getElementById("account-drawer");
     if (drawer) {
         drawer.classList.toggle("open");
         if (drawer.classList.contains("open")) {
             renderAccountDrawer();
         }
-     }
-  }
+    }
 }
 
 /* =========================================
@@ -597,7 +597,6 @@ window.addEventListener("storage", function() {
     renderYouMayAlsoLike();
 });
 
-
 /* =========================================
    13. CUSTOMER PROFILE (localStorage-based "Account")
 ========================================= */
@@ -639,7 +638,6 @@ function handleSaveProfile(event) {
 }
 
 function editProfile() {
-    const profile = getCustomerProfile() || {};
     renderAccountDrawer(true);
 }
 
@@ -719,4 +717,4 @@ function escapeHTMLAttr(value) {
         .replace(/"/g, "&quot;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
-};
+}
