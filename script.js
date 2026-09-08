@@ -347,9 +347,14 @@ function toggleCartDrawer() {
     }
    
  function toggleAccountDrawer() {
-     const drawer = document.getElementById("account-drawer");
-     if (drawer) drawer.classList.toggle("open");
-   }
+    const drawer = document.getElementById("account-drawer");
+    if (drawer) {
+        drawer.classList.toggle("open");
+        if (drawer.classList.contains("open")) {
+            renderAccountDrawer();
+        }
+     }
+  }
 }
 
 /* =========================================
@@ -591,3 +596,127 @@ window.addEventListener("storage", function() {
     showCart();
     renderYouMayAlsoLike();
 });
+
+
+/* =========================================
+   13. CUSTOMER PROFILE (localStorage-based "Account")
+========================================= */
+
+function getCustomerProfile() {
+    try {
+        return JSON.parse(localStorage.getItem("customerProfile")) || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function saveCustomerProfile(profile) {
+    localStorage.setItem("customerProfile", JSON.stringify(profile));
+}
+
+function getOrderHistory() {
+    try {
+        return JSON.parse(localStorage.getItem("orders")) || [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function handleSaveProfile(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("acc-name").value.trim();
+    const phone = document.getElementById("acc-phone").value.trim();
+    const address = document.getElementById("acc-address").value.trim();
+
+    if (!name || !phone) {
+        alert("অনুগ্রহ করে নাম ও মোবাইল নম্বর দিন।");
+        return;
+    }
+
+    saveCustomerProfile({ name, phone, address });
+    renderAccountDrawer();
+}
+
+function editProfile() {
+    const profile = getCustomerProfile() || {};
+    renderAccountDrawer(true);
+}
+
+function renderOrderHistoryHTML() {
+    const orders = getOrderHistory();
+
+    if (orders.length === 0) {
+        return `<p style="font-size: 13px; color: #888; text-align: center; padding: 15px 0;">এখনো কোনো Order নেই।</p>`;
+    }
+
+    return orders.slice().reverse().map(order => {
+        const itemCount = (order.items || []).reduce((sum, i) => sum + (Number(i.quantity) || 1), 0);
+        return `
+            <div style="border: 1px solid #eee; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;">
+                <div style="display:flex; justify-content:space-between; font-size: 12px; font-weight:bold; color:#172033;">
+                    <span>#${order.orderId}</span>
+                    <span style="color:#16a34a;">৳ ${Number(order.grandTotal || 0).toLocaleString()}</span>
+                </div>
+                <div style="font-size: 11px; color:#777; margin-top:3px;">
+                    ${order.date || ""} • ${itemCount} টি পণ্য
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function renderAccountDrawer(forceEdit) {
+    const container = document.getElementById("account-drawer-body");
+    if (!container) return;
+
+    const profile = getCustomerProfile();
+
+    if (!profile || forceEdit) {
+        container.innerHTML = `
+            <p style="font-size: 12px; color: #888; margin-bottom: 12px;">
+                একবার তথ্য দিলে পরবর্তী Order-এ আবার লিখতে হবে না।
+            </p>
+            <form onsubmit="handleSaveProfile(event)">
+                <div style="margin-bottom: 10px;">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">নাম *</label>
+                    <input type="text" id="acc-name" value="${profile ? escapeHTMLAttr(profile.name) : ''}" placeholder="আপনার নাম" style="width:100%; padding:9px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">মোবাইল নম্বর *</label>
+                    <input type="tel" id="acc-phone" value="${profile ? escapeHTMLAttr(profile.phone) : ''}" placeholder="০১৭xxxxxxxx" style="width:100%; padding:9px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                </div>
+                <div style="margin-bottom: 14px;">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">ঠিকানা</label>
+                    <input type="text" id="acc-address" value="${profile ? escapeHTMLAttr(profile.address) : ''}" placeholder="জেলা, থানা, এলাকা" style="width:100%; padding:9px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                </div>
+                <button type="submit" style="width:100%; background:#16a34a; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:14px; cursor:pointer;">
+                    Save করুন
+                </button>
+            </form>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div style="background:#f0fdf4; border:1px solid #dcfce7; border-radius:10px; padding:14px; margin-bottom:16px;">
+            <div style="font-weight:bold; font-size:15px; color:#172033;">${profile.name}</div>
+            <div style="font-size:13px; color:#555; margin-top:3px;">📱 ${profile.phone}</div>
+            ${profile.address ? `<div style="font-size:13px; color:#555; margin-top:3px;">📍 ${profile.address}</div>` : ""}
+            <button type="button" onclick="editProfile()" style="margin-top:10px; background:none; border:1px solid #16a34a; color:#16a34a; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:bold; cursor:pointer;">
+                ✎ তথ্য পরিবর্তন করুন
+            </button>
+        </div>
+
+        <h4 style="font-size: 13px; color: #16a34a; margin-bottom: 10px; text-transform: uppercase;">📦 আগের Order সমূহ</h4>
+        ${renderOrderHistoryHTML()}
+    `;
+}
+
+function escapeHTMLAttr(value) {
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+};
