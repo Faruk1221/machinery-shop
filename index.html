@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Machinery Shop | Business Machinery</title>
-    
-    <!-- External CSS (যদি থাকে) -->
+
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -407,19 +407,6 @@
         }
 
         /* =========================
-           NO RESULT
-        ========================= */
-
-        .no-result {
-            grid-column: 1 / -1;
-            background: white;
-            padding: 30px 15px;
-            text-align: center;
-            border-radius: 12px;
-            color: #6b7280;
-        }
-
-        /* =========================
            ABOUT
         ========================= */
 
@@ -442,9 +429,11 @@
             line-height: 1.7;
         }
 
-        /* =========================
-           DRAWER (SIDE MENU & CART)
-        ========================= */
+        /* =====================================================
+           DRAWER
+           IMPORTANT:
+           script.js uses "active", so CSS also uses "active".
+        ===================================================== */
 
         .drawer {
             position: fixed;
@@ -461,7 +450,7 @@
             flex-direction: column;
         }
 
-        .drawer.open {
+        .drawer.active {
             right: 0;
         }
 
@@ -473,12 +462,28 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .drawer-body {
             padding: 15px;
             flex: 1;
             overflow-y: auto;
+        }
+
+        /* =========================
+           CART DRAWER
+        ========================= */
+
+        #cart-drawer-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #cart-drawer-items .cart-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeeee;
         }
 
         /* =========================
@@ -564,6 +569,7 @@
         ========================= */
 
         @media (min-width: 768px) {
+
             header {
                 padding: 18px 7%;
             }
@@ -600,217 +606,911 @@
 
 <body>
 
-    <!-- HEADER -->
+    <!-- =========================
+         HEADER
+    ========================= -->
+
     <header>
+
         <div class="top-header">
+
             <a href="index.html" class="logo">
-                <div class="logo-icon">⚙️</div>
+
+                <div class="logo-icon">
+                    ⚙️
+                </div>
+
                 Machinery Shop
+
             </a>
+
 
             <div class="header-actions">
-                <button class="header-btn" onclick="toggleCartDrawer()" type="button" aria-label="Cart">
+
+                <!-- CART BUTTON -->
+                <button
+                    class="header-btn"
+                    type="button"
+                    onclick="toggleCartDrawer()"
+                    aria-label="Cart"
+                >
                     🛒
-                    <span class="cart-badge-header" id="header-cart-count">0</span>
+
+                    <span
+                        class="cart-badge-header"
+                        id="header-cart-count"
+                    >
+                        0
+                    </span>
+
                 </button>
-                <button class="header-btn" onclick="toggleMenuDrawer()" type="button" aria-label="Menu">☰</button>
+
+
+                <!-- MENU BUTTON -->
+                <button
+                    class="header-btn"
+                    type="button"
+                    onclick="toggleMenuDrawer()"
+                    aria-label="Menu"
+                >
+                    ☰
+                </button>
+
             </div>
+
         </div>
+
+
+        <!-- SEARCH -->
 
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="আপনার প্রয়োজনীয় পণ্য বা মেশিন খুঁজুন..." autocomplete="off">
-            <button type="button" onclick="searchProducts()" aria-label="Search">🔍</button>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="আপনার প্রয়োজনীয় পণ্য বা মেশিন খুঁজুন..."
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                onclick="searchProducts()"
+                aria-label="Search"
+            >
+                🔍
+            </button>
+
         </div>
+
     </header>
 
-    <!-- CATEGORIES -->
+
+    <!-- =========================
+         CATEGORIES
+    ========================= -->
+
     <div class="categories-wrapper">
+
         <div class="categories">
-            <a href="#products" class="category" onclick="filterCategory('all')">
-                <div class="category-icon">📦</div>
-                <div class="category-name">সবগুলো</div>
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('all')"
+            >
+                <div class="category-icon">
+                    📦
+                </div>
+
+                <div class="category-name">
+                    সবগুলো
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('machinery')">
-                <div class="category-icon">⚙️</div>
-                <div class="category-name">Machinery</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('machinery')"
+            >
+                <div class="category-icon">
+                    ⚙️
+                </div>
+
+                <div class="category-name">
+                    Machinery
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('food')">
-                <div class="category-icon">🍔</div>
-                <div class="category-name">Food & Restaurant</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('food')"
+            >
+                <div class="category-icon">
+                    🍔
+                </div>
+
+                <div class="category-name">
+                    Food & Restaurant
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('home')">
-                <div class="category-icon">🏠</div>
-                <div class="category-name">Home</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('home')"
+            >
+                <div class="category-icon">
+                    🏠
+                </div>
+
+                <div class="category-name">
+                    Home
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('daily')">
-                <div class="category-icon">🛒</div>
-                <div class="category-name">Daily Need</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('daily')"
+            >
+                <div class="category-icon">
+                    🛒
+                </div>
+
+                <div class="category-name">
+                    Daily Need
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('fashion')">
-                <div class="category-icon">👕</div>
-                <div class="category-name">Fashion</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('fashion')"
+            >
+                <div class="category-icon">
+                    👕
+                </div>
+
+                <div class="category-name">
+                    Fashion
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('health')">
-                <div class="category-icon">💊</div>
-                <div class="category-name">Health & Care</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('health')"
+            >
+                <div class="category-icon">
+                    💊
+                </div>
+
+                <div class="category-name">
+                    Health & Care
+                </div>
             </a>
-            <a href="#products" class="category" onclick="filterCategory('tools')">
-                <div class="category-icon">🔧</div>
-                <div class="category-name">Tools & Others</div>
+
+
+            <a
+                href="#products"
+                class="category"
+                onclick="filterCategory('tools')"
+            >
+                <div class="category-icon">
+                    🔧
+                </div>
+
+                <div class="category-name">
+                    Tools & Others
+                </div>
             </a>
+
         </div>
+
     </div>
 
-    <!-- HERO BANNER -->
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
     <section class="hero">
+
         <div class="hero-content">
-            <div class="hero-small">MACHINERY SHOP</div>
-            <h1>আপনার ব্যবসার মেশিন এক জায়গায়</h1>
-            <p>Quality Machinery • Best Price • Nationwide Delivery</p>
-            <a href="#products" class="hero-btn">Shop Now →</a>
+
+            <div class="hero-small">
+                MACHINERY SHOP
+            </div>
+
+            <h1>
+                আপনার ব্যবসার মেশিন এক জায়গায়
+            </h1>
+
+            <p>
+                Quality Machinery • Best Price • Nationwide Delivery
+            </p>
+
+            <a
+                href="#products"
+                class="hero-btn"
+            >
+                Shop Now →
+            </a>
+
         </div>
-        <div class="hero-machine">⚙️</div>
+
+        <div class="hero-machine">
+            ⚙️
+        </div>
+
     </section>
 
-    <!-- FEATURES -->
+
+    <!-- =========================
+         FEATURES
+    ========================= -->
+
     <section class="section">
+
         <div class="features">
+
             <div class="feature">
-                <div class="feature-icon">🚚</div>
-                <strong>Fast Delivery</strong>
-                <span>সারা বাংলাদেশ</span>
+
+                <div class="feature-icon">
+                    🚚
+                </div>
+
+                <strong>
+                    Fast Delivery
+                </strong>
+
+                <span>
+                    সারা বাংলাদেশ
+                </span>
+
             </div>
+
+
             <div class="feature">
-                <div class="feature-icon">🛡️</div>
-                <strong>Quality Product</strong>
-                <span>Trusted Quality</span>
+
+                <div class="feature-icon">
+                    🛡️
+                </div>
+
+                <strong>
+                    Quality Product
+                </strong>
+
+                <span>
+                    Trusted Quality
+                </span>
+
             </div>
+
+
             <div class="feature">
-                <div class="feature-icon">💰</div>
-                <strong>Best Price</strong>
-                <span>Affordable</span>
+
+                <div class="feature-icon">
+                    💰
+                </div>
+
+                <strong>
+                    Best Price
+                </strong>
+
+                <span>
+                    Affordable
+                </span>
+
             </div>
+
         </div>
+
     </section>
 
-    <!-- PRODUCTS -->
-    <section class="section" id="products">
+
+    <!-- =========================
+         PRODUCTS
+    ========================= -->
+
+    <section
+        class="section"
+        id="products"
+    >
+
         <div class="section-header">
-            <h2 class="section-title">🔥 জনপ্রিয় পণ্য</h2>
-            <span class="section-subtitle" onclick="showAllProducts()">View All →</span>
+
+            <h2 class="section-title">
+                🔥 জনপ্রিয় পণ্য
+            </h2>
+
+            <span
+                class="section-subtitle"
+                onclick="showAllProducts()"
+            >
+                View All →
+            </span>
+
         </div>
 
-        <div class="products" id="product-container">
-            <!-- JS থেকে ডায়নামিকালি লোড হবে -->
+
+        <div
+            class="products"
+            id="product-container"
+        >
+            <!-- Products will load from products.js -->
         </div>
+
     </section>
 
-    <!-- ABOUT -->
+
+    <!-- =========================
+         ABOUT
+    ========================= -->
+
     <section class="about">
-        <h2>⚙️ Machinery Shop</h2>
-        <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়। Quality Machinery, Best Price এবং সারা বাংলাদেশে Delivery সুবিধা।</p>
+
+        <h2>
+            ⚙️ Machinery Shop
+        </h2>
+
+        <p>
+            আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়।
+            Quality Machinery, Best Price এবং সারা বাংলাদেশে
+            Delivery সুবিধা।
+        </p>
+
     </section>
 
-    <!-- SIDEBAR MENU DRAWER -->
-    <div class="drawer" id="side-menu-drawer">
+
+    <!-- =====================================================
+         SIDE MENU DRAWER
+    ===================================================== -->
+
+    <div
+        class="drawer"
+        id="side-menu-drawer"
+    >
+
         <div class="drawer-header">
-            <span>ক্যাটাগরি ও মেনু</span>
-            <button onclick="toggleMenuDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+
+            <span>
+                ক্যাটাগরি ও মেনু
+            </span>
+
+            <button
+                type="button"
+                onclick="toggleMenuDrawer()"
+                style="
+                    background:none;
+                    border:none;
+                    color:white;
+                    font-size:20px;
+                    cursor:pointer;
+                "
+            >
+                ✕
+            </button>
+
         </div>
+
+
         <div class="drawer-body">
-            <h4 style="margin-bottom: 12px; color: #16a34a;">📂 ক্যাটাগরি সমূহ</h4>
-            <ul style="list-style: none; padding-left: 0; line-height: 2.2; font-size: 14px;">
-                <li><a href="#products" onclick="filterCategory('machinery'); toggleMenuDrawer();">⚙️ Machinery</a></li>
-                <li><a href="#products" onclick="filterCategory('food'); toggleMenuDrawer();">🍔 Food & Restaurant</a></li>
-                <li><a href="#products" onclick="filterCategory('home'); toggleMenuDrawer();">🏠 Home</a></li>
-                <li><a href="#products" onclick="filterCategory('daily'); toggleMenuDrawer();">🛒 Daily Need</a></li>
-                <li><a href="#products" onclick="filterCategory('fashion'); toggleMenuDrawer();">👕 Fashion</a></li>
-                <li><a href="#products" onclick="filterCategory('health'); toggleMenuDrawer();">💊 Health & Care</a></li>
-                <li><a href="#products" onclick="filterCategory('tools'); toggleMenuDrawer();">🔧 Tools & Others</a></li>
+
+            <h4
+                style="
+                    margin-bottom:12px;
+                    color:#16a34a;
+                "
+            >
+                📂 ক্যাটাগরি সমূহ
+            </h4>
+
+
+            <ul
+                style="
+                    list-style:none;
+                    padding-left:0;
+                    line-height:2.2;
+                    font-size:14px;
+                "
+            >
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('machinery');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        ⚙️ Machinery
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('food');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        🍔 Food & Restaurant
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('home');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        🏠 Home
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('daily');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        🛒 Daily Need
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('fashion');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        👕 Fashion
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('health');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        💊 Health & Care
+                    </a>
+                </li>
+
+
+                <li>
+                    <a
+                        href="#products"
+                        onclick="
+                            filterCategory('tools');
+                            toggleMenuDrawer();
+                        "
+                    >
+                        🔧 Tools & Others
+                    </a>
+                </li>
+
             </ul>
-            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
-            <h4 style="margin-bottom: 10px; color: #16a34a;">📞 Contact Us</h4>
-            <p style="font-size: 13px; color: #555; margin-bottom: 5px;"><strong>মোবাইল:</strong> +8801973317146</p>
-            <p style="font-size: 13px; color: #555; margin-bottom: 5px;"><strong>ইমেইল:</strong> contact@worldsbestmachinerybd.com</p>
-            <p style="font-size: 13px; color: #555;"><strong>📍 Business Location:</strong> কুষ্টিয়া, বাংলাদেশ</p>
-            <p style="font-size: 13px; color: #555;"><strong>📦 Product Sourcing:</strong> ঢাকা(নবাবপুর) ও যশোর (R.N. Road), বাংলাদেশ</p>
-            
+
+
+            <hr
+                style="
+                    margin:15px 0;
+                    border:0;
+                    border-top:1px solid #eee;
+                "
+            >
+
+
+            <h4
+                style="
+                    margin-bottom:10px;
+                    color:#16a34a;
+                "
+            >
+                📞 Contact Us
+            </h4>
+
+
+            <p
+                style="
+                    font-size:13px;
+                    color:#555;
+                    margin-bottom:5px;
+                "
+            >
+                <strong>মোবাইল:</strong>
+                +8801973317146
+            </p>
+
+
+            <p
+                style="
+                    font-size:13px;
+                    color:#555;
+                    margin-bottom:5px;
+                "
+            >
+                <strong>ইমেইল:</strong>
+                contact@worldsbestmachinerybd.com
+            </p>
+
+
+            <p
+                style="
+                    font-size:13px;
+                    color:#555;
+                    margin-bottom:5px;
+                "
+            >
+                <strong>📍 Business Location:</strong>
+                কুষ্টিয়া, বাংলাদেশ
+            </p>
+
+
+            <p
+                style="
+                    font-size:13px;
+                    color:#555;
+                "
+            >
+                <strong>📦 Product Sourcing:</strong>
+                ঢাকা(নবাবপুর) ও যশোর (R.N. Road), বাংলাদেশ
+            </p>
+
         </div>
+
     </div>
 
-        <!-- CART DRAWER WITH "YOU MAY ALSO LIKE" -->
-    <div class="drawer" id="cart-drawer">
+
+    <!-- =====================================================
+         CART DRAWER
+    ===================================================== -->
+
+    <div
+        class="drawer"
+        id="cart-drawer"
+    >
+
         <div class="drawer-header">
-            <span>🛒 Shopping Cart</span>
-            <button onclick="toggleCartDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+
+            <span>
+                🛒 Shopping Cart
+            </span>
+
+            <button
+                type="button"
+                onclick="toggleCartDrawer()"
+                style="
+                    background:none;
+                    border:none;
+                    color:white;
+                    font-size:20px;
+                    cursor:pointer;
+                "
+            >
+                ✕
+            </button>
+
         </div>
+
+
         <div class="drawer-body">
+
             <div id="cart-drawer-items">
-                <!-- Cart Items ডাইনামিকালি লোড হবে -->
+                <!-- Cart items load from script.js -->
             </div>
 
-            <div style="margin-top: 16px;">
-                <a href="cart.html" style="display: block; text-align: center; background: #16a34a; color: white; padding: 12px; border-radius: 8px; font-weight: bold;">Checkout Page →</a>
+
+            <div style="margin-top:16px;">
+
+                <a
+                    href="cart.html"
+                    style="
+                        display:block;
+                        text-align:center;
+                        background:#16a34a;
+                        color:white;
+                        padding:12px;
+                        border-radius:8px;
+                        font-weight:bold;
+                    "
+                >
+                    Checkout Page →
+                </a>
+
             </div>
 
-            <hr style="margin: 18px 0; border: 0; border-top: 1px dashed #ccc;">
 
-            <!-- YOU MAY ALSO LIKE SECTION -->
-            <h4 style="font-size: 13px; color: #16a34a; margin-bottom: 10px; text-transform: uppercase;">You May Also Like</h4>
+            <hr
+                style="
+                    margin:18px 0;
+                    border:0;
+                    border-top:1px dashed #ccc;
+                "
+            >
+
+
+            <h4
+                style="
+                    font-size:13px;
+                    color:#16a34a;
+                    margin-bottom:10px;
+                    text-transform:uppercase;
+                "
+            >
+                You May Also Like
+            </h4>
+
+
             <div id="you-may-also-like-container">
-                <!-- দাম অনুযায়ী (কম থেকে বেশি) আইটেমগুলো লোড হবে -->
+                <!-- Suggestions load from script.js -->
             </div>
+
         </div>
+
     </div>
-    
-        <!-- ACCOUNT DRAWER -->
-    <div class="drawer" id="account-drawer">
+
+
+    <!-- =====================================================
+         ACCOUNT DRAWER
+    ===================================================== -->
+
+    <div
+        class="drawer"
+        id="account-drawer"
+    >
+
         <div class="drawer-header">
-            <span>👤 আমার একাউন্ট</span>
-            <button onclick="toggleAccountDrawer()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+
+            <span>
+                👤 আমার একাউন্ট
+            </span>
+
+            <button
+                type="button"
+                onclick="toggleAccountDrawer()"
+                style="
+                    background:none;
+                    border:none;
+                    color:white;
+                    font-size:20px;
+                    cursor:pointer;
+                "
+            >
+                ✕
+            </button>
+
         </div>
-        <div class="drawer-body" id="account-drawer-body">
-            <!-- Profile form / summary + Order History এখানে JS দিয়ে লোড হবে -->
+
+
+        <div
+            class="drawer-body"
+            id="account-drawer-body"
+        >
+            <!-- Account/Profile will load from script.js -->
         </div>
+
     </div>
-    
-    <!-- FOOTER -->
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
     <footer>
-        <h3>⚙️ Machinery Shop</h3>
-        <p>আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়</p>
-        <p>🚚 সারা বাংলাদেশে Delivery</p>
-        <p>📞 Contact: +8801973317146</p>
-        <p>© 2026 Machinery Shop</p>
+
+        <h3>
+            ⚙️ Machinery Shop
+        </h3>
+
+        <p>
+            আপনার ব্যবসার প্রয়োজনীয় মেশিন এক জায়গায়
+        </p>
+
+        <p>
+            🚚 সারা বাংলাদেশে Delivery
+        </p>
+
+        <p>
+            📞 Contact: +8801973317146
+        </p>
+
+        <p>
+            © 2026 Machinery Shop
+        </p>
+
     </footer>
-    
-        <!-- BOTTOM NAVIGATION -->
+
+
+    <!-- =====================================================
+         BOTTOM NAVIGATION
+    ===================================================== -->
+
     <nav class="bottom-nav">
-        <a href="index.html" class="bottom-item active">
-            <span>🏠</span>
+
+        <!-- HOME -->
+
+        <a
+            href="index.html"
+            class="bottom-item active"
+        >
+
+            <span>
+                🏠
+            </span>
+
             Home
+
         </a>
-        <a href="javascript:void(0)" class="bottom-item" onclick="toggleMenuDrawer()">
-            <span>🛍️</span>
+
+
+        <!-- SHOP -->
+
+        <a
+            href="javascript:void(0)"
+            class="bottom-item"
+            onclick="toggleMenuDrawer()"
+        >
+
+            <span>
+                🛍️
+            </span>
+
             Shop
+
         </a>
-        <a href="https://wa.me/8801973317146" target="_blank" class="bottom-item">
-            <span>📞</span>
+
+
+        <!-- CALL / WHATSAPP -->
+
+        <a
+            href="https://wa.me/8801973317146"
+            target="_blank"
+            class="bottom-item"
+        >
+
+            <span>
+                📞
+            </span>
+
             Call
+
         </a>
-        <a href="javascript:void(0)" class="bottom-item" onclick="toggleCartDrawer()">
-            <span>🛒</span>
-            <div class="cart-badge" id="cart-count">0</div>
+
+
+        <!-- CART -->
+
+        <a
+            href="javascript:void(0)"
+            class="bottom-item"
+            onclick="toggleCartDrawer()"
+        >
+
+            <span>
+                🛒
+            </span>
+
+            <div
+                class="cart-badge"
+                id="cart-count"
+            >
+                0
+            </div>
+
             Cart
+
         </a>
-        <a href="javascript:void(0)" class="bottom-item" onclick="toggleAccountDrawer()">
-            <span>👤</span>
+
+
+        <!-- ACCOUNT -->
+
+        <a
+            href="javascript:void(0)"
+            class="bottom-item"
+            onclick="toggleAccountDrawer()"
+        >
+
+            <span>
+                👤
+            </span>
+
             Account
+
         </a>
+
     </nav>
 
-    <!-- JAVASCRIPT FILES -->
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
     <script src="products.js"></script>
     <script src="script.js"></script>
+
+
+    <!-- =====================================================
+         ACCOUNT AUTO-OPEN SUPPORT
+         =====================================================
+
+         Cart/Product থেকে profile না থাকলে
+         sessionStorage.openAccountProfile = "true"
+         সেট করা হলে Account drawer automatically খুলবে।
+    ===================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                if (
+                    sessionStorage.getItem(
+                        "openAccountProfile"
+                    ) === "true"
+                ) {
+
+                    sessionStorage.removeItem(
+                        "openAccountProfile"
+                    );
+
+                    setTimeout(function () {
+
+                        const accountDrawer =
+                            document.getElementById(
+                                "account-drawer"
+                            );
+
+                        if (!accountDrawer) {
+                            return;
+                        }
+
+                        accountDrawer.classList.add(
+                            "active"
+                        );
+
+                        if (
+                            typeof renderAccountDrawer ===
+                            "function"
+                        ) {
+
+                            renderAccountDrawer(true);
+
+                        }
+
+                    }, 100);
+
+                }
+
+            }
+        );
+
+    </script>
+
 </body>
 
-    </html>
+</html>
